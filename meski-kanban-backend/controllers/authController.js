@@ -47,7 +47,7 @@ export const login = async (req, res) => {
       return res.status(400).json({ message: "Geçersiz email veya şifre." });
     }
 
-    const isMatch = await bcrypt.compare(password, user.rows[0].password);
+    const isMatch = await bcrypt.compare(password, user.rows[0].password_hash);
 
     if (!isMatch) {
       return res.status(400).json({ message: "Geçersiz email veya şifre." });
