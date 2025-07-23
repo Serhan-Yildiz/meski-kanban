@@ -30,8 +30,8 @@ export const register = async (req, res) => {
 
     res.status(201).json({ token, user: newUser.rows[0] });
   } catch (error) {
-    console.error("Kayıt hatası:", error.message);
-    res.status(500).json({ message: "Sunucu hatası" });
+    console.error("Kayıt sırasında hata:", error);
+    res.status(500).json({ message: "Sunucu hatası", error: error.message });
   }
 };
 
@@ -39,10 +39,9 @@ export const login = async (req, res) => {
   const { email, password } = req.body;
 
   try {
-    const user = await pool.query(
-      "SELECT * FROM users WHERE email = $1",
-      [email]
-    );
+    const user = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
 
     if (user.rows.length === 0) {
       return res.status(400).json({ message: "Geçersiz email veya şifre." });
