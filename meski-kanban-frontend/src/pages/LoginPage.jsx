@@ -16,7 +16,7 @@ export default function LoginPage() {
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      alert("Giriş başarısız: " + err.response?.data?.message || "Sunucu hatası");
+      alert("Giriş başarısız: " + (err.response?.data?.message || "Sunucu hatası"));
     }
   };
 
