@@ -1,13 +1,19 @@
 import express from "express";
 import {
-  getCommentsByCard,
-  addComment,
+  getComments,
+  createComment,
+  updateComment,
+  deleteComment,
 } from "../controllers/commentController.js";
-import { verifyToken } from "../middleware/authMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/:cardId", verifyToken, getCommentsByCard);
-router.post("/", verifyToken, addComment);
+router.use(authMiddleware);
+
+router.get("/:cardId", getComments);
+router.post("/", createComment);
+router.put("/:id", updateComment);
+router.delete("/:id", deleteComment);
 
 export default router;

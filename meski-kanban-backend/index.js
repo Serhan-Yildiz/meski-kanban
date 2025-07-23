@@ -3,36 +3,31 @@ import cors from "cors";
 import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import boardRoutes from "./routes/boardRoutes.js";
-import listRoutes from "./routes/listRoutes.js";
 import cardRoutes from "./routes/cardRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
+import listRoutes from "./routes/listRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 3000;
 
-app.use(
-  cors({
-    origin: "https://meski-kanban.vercel.app",
-    credentials: true,
-  })
-);
+app.use(cors());
 app.use(express.json());
 
-// Routes
-app.use("/auth", authRoutes);
-app.use("/boards", boardRoutes);
-app.use("/lists", listRoutes);
-app.use("/cards", cardRoutes);
-app.use("/comments", commentRoutes);
-app.use("/users", userRoutes);
+app.use("/api/auth", authRoutes);
+app.use("/api/boards", boardRoutes);
+app.use("/api/cards", cardRoutes);
+app.use("/api/comments", commentRoutes);
+app.use("/api/lists", listRoutes);
+app.use("/api/users", userRoutes);
 
 app.get("/", (req, res) => {
-  res.send("MESKİ Kanban API çalışıyor 🚀");
+  res.send("MESKİ Kanban API is running");
 });
 
-app.listen(PORT, "0.0.0.0", () => {
-  console.log(`Sunucu ${PORT} portunda çalışıyor...`);
+const PORT = process.env.PORT || 5000;
+
+app.listen(PORT, () => {
+  console.log(`Server is running on port ${PORT}`);
 });

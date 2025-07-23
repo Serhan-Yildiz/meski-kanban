@@ -1,15 +1,19 @@
 import express from "express";
 import {
-  getListsByBoard,
+  getLists,
   createList,
-  updateListPosition,
+  updateList,
+  deleteList,
 } from "../controllers/listController.js";
-import { verifyToken } from "../middleware/authMiddleware.js";
+import authMiddleware from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/:boardId", verifyToken, getListsByBoard);
-router.post("/", verifyToken, createList);
-router.patch("/position/:id", verifyToken, updateListPosition);
+router.use(authMiddleware);
+
+router.get("/:boardId", getLists);
+router.post("/", createList);
+router.put("/:id", updateList);
+router.delete("/:id", deleteList);
 
 export default router;
