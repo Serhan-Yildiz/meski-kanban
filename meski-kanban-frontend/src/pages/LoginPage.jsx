@@ -18,7 +18,7 @@ function LoginPage() {
       navigate("/dashboard");
     } catch (err) {
       setError(
-        "Giriş başarısız: " + (err.response?.data?.message || "Sunucu hatası")
+        "Giriş başarısız: " + err.response?.data?.message || "Sunucu hatası"
       );
     }
   };
@@ -33,8 +33,10 @@ function LoginPage() {
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      console.error("Google ile giriş başarısız", err);
-      setError("Google ile giriş başarısız");
+      setError(
+        "Google ile giriş başarısız: " +
+          (err.response?.data?.message || err.message)
+      );
     }
   };
 

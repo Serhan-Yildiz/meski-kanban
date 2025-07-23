@@ -5,7 +5,7 @@ import Button from "../components/Button";
 import Input from "../components/Input";
 import BoardTile from "../components/BoardTile";
 
-export default function Dashboard() {
+export default function DashboardPage() {
   const [boards, setBoards] = useState([]);
   const [newBoardName, setNewBoardName] = useState("");
   const navigate = useNavigate();
