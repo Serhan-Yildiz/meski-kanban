@@ -4,7 +4,7 @@ import jwt from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET || "meskisupersecret";
 
-exports.login = async (req, res) => {
+export async function login(req, res) {
   const { email, password } = req.body;
 
   if (!email || !password) {
@@ -12,7 +12,9 @@ exports.login = async (req, res) => {
   }
 
   try {
-    const result = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const result = await pool.query("SELECT * FROM users WHERE email = $1", [
+      email,
+    ]);
     const user = result.rows[0];
 
     if (!user) {
@@ -41,9 +43,9 @@ exports.login = async (req, res) => {
     console.error("Giriş hatası:", err);
     return res.status(500).json({ message: "Sunucu hatası" });
   }
-};
+}
 
-exports.register = async (req, res) => {
+export async function register(req, res) {
   const { name, email, password } = req.body;
 
   if (!name || !email || !password) {
@@ -51,7 +53,10 @@ exports.register = async (req, res) => {
   }
 
   try {
-    const userExists = await pool.query("SELECT * FROM users WHERE email = $1", [email]);
+    const userExists = await pool.query(
+      "SELECT * FROM users WHERE email = $1",
+      [email]
+    );
     if (userExists.rows.length > 0) {
       return res.status(409).json({ message: "Bu e-posta zaten kayıtlı" });
     }
@@ -72,6 +77,6 @@ exports.register = async (req, res) => {
     console.error("Kayıt hatası:", err);
     return res.status(500).json({ message: "Sunucu hatası" });
   }
-};
+}
 
 export default { login, register };
