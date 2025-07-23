@@ -12,7 +12,6 @@ export default function RegisterPage() {
 
   const handleRegister = async (e) => {
     e.preventDefault();
-      console.log("Form gönderildi"); // bu satırı ekle
     try {
       await api.post("/auth/register", { name, email, password });
       alert("Kayıt başarılı, şimdi giriş yapabilirsiniz.");
