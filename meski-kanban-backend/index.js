@@ -13,7 +13,12 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(
+  cors({
+    origin: "https://meski-kanban.vercel.app",
+    credentials: true,
+  })
+);
 app.use(express.json());
 
 // Routes
@@ -28,6 +33,6 @@ app.get("/", (req, res) => {
   res.send("MESKİ Kanban API çalışıyor 🚀");
 });
 
-app.listen(PORT, '0.0.0.0', () => {
+app.listen(PORT, "0.0.0.0", () => {
   console.log(`Sunucu ${PORT} portunda çalışıyor...`);
 });
