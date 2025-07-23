@@ -1,46 +1,74 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import api from "../api/axios";
-import Button from "../components/Button";
-import Input from "../components/Input";
+import { useNavigate } from "react-router-dom";
+import api from "../axios";
+import { GoogleLogin } from "@react-oauth/google";
+import jwt_decode from "jwt-decode";
 
-export default function LoginPage() {
+function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [error, setError] = useState("");
   const navigate = useNavigate();
 
-  const handleLogin = async (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
     try {
       const res = await api.post("/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      alert("Giriş başarısız: " + (err.response?.data?.message || "Sunucu hatası"));
+      setError(
+        "Giriş başarısız: " + (err.response?.data?.message || "Sunucu hatası")
+      );
+    }
+  };
+
+  const handleGoogleSuccess = async (credentialResponse) => {
+    const decoded = jwt_decode(credentialResponse.credential);
+    try {
+      const res = await api.post("/auth/google-login", {
+        email: decoded.email,
+        name: decoded.name,
+      });
+      localStorage.setItem("token", res.data.token);
+      navigate("/dashboard");
+    } catch (err) {
+      console.error("Google ile giriş başarısız", err);
+      setError("Google ile giriş başarısız");
     }
   };
 
   return (
-    <div className="container" style={{ maxWidth: "400px", marginTop: "100px" }}>
-      <h2 style={{ color: "#006eae", marginBottom: "20px" }}>MESKİ Kanban Giriş</h2>
-      <form onSubmit={handleLogin}>
-        <Input
+    <div>
+      <h2>Giriş Yap</h2>
+      <form onSubmit={handleSubmit}>
+        <input
           type="email"
+          placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          placeholder="E-posta"
+          required
         />
-        <Input
+        <input
           type="password"
+          placeholder="Şifre"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          placeholder="Şifre"
+          required
         />
-        <Button type="submit">Giriş Yap</Button>
+        <button type="submit">Giriş Yap</button>
       </form>
-      <p style={{ marginTop: "16px", fontSize: "14px" }}>
-        Hesabınız yok mu? <Link to="/register">Kayıt Ol</Link>
-      </p>
+
+      <div style={{ marginTop: "1rem" }}>
+        <GoogleLogin
+          onSuccess={handleGoogleSuccess}
+          onError={() => setError("Google ile giriş başarısız")}
+        />
+      </div>
+
+      {error && <p style={{ color: "red" }}>{error}</p>}
     </div>
   );
 }
+
+export default LoginPage;

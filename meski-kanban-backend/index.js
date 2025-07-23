@@ -1,24 +1,42 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import session from "express-session";
+import passport from "passport";
 import authRoutes from "./routes/authRoutes.js";
 import boardRoutes from "./routes/boardRoutes.js";
 import cardRoutes from "./routes/cardRoutes.js";
 import commentRoutes from "./routes/commentRoutes.js";
 import listRoutes from "./routes/listRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
+import "./passport.js";
 
 dotenv.config();
 
 const app = express();
 
+app.use(cors({
+  origin: process.env.CLIENT_URL,
+  credentials: true
+}));
+
+app.use(express.json());
+
 app.use(
-  cors({
-    origin: "https://meski-kanban.vercel.app",
-    credentials: true,
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+    cookie: {
+      secure: process.env.NODE_ENV === "production",
+      httpOnly: true,
+      sameSite: "none"
+    }
   })
 );
-app.use(express.json());
+
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.use("/auth", authRoutes);
 app.use("/boards", boardRoutes);

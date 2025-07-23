@@ -1,23 +1,21 @@
-import { BrowserRouter, Routes, Route, Navigate } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
-import Dashboard from "./pages/Dashboard";
-import BoardView from "./pages/BoardView";
-import CardDetail from "./pages/CardDetail";
-import "./App.css";
+import DashboardPage from "./pages/DashboardPage"; // henüz oluşturmadıysan placeholder bırakabilirsin
+import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
   return (
-    <BrowserRouter>
-      <Routes>
-        <Route path="/" element={<Navigate to="/login" />} />
-        <Route path="/login" element={<LoginPage />} />
-        <Route path="/register" element={<RegisterPage />} />
-        <Route path="/dashboard" element={<Dashboard />} />
-        <Route path="/board/:id" element={<BoardView />} />
-        <Route path="/card/:id" element={<CardDetail />} />
-      </Routes>
-    </BrowserRouter>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <Router>
+        <Routes>
+          <Route path="/login" element={<LoginPage />} />
+          <Route path="/register" element={<RegisterPage />} />
+          <Route path="/dashboard" element={<DashboardPage />} />
+          <Route path="*" element={<LoginPage />} />
+        </Routes>
+      </Router>
+    </GoogleOAuthProvider>
   );
 }
 
