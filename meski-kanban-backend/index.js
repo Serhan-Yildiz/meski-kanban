@@ -20,12 +20,12 @@ app.use(
 );
 app.use(express.json());
 
-app.use("/api/auth", authRoutes);
-app.use("/api/boards", boardRoutes);
-app.use("/api/cards", cardRoutes);
-app.use("/api/comments", commentRoutes);
-app.use("/api/lists", listRoutes);
-app.use("/api/users", userRoutes);
+app.use("/auth", authRoutes);
+app.use("/boards", boardRoutes);
+app.use("/cards", cardRoutes);
+app.use("/comments", commentRoutes);
+app.use("/lists", listRoutes);
+app.use("/users", userRoutes);
 
 app.get("/", (req, res) => {
   res.send("MESKİ Kanban API is running");
