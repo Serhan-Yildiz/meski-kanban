@@ -17,7 +17,7 @@ export default function RegisterPage() {
       alert("Kayıt başarılı, şimdi giriş yapabilirsiniz.");
       navigate("/login");
     } catch (err) {
-      alert("Kayıt başarısız: " + err.response?.data?.message || "Sunucu hatası");
+      alert("Kayıt başarısız: " + (err.response?.data?.message || "Sunucu hatası"));
     }
   };
 
