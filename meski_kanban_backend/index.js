@@ -5,12 +5,12 @@ import dotenv from "dotenv";
 import cors from "cors";
 import session from "express-session";
 
-import authRoutes from "./authRoutes.js";
-import userRoutes from "./userRoutes.js";
-import boardRoutes from "./boardRoutes.js";
-import listRoutes from "./listRoutes.js";
-import cardRoutes from "./cardRoutes.js";
-import commentRoutes from "./commentRoutes.js";
+import authRoutes from "./routes/authRoutes.js";
+import userRoutes from "./routes/userRoutes.js";
+import boardRoutes from "./routes/boardRoutes.js";
+import listRoutes from "./routes/listRoutes.js";
+import cardRoutes from "./routes/cardRoutes.js";
+import commentRoutes from "./routes/commentRoutes.js";
 
 dotenv.config();
 
