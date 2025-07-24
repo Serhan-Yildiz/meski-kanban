@@ -1,4 +1,9 @@
-import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
@@ -16,7 +21,11 @@ function App() {
             <Route
               path="/"
               element={
-                isAuthenticated ? <Navigate to="/dashboard" /> : <Navigate to="/login" />
+                isAuthenticated ? (
+                  <Navigate to="/dashboard" />
+                ) : (
+                  <Navigate to="/login" />
+                )
               }
             />
             <Route path="/login" element={<LoginPage />} />

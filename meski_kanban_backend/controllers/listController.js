@@ -1,52 +1,40 @@
-import pool from "../config/db.js";
+import db from "../db.js";
 
 export const getLists = async (req, res) => {
+  const { boardId } = req.params;
   try {
-    const result = await pool.query(
-      "SELECT * FROM lists WHERE board_id = $1",
-      [req.params.boardId]
+    const result = await db.query(
+      "SELECT * FROM lists WHERE board_id = $1 ORDER BY position ASC",
+      [boardId]
     );
-    res.json(result.rows);
-  } catch (error) {
-    console.error("getLists error:", error.message);
-    res.status(500).json({ message: "Sunucu hatası" });
+    res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 export const createList = async (req, res) => {
+  const { title, position } = req.body;
+  const { boardId } = req.params;
+  if (!title) return res.status(400).json({ message: "Title is required" });
+
   try {
-    const { title, board_id } = req.body;
-    const result = await pool.query(
-      "INSERT INTO lists (title, board_id) VALUES ($1, $2) RETURNING *",
-      [title, board_id]
+    const result = await db.query(
+      "INSERT INTO lists (title, position, board_id) VALUES ($1, $2, $3) RETURNING *",
+      [title, position || 0, boardId]
     );
     res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error("createList error:", error.message);
-    res.status(500).json({ message: "Sunucu hatası" });
-  }
-};
-
-export const updateList = async (req, res) => {
-  try {
-    const { title } = req.body;
-    const result = await pool.query(
-      "UPDATE lists SET title = $1 WHERE id = $2 RETURNING *",
-      [title, req.params.id]
-    );
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error("updateList error:", error.message);
-    res.status(500).json({ message: "Sunucu hatası" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 export const deleteList = async (req, res) => {
+  const { listId } = req.params;
   try {
-    await pool.query("DELETE FROM lists WHERE id = $1", [req.params.id]);
-    res.json({ message: "Liste silindi" });
-  } catch (error) {
-    console.error("deleteList error:", error.message);
-    res.status(500).json({ message: "Sunucu hatası" });
+    await db.query("DELETE FROM lists WHERE id = $1", [listId]);
+    res.status(200).json({ message: "List deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };

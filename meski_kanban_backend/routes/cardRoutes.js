@@ -1,19 +1,11 @@
 import express from "express";
-import {
-  getCards,
-  createCard,
-  updateCard,
-  deleteCard,
-} from "../controllers/cardController.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { getCards, createCard, deleteCard } from "./cardController.js";
+import { authenticate } from "./authMiddleware.js";
 
 const router = express.Router();
 
-router.use(authMiddleware);
-
-router.get("/:listId", getCards);
-router.post("/", createCard);
-router.put("/:id", updateCard);
-router.delete("/:id", deleteCard);
+router.get("/:listId", authenticate, getCards);
+router.post("/:listId", authenticate, createCard);
+router.delete("/:cardId", authenticate, deleteCard);
 
 export default router;

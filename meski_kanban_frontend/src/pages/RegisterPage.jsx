@@ -18,7 +18,10 @@ function RegisterPage() {
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      setError("Kayıt sırasında hata: " + (err.response?.data?.message || "Sunucu hatası"));
+      setError(
+        "Kayıt sırasında hata: " +
+          (err.response?.data?.message || "Sunucu hatası")
+      );
     }
   };
 
@@ -65,11 +68,16 @@ function RegisterPage() {
           className="input"
           required
         />
-        <button type="submit" className="button">Kayıt Ol</button>
+        <button type="submit" className="button">
+          Kayıt Ol
+        </button>
 
         <div className="google-login-container">
           <p style={{ margin: "10px 0" }}>veya Google ile kayıt ol</p>
-          <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => setError("Google hatası")} />
+          <GoogleLogin
+            onSuccess={handleGoogleSuccess}
+            onError={() => setError("Google hatası")}
+          />
         </div>
 
         <p style={{ marginTop: "15px" }}>

@@ -1,55 +1,43 @@
-import pool from "../config/db.js";
+import db from "../db.js";
 
 export const getComments = async (req, res) => {
+  const { cardId } = req.params;
   try {
-    const result = await pool.query(
-      "SELECT * FROM comments WHERE card_id = $1",
-      [req.params.cardId]
+    const result = await db.query(
+      "SELECT * FROM comments WHERE card_id = $1 ORDER BY created_at ASC",
+      [cardId]
     );
-    res.json(result.rows);
-  } catch (error) {
-    console.error("getComments error:", error.message);
-    res.status(500).json({ message: "Sunucu hatası" });
+    res.status(200).json(result.rows);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 export const createComment = async (req, res) => {
+  const { text } = req.body;
+  const { cardId } = req.params;
+  if (!text) return res.status(400).json({ message: "Text is required" });
+
   try {
-    const { content, card_id } = req.body;
-    const { userId } = req.user;
-
-    const result = await pool.query(
-      "INSERT INTO comments (content, card_id, user_id) VALUES ($1, $2, $3) RETURNING *",
-      [content, card_id, userId]
+    const result = await db.query(
+      "INSERT INTO comments (text, card_id, user_id) VALUES ($1, $2, $3) RETURNING *",
+      [text, cardId, req.user.id]
     );
-
     res.status(201).json(result.rows[0]);
-  } catch (error) {
-    console.error("createComment error:", error.message);
-    res.status(500).json({ message: "Sunucu hatası" });
-  }
-};
-
-export const updateComment = async (req, res) => {
-  try {
-    const { content } = req.body;
-    const result = await pool.query(
-      "UPDATE comments SET content = $1 WHERE id = $2 RETURNING *",
-      [content, req.params.id]
-    );
-    res.json(result.rows[0]);
-  } catch (error) {
-    console.error("updateComment error:", error.message);
-    res.status(500).json({ message: "Sunucu hatası" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };
 
 export const deleteComment = async (req, res) => {
+  const { commentId } = req.params;
   try {
-    await pool.query("DELETE FROM comments WHERE id = $1", [req.params.id]);
-    res.json({ message: "Yorum silindi" });
-  } catch (error) {
-    console.error("deleteComment error:", error.message);
-    res.status(500).json({ message: "Sunucu hatası" });
+    await db.query("DELETE FROM comments WHERE id = $1 AND user_id = $2", [
+      commentId,
+      req.user.id,
+    ]);
+    res.status(200).json({ message: "Comment deleted" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
   }
 };

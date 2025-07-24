@@ -54,12 +54,18 @@ export default function CardDetail() {
   return (
     <div className="container">
       <h2>{card.title}</h2>
-      <p style={{ marginBottom: "20px" }}>{card.description || "Açıklama yok."}</p>
+      <p style={{ marginBottom: "20px" }}>
+        {card.description || "Açıklama yok."}
+      </p>
 
       <h4>Yorumlar</h4>
       <div style={{ marginBottom: "10px" }}>
         {comments.map((c) => (
-          <div key={c.id} className="card" style={{ backgroundColor: "#f9f9f9", fontSize: "14px" }}>
+          <div
+            key={c.id}
+            className="card"
+            style={{ backgroundColor: "#f9f9f9", fontSize: "14px" }}
+          >
             {c.content}
           </div>
         ))}

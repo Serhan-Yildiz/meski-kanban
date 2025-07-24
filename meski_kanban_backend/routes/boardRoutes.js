@@ -1,21 +1,11 @@
 import express from "express";
-import {
-  getBoards,
-  getBoardById,
-  createBoard,
-  updateBoard,
-  deleteBoard,
-} from "../controllers/boardController.js";
-import authMiddleware from "../middleware/authMiddleware.js";
+import { getBoards, createBoard, deleteBoard } from "./boardController.js";
+import { authenticate } from "./authMiddleware.js";
 
 const router = express.Router();
 
-router.use(authMiddleware);
-
-router.get("/", getBoards);
-router.get("/:id", getBoardById);
-router.post("/", createBoard);
-router.put("/:id", updateBoard);
-router.delete("/:id", deleteBoard);
+router.get("/", authenticate, getBoards);
+router.post("/", authenticate, createBoard);
+router.delete("/:boardId", authenticate, deleteBoard);
 
 export default router;

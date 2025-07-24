@@ -1,6 +1,12 @@
 import React from "react";
 
-export default function Input({ value, onChange, placeholder, type = "text", onKeyDown }) {
+export default function Input({
+  value,
+  onChange,
+  placeholder,
+  type = "text",
+  onKeyDown,
+}) {
   return (
     <input
       className="input"

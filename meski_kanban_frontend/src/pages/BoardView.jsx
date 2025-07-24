@@ -65,7 +65,14 @@ export default function BoardView() {
         <Button onClick={handleAddList}>Liste Ekle</Button>
       </div>
 
-      <div style={{ display: "flex", gap: "16px", overflowX: "auto", paddingBottom: "10px" }}>
+      <div
+        style={{
+          display: "flex",
+          gap: "16px",
+          overflowX: "auto",
+          paddingBottom: "10px",
+        }}
+      >
         {lists.map((list) => (
           <ListColumn
             key={list.id}
