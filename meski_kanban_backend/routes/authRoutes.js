@@ -1,32 +1,37 @@
 import express from "express";
 import passport from "passport";
-import jwt from "jsonwebtoken";
-import "../passport.js"; // passport setup
-import { register, login, logout } from "../controllers/authController.js";
+import { login, register, getProfile } from "../controllers/authController.js";
+import { authenticate } from "../authMiddleware.js";
 
 const router = express.Router();
 
-router.post("/register", register);
 router.post("/login", login);
-router.post("/logout", logout);
+router.post("/register", register);
 
-// Google Login Başlat
+// ✅ Giriş yapan kullanıcının profilini döner
+router.get("/me", authenticate, getProfile);
+
+// ✅ Google Auth
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
 );
 
-// Google Callback
 router.get(
   "/google/callback",
-  passport.authenticate("google", { session: false, failureRedirect: "/" }),
+  passport.authenticate("google", {
+    failureRedirect: "/login",
+    session: false,
+  }),
   (req, res) => {
-    const token = jwt.sign({ id: req.user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
-    });
-
-    // Token'ı frontend'e gönderiyoruz (query param olarak)
-    res.redirect(`${process.env.CLIENT_URL}/auth/success?token=${token}`);
+    const token = jwt.sign(
+      { id: req.user.id, email: req.user.email },
+      process.env.JWT_SECRET,
+      {
+        expiresIn: "1d",
+      }
+    );
+    res.redirect(`https://meski-kanban.vercel.app/auth/success?token=${token}`);
   }
 );
 
