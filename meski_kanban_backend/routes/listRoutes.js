@@ -1,5 +1,5 @@
 import express from "express";
-import { getLists, createList, deleteList } from "..controllers/listController.js";
+import { getLists, createList, deleteList } from "../controllers/listController.js";
 import { authenticate } from "./authMiddleware.js";
 
 const router = express.Router();
