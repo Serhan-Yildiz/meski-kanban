@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { GoogleLogin } from "@react-oauth/google";
 import { jwtDecode } from "jwt-decode";
-import api from "../axios";
+import api from "../api/axios";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
