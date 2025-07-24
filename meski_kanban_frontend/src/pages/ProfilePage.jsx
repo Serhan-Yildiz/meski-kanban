@@ -43,12 +43,11 @@ export default function ProfilePage() {
     }
   };
 
-  if (!profile)
-    return <p className="text-center mt-10">Profil yükleniyor...</p>;
+  if (!profile) return <p className="auth-container">Profil yükleniyor...</p>;
 
   return (
-    <div className="max-w-md mx-auto mt-10 p-6 bg-white shadow rounded-lg">
-      <h2 className="text-2xl font-bold mb-4 text-center">Profil</h2>
+    <div className="auth-container">
+      <h2 className="auth-title">Profil Bilgileri</h2>
       <p>
         <strong>Ad:</strong> {profile.name}
       </p>
@@ -56,36 +55,38 @@ export default function ProfilePage() {
         <strong>Email:</strong> {profile.email}
       </p>
 
-      <form onSubmit={handleChangePassword} className="mt-6">
-        <h3 className="text-lg font-semibold mb-2">Parola Değiştir</h3>
+      <form
+        onSubmit={handleChangePassword}
+        className="auth-form"
+        style={{ marginTop: "20px" }}
+      >
+        <h3 style={{ color: "#004d66" }}>Parola Değiştir</h3>
         <input
           type="password"
+          className="input"
           value={currentPassword}
           onChange={(e) => setCurrentPassword(e.target.value)}
           placeholder="Mevcut Parola"
-          className="w-full mb-2 p-2 border rounded"
           required
         />
         <input
           type="password"
+          className="input"
           value={newPassword}
           onChange={(e) => setNewPassword(e.target.value)}
           placeholder="Yeni Parola"
-          className="w-full mb-2 p-2 border rounded"
           required
         />
-        <button
-          type="submit"
-          className="w-full bg-blue-500 text-white py-2 rounded hover:bg-blue-600"
-        >
+        <button type="submit" className="button">
           Güncelle
         </button>
-        {message && <p className="mt-2 text-center text-sm">{message}</p>}
+        {message && <p className="error">{message}</p>}
       </form>
 
       <button
         onClick={handleLogout}
-        className="mt-6 w-full bg-red-500 text-white py-2 rounded hover:bg-red-600 transition"
+        className="button"
+        style={{ backgroundColor: "#c62828", marginTop: "20px" }}
       >
         Çıkış Yap
       </button>
