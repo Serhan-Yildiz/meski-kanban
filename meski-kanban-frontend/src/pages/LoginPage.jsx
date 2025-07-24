@@ -36,9 +36,10 @@ function LoginPage() {
   };
 
   return (
-    <div className="container">
-      <h2>Giriş Yap</h2>
-      <form onSubmit={handleSubmit}>
+    <div className="auth-container">
+      <h2 className="auth-title">MESKİ Kanban - Giriş</h2>
+
+      <form className="auth-form" onSubmit={handleSubmit}>
         <input
           type="email"
           placeholder="E-posta"
@@ -56,18 +57,29 @@ function LoginPage() {
           required
         />
         <button type="submit" className="button">Giriş Yap</button>
+
+        <div className="google-login-container">
+          <p style={{ margin: "10px 0" }}>veya Google ile giriş yap</p>
+          <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => setError("Google hatası")} />
+        </div>
+
+        <p style={{ marginTop: "15px" }}>
+          Hesabınız yok mu? <a href="/register">Kayıt Ol</a>
+        </p>
+
+        {error && <p className="error">{error}</p>}
       </form>
 
-      <div className="google-login-container">
-        <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => setError("Google hatası")} />
+      <div className="apk-download">
+        <p>📱 Android için uygulamayı indir:</p>
+        <a href="/MESKI_Kanban_App.apk" download>
+          <img
+            src="/apk-download-icon.png"
+            alt="APK İndir"
+            style={{ height: "40px", marginTop: "5px" }}
+          />
+        </a>
       </div>
-
-      <p style={{ marginTop: "10px" }}>
-        Hesabınız yok mu?{" "}
-        <a href="/register">Kayıt Ol</a>
-      </p>
-
-      {error && <p className="error">{error}</p>}
     </div>
   );
 }
