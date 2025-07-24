@@ -33,7 +33,6 @@ export const register = async (req, res) => {
     const token = generateToken(user.id);
     res.status(201).json({ user, token });
   } catch (err) {
-      console.error(' ERROR:', err);
     res.status(500).json({ message: "Server error" });
   }
 };
@@ -60,7 +59,6 @@ export const login = async (req, res) => {
     delete user.password_hash;
     res.status(200).json({ user, token });
   } catch (err) {
-      console.error(' ERROR:', err);
     res.status(500).json({ message: "Server error" });
   }
 };
