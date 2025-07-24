@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import api from "../api/axios";
 import Input from "../components/Input";
-import Button from "../components/Button";
 
 export default function CardDetail() {
   const { id } = useParams(); // card id
@@ -48,23 +47,19 @@ export default function CardDetail() {
   useEffect(() => {
     fetchCard();
     fetchComments();
-  });
+  }, [id]);
 
   if (!card) return <div className="container">Yükleniyor...</div>;
 
   return (
     <div className="container">
-      <h2 style={{ color: "#006eae", marginBottom: "10px" }}>{card.title}</h2>
+      <h2>{card.title}</h2>
       <p style={{ marginBottom: "20px" }}>{card.description || "Açıklama yok."}</p>
 
-      <h4 style={{ marginBottom: "10px" }}>Yorumlar</h4>
+      <h4>Yorumlar</h4>
       <div style={{ marginBottom: "10px" }}>
         {comments.map((c) => (
-          <div
-            key={c.id}
-            className="card"
-            style={{ backgroundColor: "#f9f9f9", fontSize: "14px" }}
-          >
+          <div key={c.id} className="card" style={{ backgroundColor: "#f9f9f9", fontSize: "14px" }}>
             {c.content}
           </div>
         ))}

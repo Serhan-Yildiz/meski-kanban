@@ -41,7 +41,7 @@ export default function DashboardPage() {
 
   return (
     <div className="container">
-      <h2 style={{ color: "#006eae", marginBottom: "20px" }}>Board'larım</h2>
+      <h2>Board'larım</h2>
 
       <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
         <Input

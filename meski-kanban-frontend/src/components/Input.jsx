@@ -1,7 +1,6 @@
 import React from "react";
-import "../App.css";
 
-export default function Input({ value, onChange, placeholder, type = "text" }) {
+export default function Input({ value, onChange, placeholder, type = "text", onKeyDown }) {
   return (
     <input
       className="input"
@@ -9,6 +8,7 @@ export default function Input({ value, onChange, placeholder, type = "text" }) {
       value={value}
       onChange={onChange}
       placeholder={placeholder}
+      onKeyDown={onKeyDown}
     />
   );
 }
