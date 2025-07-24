@@ -12,7 +12,3 @@ GeneratedPluginRegistrant.java
 key.properties
 **/*.keystore
 **/*.jks
-build/
-.dart_tool/
-.pub-cache/
-.idea/
