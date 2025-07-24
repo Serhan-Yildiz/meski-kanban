@@ -18,10 +18,7 @@ function RegisterPage() {
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      setError(
-        "Kayıt sırasında hata: " + err.response?.data?.message ||
-          "Sunucu hatası"
-      );
+      setError("Kayıt sırasında hata: " + (err.response?.data?.message || "Sunucu hatası"));
     }
   };
 
@@ -35,15 +32,14 @@ function RegisterPage() {
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      console.error("Google ile kayıt/giriş başarısız", err);
-      setError("Google ile kayıt/giriş başarısız");
+      setError("Google ile kayıt/giriş başarısız: " + (err.response?.data?.message || err.message));
     }
   };
 
   return (
-    <div>
+    <div className="auth-container">
       <h2>Kayıt Ol</h2>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={handleSubmit} className="auth-form">
         <input
           type="text"
           placeholder="Ad"
@@ -68,14 +64,15 @@ function RegisterPage() {
         <button type="submit">Kayıt Ol</button>
       </form>
 
-      <div style={{ marginTop: "1rem" }}>
+      <div className="google-login-wrapper">
+        <p>veya</p>
         <GoogleLogin
           onSuccess={handleGoogleSuccess}
-          onError={() => setError("Google ile giriş başarısız")}
+          onError={() => setError("Google ile kayıt/giriş başarısız")}
         />
       </div>
 
-      {error && <p style={{ color: "red" }}>{error}</p>}
+      {error && <p className="error-text">{error}</p>}
     </div>
   );
 }
