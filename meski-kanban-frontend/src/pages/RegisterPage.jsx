@@ -1,8 +1,8 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axios";
 import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
+import jwt_decode from "jwt-decode";
+import api from "../axios";
 
 function RegisterPage() {
   const [name, setName] = useState("");
@@ -23,7 +23,7 @@ function RegisterPage() {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    const decoded = jwtDecode(credentialResponse.credential);
+    const decoded = jwt_decode(credentialResponse.credential);
     try {
       const res = await api.post("/auth/google-login", {
         email: decoded.email,
@@ -31,48 +31,56 @@ function RegisterPage() {
       });
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
-    } catch (err) {
-      setError("Google ile kayıt/giriş başarısız: " + (err.response?.data?.message || err.message));
+    } catch {
+      setError("Google ile kayıt başarısız");
     }
   };
 
   return (
-    <div className="auth-container">
-      <h2>Kayıt Ol</h2>
-      <form onSubmit={handleSubmit} className="auth-form">
-        <input
-          type="text"
-          placeholder="Ad"
-          value={name}
-          onChange={(e) => setName(e.target.value)}
-          required
-        />
-        <input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <input
-          type="password"
-          placeholder="Şifre"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        <button type="submit">Kayıt Ol</button>
-      </form>
-
-      <div className="google-login-wrapper">
-        <p>veya</p>
-        <GoogleLogin
-          onSuccess={handleGoogleSuccess}
-          onError={() => setError("Google ile kayıt/giriş başarısız")}
-        />
+    <div className="min-h-screen flex items-center justify-center bg-blue-50 p-4">
+      <div className="bg-white rounded-2xl shadow-xl p-8 max-w-md w-full">
+        <h2 className="text-3xl font-bold text-center text-blue-800">Kayıt Ol</h2>
+        <p className="text-center text-gray-500 mb-6">Yeni bir hesap oluşturun</p>
+        <form className="space-y-4" onSubmit={handleSubmit}>
+          <input
+            type="text"
+            placeholder="Ad Soyad"
+            value={name}
+            onChange={(e) => setName(e.target.value)}
+            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+          <input
+            type="email"
+            placeholder="E-posta"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+          <input
+            type="password"
+            placeholder="Şifre"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            className="w-full p-3 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            required
+          />
+          <button
+            type="submit"
+            className="w-full bg-blue-700 hover:bg-blue-800 text-white font-semibold py-2 rounded-md"
+          >
+            Kayıt Ol
+          </button>
+        </form>
+        <div className="my-4 text-center text-sm text-gray-500">veya</div>
+        <GoogleLogin onSuccess={handleGoogleSuccess} onError={() => setError("Google hatası")} />
+        <p className="mt-4 text-sm text-center text-gray-500">
+          Zaten hesabınız var mı?{" "}
+          <a href="/login" className="text-blue-700 hover:underline font-semibold">Giriş Yap</a>
+        </p>
+        {error && <p className="text-red-600 text-center mt-2">{error}</p>}
       </div>
-
-      {error && <p className="error-text">{error}</p>}
     </div>
   );
 }
