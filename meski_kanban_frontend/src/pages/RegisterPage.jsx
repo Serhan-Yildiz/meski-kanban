@@ -74,10 +74,15 @@ function RegisterPage() {
 
         <div className="google-login-container">
           <p style={{ margin: "10px 0" }}>veya Google ile kayıt ol</p>
-          <GoogleLogin
-            onSuccess={handleGoogleSuccess}
-            onError={() => setError("Google hatası")}
-          />
+          <button
+            className="button google"
+            onClick={() =>
+              (window.location.href =
+                "https://meski-kanban.onrender.com/auth/google")
+            }
+          >
+            Google ile Kayıt Ol
+          </button>
         </div>
 
         <p style={{ marginTop: "15px" }}>
