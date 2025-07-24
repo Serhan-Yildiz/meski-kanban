@@ -1,9 +1,6 @@
 import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
-import Button from "../components/Button";
-import Input from "../components/Input";
-import BoardTile from "../components/BoardTile";
 
 export default function DashboardPage() {
   const [boards, setBoards] = useState([]);
@@ -15,21 +12,19 @@ export default function DashboardPage() {
       const res = await api.get("/boards");
       setBoards(res.data);
     } catch (err) {
-      console.error("Board'lar alınamadı:", err);
-      alert("Board'lar alınamadı");
+      console.error("Panolar alınamadı:", err);
     }
   };
 
   const handleCreateBoard = async () => {
     if (!newBoardName.trim()) return;
     try {
-      const res = await api.post("/boards", { name: newBoardName.trim() });
+      const res = await api.post("/boards", { name: newBoardName });
       setNewBoardName("");
       fetchBoards();
       navigate(`/board/${res.data.id}`);
     } catch (err) {
-      console.error("Board oluşturulamadı:", err);
-      alert("Board oluşturulamadı");
+      console.error("Pano oluşturulamadı:", err);
     }
   };
 
@@ -39,26 +34,53 @@ export default function DashboardPage() {
 
   return (
     <div className="dashboard-container">
-      <h2 className="dashboard-title">Panolarım</h2>
-
-      <div className="create-board-bar">
-        <Input
-          value={newBoardName}
-          onChange={(e) => setNewBoardName(e.target.value)}
-          placeholder="Yeni pano adı"
-        />
-        <Button onClick={handleCreateBoard}>Ekle</Button>
+      <div className="dashboard-header">
+        <div>
+          <h1 className="dashboard-title">Your Boards</h1>
+          <p className="dashboard-subtitle">Manage your projects and tasks</p>
+        </div>
+        <div className="user-info">👤 Kullanıcı</div>
       </div>
 
       <div className="board-grid">
-        {boards.map((board) => (
-          <BoardTile
+        {/* Yeni pano kutusu */}
+        <div className="board-tile new-board">
+          <div className="dashed-box">
+            <div className="plus-icon">+</div>
+            <input
+              type="text"
+              placeholder="Yeni pano oluştur"
+              value={newBoardName}
+              onChange={(e) => setNewBoardName(e.target.value)}
+              onKeyDown={(e) => e.key === "Enter" && handleCreateBoard()}
+              className="new-board-input"
+            />
+          </div>
+        </div>
+
+        {/* Panolar */}
+        {boards.map((board, i) => (
+          <div
             key={board.id}
-            title={board.name}
+            className="board-tile"
             onClick={() => navigate(`/board/${board.id}`)}
-          />
+          >
+            <div
+              className="board-color-bar"
+              style={{ backgroundColor: getColor(i) }}
+            />
+            <div className="board-content">
+              <h3 className="board-title">{board.name}</h3>
+              <p className="board-desc">Proje panosu</p>
+            </div>
+          </div>
         ))}
       </div>
     </div>
   );
+}
+
+function getColor(index) {
+  const colors = ["#007ba7", "#00838f", "#00acc1", "#0097a7", "#006064"];
+  return colors[index % colors.length];
 }
