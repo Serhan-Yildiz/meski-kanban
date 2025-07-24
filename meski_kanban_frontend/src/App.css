@@ -123,3 +123,28 @@ body {
   padding: 10px;
   border-radius: 4px;
 }
+
+.dashboard-container {
+  padding: 30px;
+  max-width: 1200px;
+  margin: auto;
+}
+
+.dashboard-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #004d66; /* Meski koyu mavi */
+  margin-bottom: 20px;
+}
+
+.create-board-bar {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 25px;
+}
+
+.board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 20px;
+}

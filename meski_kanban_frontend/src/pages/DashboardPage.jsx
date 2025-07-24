@@ -23,9 +23,7 @@ export default function DashboardPage() {
   const handleCreateBoard = async () => {
     if (!newBoardName.trim()) return;
     try {
-      const res = await api.post("/boards", {
-        name: newBoardName.trim(),
-      });
+      const res = await api.post("/boards", { name: newBoardName.trim() });
       setNewBoardName("");
       fetchBoards();
       navigate(`/board/${res.data.id}`);
@@ -40,25 +38,19 @@ export default function DashboardPage() {
   }, []);
 
   return (
-    <div className="container">
-      <h2>Board'larım</h2>
+    <div className="dashboard-container">
+      <h2 className="dashboard-title">Panolarım</h2>
 
-      <div style={{ display: "flex", gap: "10px", marginBottom: "20px" }}>
+      <div className="create-board-bar">
         <Input
           value={newBoardName}
           onChange={(e) => setNewBoardName(e.target.value)}
-          placeholder="Yeni board ismi"
+          placeholder="Yeni pano adı"
         />
         <Button onClick={handleCreateBoard}>Ekle</Button>
       </div>
 
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(200px, 1fr))",
-          gap: "16px",
-        }}
-      >
+      <div className="board-grid">
         {boards.map((board) => (
           <BoardTile
             key={board.id}
