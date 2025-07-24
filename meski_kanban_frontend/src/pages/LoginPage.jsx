@@ -1,7 +1,5 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { GoogleLogin } from "@react-oauth/google";
-import { jwtDecode } from "jwt-decode";
 import api from "../api/axios";
 
 function LoginPage() {
@@ -20,20 +18,6 @@ function LoginPage() {
       setError(
         "Giriş hatası: " + (err.response?.data?.message || "Sunucu hatası")
       );
-    }
-  };
-
-  const handleGoogleSuccess = async (credentialResponse) => {
-    const decoded = jwtDecode(credentialResponse.credential);
-    try {
-      const res = await api.post("/auth/google-login", {
-        email: decoded.email,
-        name: decoded.name,
-      });
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
-    } catch {
-      setError("Google ile giriş başarısız");
     }
   };
 
