@@ -1,8 +1,8 @@
 import { BrowserRouter as Router, Routes, Route, Navigate } from "react-router-dom";
-import LoginPage from "./LoginPage";
-import RegisterPage from "./RegisterPage";
-import DashboardPage from "./DashboardPage";
-import BoardView from "./BoardView";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
+import BoardView from "./pages/BoardView";
 import { GoogleOAuthProvider } from "@react-oauth/google";
 
 function App() {
