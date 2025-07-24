@@ -4,7 +4,7 @@ import {
   createComment,
   deleteComment,
 } from "../controllers/commentController.js";
-import { authenticate } from "./authMiddleware.js";
+import { authenticate } from "../authMiddleware.js";
 
 const router = express.Router();
 
