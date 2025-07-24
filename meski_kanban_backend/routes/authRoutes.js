@@ -1,17 +1,21 @@
 import express from "express";
 import passport from "passport";
-import { login, register, getProfile } from "../controllers/authController.js";
+import {
+  login,
+  register,
+  getProfile,
+  changePassword,
+} from "../controllers/authController.js";
 import { authenticate } from "../authMiddleware.js";
+import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
 router.post("/login", login);
 router.post("/register", register);
-
-// ✅ Giriş yapan kullanıcının profilini döner
 router.get("/me", authenticate, getProfile);
+router.put("/change-password", authenticate, changePassword);
 
-// ✅ Google Auth
 router.get(
   "/google",
   passport.authenticate("google", { scope: ["profile", "email"] })
