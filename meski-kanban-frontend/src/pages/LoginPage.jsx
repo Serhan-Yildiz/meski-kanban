@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
 import { GoogleLogin } from "@react-oauth/google";
-import jwt_decode from "jwt-decode";
+import jwtDecode from "jwt-decode";
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -24,7 +24,7 @@ function LoginPage() {
   };
 
   const handleGoogleSuccess = async (credentialResponse) => {
-    const decoded = jwt_decode(credentialResponse.credential);
+    const decoded = jwtDecode(credentialResponse.credential);
     try {
       const res = await api.post("/auth/google-login", {
         email: decoded.email,
