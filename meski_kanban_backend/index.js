@@ -1,10 +1,8 @@
-// index.js (Refactored)
-
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
 import session from "express-session";
-
+import "./passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import boardRoutes from "./routes/boardRoutes.js";
@@ -21,12 +19,13 @@ const PORT = process.env.PORT || 5000;
 app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
 app.use(express.json());
 
-// Optional: session (Google auth eklenince aktif olacak)
-// app.use(session({
-//   secret: process.env.SESSION_SECRET,
-//   resave: false,
-//   saveUninitialized: false,
-// }));
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
 
 // Routes
 app.use("/auth", authRoutes);
