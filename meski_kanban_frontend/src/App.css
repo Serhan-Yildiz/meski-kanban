@@ -6,7 +6,33 @@ body {
   color: #333;
 }
 
-/* Giriş ve Kayıt Sayfaları */
+/* Ortak Bileşenler */
+.input {
+  padding: 10px;
+  font-size: 1rem;
+  border: 1px solid #cccccc;
+  border-radius: 4px;
+  outline-color: #0099cc;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.button {
+  background-color: #007ba7;
+  color: white;
+  padding: 10px;
+  font-size: 1rem;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.button:hover {
+  background-color: #00668d;
+}
+
+/* Giriş & Kayıt Sayfaları */
 .auth-container {
   max-width: 400px;
   margin: 60px auto;
@@ -28,62 +54,34 @@ body {
   gap: 12px;
 }
 
+.google-login-container {
+  margin-top: 12px;
+}
+
 .error {
   color: #c62828;
   font-size: 0.9rem;
   margin-top: 8px;
 }
 
-.google-login-container {
-  margin-top: 12px;
-}
-
-/* Giriş ve Kayıt Girişleri */
-.input {
-  padding: 10px;
-  font-size: 1rem;
-  border: 1px solid #cccccc;
-  border-radius: 4px;
-  outline-color: #0099cc;
-  width: 100%;
-  box-sizing: border-box;
-}
-
-/* Butonlar */
-.button {
-  background-color: #007ba7;
-  color: white;
-  padding: 10px;
-  font-size: 1rem;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
-  transition: background-color 0.2s;
-}
-
-.button:hover {
-  background-color: #00668d;
-}
-
-/* Uygulama İndirme Bölümü */
-.apk-download {
-  margin-top: 30px;
-  text-align: center;
-  font-size: 14px;
-}
-
-/* Dashboard (Board listesi) */
-.container {
+/* Dashboard Sayfası */
+.dashboard-container {
+  padding: 30px;
   max-width: 1200px;
-  margin: 0 auto;
-  padding: 20px;
+  margin: auto;
+}
+
+.dashboard-title {
+  font-size: 24px;
+  font-weight: bold;
+  color: #004d66;
+  margin-bottom: 20px;
 }
 
 .dashboard {
   display: flex;
   flex-wrap: wrap;
   gap: 20px;
-  padding-top: 20px;
 }
 
 .board-tile {
@@ -102,179 +100,7 @@ body {
   background-color: #b3e5fc;
 }
 
-/* Listeler */
-.list {
-  background-color: #ffffff;
-  padding: 16px;
-  border-radius: 8px;
-  width: 250px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  flex-shrink: 0;
-}
-
-.list h4 {
-  margin-bottom: 10px;
-}
-
-/* Kartlar */
-.card {
-  background-color: #ccefff;
-  margin-bottom: 10px;
-  padding: 10px;
-  border-radius: 4px;
-}
-
-.dashboard-container {
-  padding: 30px;
-  max-width: 1200px;
-  margin: auto;
-}
-
-.dashboard-title {
-  font-size: 24px;
-  font-weight: bold;
-  color: #004d66; /* Meski koyu mavi */
-  margin-bottom: 20px;
-}
-
-.create-board-bar {
-  display: flex;
-  gap: 10px;
-  margin-bottom: 25px;
-}
-
-.board-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 20px;
-}
-
-.dashboard-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-  margin-bottom: 20px;
-}
-
-.dashboard-subtitle {
-  font-size: 14px;
-  color: #666;
-  margin-top: 5px;
-}
-
-.user-info {
-  font-size: 14px;
-  color: #333;
-  padding: 5px 10px;
-}
-
-.new-board {
-  border: 2px dashed #ccc;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  background-color: transparent;
-}
-
-.dashed-box {
-  text-align: center;
-  padding: 20px;
-  width: 100%;
-}
-
-.plus-icon {
-  font-size: 24px;
-  color: #888;
-  margin-bottom: 10px;
-}
-
-.new-board-input {
-  border: none;
-  border-bottom: 1px solid #aaa;
-  outline: none;
-  width: 80%;
-  text-align: center;
-  font-size: 14px;
-  background-color: transparent;
-}
-
-.board-color-bar {
-  height: 40px;
-}
-
-.board-content {
-  padding: 10px 15px;
-}
-
-.board-title {
-  font-size: 16px;
-  font-weight: bold;
-  color: #004d66;
-}
-
-.board-desc {
-  font-size: 13px;
-  color: #777;
-  margin-top: 5px;
-}
-
-.boardpage-container {
-  padding: 20px;
-}
-
-.boardpage-title {
-  font-size: 24px;
-  color: #003b5c;
-  margin-bottom: 15px;
-}
-
-.list-container {
-  display: flex;
-  gap: 20px;
-  overflow-x: auto;
-}
-
-.list {
-  background-color: #f4f4f4;
-  border-radius: 10px;
-  padding: 15px;
-  min-width: 250px;
-  max-height: 85vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.cards {
-  flex-grow: 1;
-  overflow-y: auto;
-  margin-bottom: 10px;
-}
-
-.card {
-  background-color: #fff;
-  padding: 10px;
-  margin-bottom: 8px;
-  border-radius: 5px;
-  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
-}
-
-.new-list input,
-.list input {
-  margin-top: 10px;
-  padding: 5px;
-  border: 1px solid #aaa;
-  border-radius: 5px;
-}
-
-.list button {
-  margin-top: 5px;
-  padding: 6px 10px;
-  border: none;
-  background-color: #007ba7;
-  color: white;
-  border-radius: 5px;
-  cursor: pointer;
-}
+/* Board Sayfası */
 .boardpage {
   padding: 20px;
   background-color: #e6f2f8;
@@ -296,17 +122,12 @@ body {
   font-weight: bold;
 }
 
-.list-adder {
-  display: flex;
-  gap: 10px;
-}
-
-.list-wrapper {
+.list-container {
   display: flex;
   gap: 20px;
   overflow-x: auto;
-  padding-bottom: 10px;
 }
+
 .list-column {
   background-color: #f4f7fa;
   border-radius: 8px;
@@ -375,4 +196,35 @@ body {
   display: flex;
   flex-direction: column;
   gap: 6px;
+}
+
+/* Kart Detay Sayfası */
+.card-detail-container {
+  max-width: 600px;
+  margin: auto;
+  background-color: #fff;
+  padding: 24px;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.05);
+}
+
+.card-detail-title {
+  font-size: 22px;
+  color: #004d66;
+  font-weight: 600;
+  margin-bottom: 16px;
+}
+
+.card-detail-section {
+  margin-bottom: 12px;
+}
+
+.card-detail-label {
+  font-weight: bold;
+  margin-right: 10px;
+  color: #004d66;
+}
+
+.card-detail-value {
+  color: #333;
 }
