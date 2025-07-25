@@ -22,7 +22,7 @@ const DashboardPage = () => {
       );
       setBoards(response.data);
     } catch (error) {
-      console.error("Error fetching boards:", error);
+      console.error("Pano verileri alınırken hata oluştu:", error);
     }
   };
 
@@ -32,12 +32,16 @@ const DashboardPage = () => {
       const response = await axios.post(
         "https://meski-kanban.onrender.com/boards",
         { title: newBoardTitle },
-        { withCredentials: true }
+        {
+          withCredentials: true,
+          // Eğer JWT gerekiyorsa şunu ekle:
+          // headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+        }
       );
       setBoards([...boards, response.data]);
       setNewBoardTitle("");
     } catch (error) {
-      console.error("Error creating board:", error);
+      console.error("Pano oluşturulurken hata oluştu:", error);
     }
   };
 
@@ -48,12 +52,14 @@ const DashboardPage = () => {
   return (
     <div className="dashboard-container">
       <header className="dashboard-header">
-        <h1 className="dashboard-app-title">Trello Clone</h1>
+        <h1 className="dashboard-app-title">MESKİ Kanban</h1>
         <div className="dashboard-user">👤 Kullanıcı</div>
       </header>
 
-      <h2 className="dashboard-title">Your Boards</h2>
-      <p className="dashboard-subtitle">Manage your projects and tasks</p>
+      <h2 className="dashboard-title">Panolarınız</h2>
+      <p className="dashboard-subtitle">
+        Projelerinizi ve görevlerinizi yönetin
+      </p>
 
       <div className="dashboard-grid">
         <div className="board-tile create-board">
@@ -61,11 +67,11 @@ const DashboardPage = () => {
             type="text"
             value={newBoardTitle}
             onChange={(e) => setNewBoardTitle(e.target.value)}
-            placeholder="New board title"
+            placeholder="Yeni pano başlığı"
             className="create-board-input"
           />
           <button onClick={handleCreateBoard} className="create-board-btn">
-            Create
+            Oluştur
           </button>
         </div>
 
@@ -81,7 +87,7 @@ const DashboardPage = () => {
             />
             <div className="board-tile-content">
               <h3>{board.title}</h3>
-              <p>{board.description || "No description"}</p>
+              <p>{board.description || "Açıklama yok"}</p>
             </div>
           </div>
         ))}
