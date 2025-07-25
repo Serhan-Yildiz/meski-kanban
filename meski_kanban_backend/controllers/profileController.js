@@ -25,9 +25,12 @@ export async function changePassword(req, res) {
     const user = userQuery.rows[0];
 
     if (!user.password)
-      return res.status(400).json({
-        message: "Google hesabı ile giriş yapan kullanıcı şifre değiştiremez.",
-      });
+      return res
+        .status(400)
+        .json({
+          message:
+            "Google hesabı ile giriş yapan kullanıcı şifre değiştiremez.",
+        });
 
     const match = await bcrypt.compare(currentPassword, user.password);
     if (!match) return res.status(401).json({ message: "Mevcut şifre hatalı" });

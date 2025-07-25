@@ -1,38 +1,23 @@
 import express from "express";
-import dotenv from "dotenv";
 import cors from "cors";
-import session from "express-session";
-import "./passport.js";
+import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
-import userRoutes from "./routes/userRoutes.js";
-import boardRoutes from "./routes/boardRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
+import boardRoutes from "./routes/boardRoutes.js";
 
 dotenv.config();
-
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-app.use(cors({ origin: process.env.CLIENT_URL, credentials: true }));
+app.use(cors());
 app.use(express.json());
 
-app.use(
-  session({
-    secret: process.env.SESSION_SECRET,
-    resave: false,
-    saveUninitialized: false,
-  })
-);
-
 app.use("/auth", authRoutes);
-app.use("/users", userRoutes);
+app.use("/auth", profileRoutes); // 👈 Profil route'ları
 app.use("/boards", boardRoutes);
-app.use("/auth", profileRoutes);
 
 app.get("/", (req, res) => {
-  res.send("MESKI Trello-Clone API is running");
+  res.send("MESKİ Kanban API çalışıyor");
 });
 
-app.listen(PORT, () => {
-  console.log(`Server listening on port ${PORT}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Sunucu ${PORT} portunda çalışıyor`));
