@@ -5,10 +5,6 @@ import session from "express-session";
 import "./passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
-import boardRoutes from "./routes/boardRoutes.js";
-import listRoutes from "./routes/listRoutes.js";
-import cardRoutes from "./routes/cardRoutes.js";
-import commentRoutes from "./routes/commentRoutes.js";
 
 dotenv.config();
 
@@ -30,10 +26,7 @@ app.use(
 // Routes
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
-app.use("/boards", boardRoutes);
-app.use("/lists", listRoutes);
-app.use("/cards", cardRoutes);
-app.use("/comments", commentRoutes);
+
 
 // Root
 app.get("/", (req, res) => {
