@@ -217,3 +217,93 @@ body {
   color: #777;
   margin-top: 5px;
 }
+
+.boardpage-container {
+  padding: 20px;
+}
+
+.boardpage-title {
+  font-size: 24px;
+  color: #003b5c;
+  margin-bottom: 15px;
+}
+
+.list-container {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+}
+
+.list {
+  background-color: #f4f4f4;
+  border-radius: 10px;
+  padding: 15px;
+  min-width: 250px;
+  max-height: 85vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.cards {
+  flex-grow: 1;
+  overflow-y: auto;
+  margin-bottom: 10px;
+}
+
+.card {
+  background-color: #fff;
+  padding: 10px;
+  margin-bottom: 8px;
+  border-radius: 5px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.1);
+}
+
+.new-list input,
+.list input {
+  margin-top: 10px;
+  padding: 5px;
+  border: 1px solid #aaa;
+  border-radius: 5px;
+}
+
+.list button {
+  margin-top: 5px;
+  padding: 6px 10px;
+  border: none;
+  background-color: #007ba7;
+  color: white;
+  border-radius: 5px;
+  cursor: pointer;
+}
+.boardpage {
+  padding: 20px;
+  background-color: #e6f2f8;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.board-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.board-title {
+  font-size: 28px;
+  color: #004d73;
+  font-weight: bold;
+}
+
+.list-adder {
+  display: flex;
+  gap: 10px;
+}
+
+.list-wrapper {
+  display: flex;
+  gap: 20px;
+  overflow-x: auto;
+  padding-bottom: 10px;
+}
