@@ -14,7 +14,7 @@ export default function ProfilePage() {
     if (!token) return navigate("/login");
 
     axios
-      .get("https://meski-kanban.onrender.com/auth/me", {
+      .get(`${import.meta.env.VITE_API_URL}/auth/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setProfile(res.data))
