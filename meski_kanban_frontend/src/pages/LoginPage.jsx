@@ -6,18 +6,38 @@ function LoginPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+
+    if (!email || !password) {
+      setError("E-posta ve şifre boş bırakılamaz");
+      return;
+    }
+
+    if (!validateEmail(email)) {
+      setError("Geçerli bir e-posta adresi giriniz");
+      return;
+    }
+
+    setLoading(true);
+
     try {
       const res = await api.post("/auth/login", { email, password });
       localStorage.setItem("token", res.data.token);
       navigate("/dashboard");
     } catch (err) {
-      setError(
-        "Giriş hatası: " + (err.response?.data?.message || "Sunucu hatası")
-      );
+      setError("Giriş hatası: " + (err.response?.data?.message || "Sunucu hatası"));
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -42,14 +62,15 @@ function LoginPage() {
           className="input"
           required
         />
-        <button type="submit" className="button">
-          Giriş Yap
+        <button type="submit" className="button" disabled={loading}>
+          {loading ? "Giriş yapılıyor..." : "Giriş Yap"}
         </button>
 
         <div className="google-login-container">
           <p style={{ margin: "10px 0" }}>veya Google ile giriş yap</p>
           <button
             className="button google"
+            type="button"
             onClick={() =>
               (window.location.href =
                 "https://meski-kanban.onrender.com/auth/google")
@@ -61,6 +82,11 @@ function LoginPage() {
 
         <p style={{ marginTop: "15px" }}>
           Hesabınız yok mu? <a href="/register">Kayıt Ol</a>
+        </p>
+
+        {/* Opsiyonel */}
+        <p style={{ marginTop: "5px" }}>
+          <a href="/forgot-password">Şifremi unuttum</a>
         </p>
 
         {error && <p className="error">{error}</p>}
