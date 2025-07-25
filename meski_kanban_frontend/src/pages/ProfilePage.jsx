@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
+const API = import.meta.env.VITE_API_URL;
+
 export default function ProfilePage() {
   const [profile, setProfile] = useState(null);
   const [currentPassword, setCurrentPassword] = useState("");
@@ -14,7 +16,7 @@ export default function ProfilePage() {
     if (!token) return navigate("/login");
 
     axios
-      .get(`${import.meta.env.VITE_API_URL}/profile`, {
+      .get(`${API}/auth/me`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setProfile(res.data))
@@ -31,7 +33,7 @@ export default function ProfilePage() {
     const token = localStorage.getItem("token");
     try {
       const res = await axios.put(
-        "https://meski-kanban.onrender.com/auth/change-password",
+        `${API}/auth/change-password`,
         { currentPassword, newPassword },
         { headers: { Authorization: `Bearer ${token}` } }
       );

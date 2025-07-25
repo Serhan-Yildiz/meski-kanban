@@ -1,6 +1,6 @@
 import jwt from "jsonwebtoken";
 
-export const authenticate = (req, res, next) => {
+const auth = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
@@ -18,4 +18,4 @@ export const authenticate = (req, res, next) => {
     res.status(401).json({ message: "Geçersiz token" });
   }
 };
-;
+export default auth;

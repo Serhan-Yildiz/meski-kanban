@@ -1,13 +1,13 @@
 import express from "express";
+import auth from "../authMiddleware.js";
 import {
   getProfile,
   changePassword,
 } from "../controllers/profileController.js";
-import { authenticate } from "../authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/profile", authenticate, getProfile);
-router.put("/change-password", authenticate, changePassword);
+router.get("/me", auth, getProfile);
+router.put("/change-password", auth, changePassword);
 
 export default router;
