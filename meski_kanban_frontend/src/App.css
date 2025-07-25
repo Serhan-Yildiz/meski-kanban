@@ -228,3 +228,81 @@ body {
 .card-detail-value {
   color: #333;
 }
+
+/* Dashboard Header */
+.dashboard-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 30px;
+}
+
+.dashboard-app-title {
+  font-size: 28px;
+  font-weight: bold;
+  color: #004d66;
+}
+
+.dashboard-user {
+  font-size: 16px;
+  color: #333;
+}
+
+/* Dashboard Grid */
+.dashboard-subtitle {
+  color: #666;
+  margin-bottom: 20px;
+}
+
+.dashboard-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 20px;
+}
+
+.board-tile {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 1px 5px rgba(0, 0, 0, 0.05);
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+}
+
+.board-tile:hover {
+  transform: scale(1.02);
+}
+
+.board-color-bar {
+  height: 50px;
+}
+
+.board-tile-content {
+  padding: 16px;
+}
+
+.board-tile-content h3 {
+  margin: 0;
+  font-size: 16px;
+  font-weight: 600;
+}
+
+.board-tile-content p {
+  margin: 4px 0 0;
+  color: #666;
+  font-size: 14px;
+}
+
+.create-board {
+  border: 2px dashed #ccc;
+  color: #666;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.plus-icon {
+  font-size: 24px;
+  margin-bottom: 6px;
+}
