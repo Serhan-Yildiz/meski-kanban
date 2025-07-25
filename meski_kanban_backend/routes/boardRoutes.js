@@ -1,10 +1,10 @@
 import express from "express";
 import pool from "../db.js";
-import auth from "../authMiddleware.js";
+import authenticate from "../authMiddleware.js";
 
 const router = express.Router();
 
-router.get("/", auth, async (req, res) => {
+router.get("/", authenticate, async (req, res) => {
   try {
     const result = await pool.query(
       "SELECT * FROM boards WHERE owner_id = $1 ORDER BY created_at DESC",
@@ -16,7 +16,7 @@ router.get("/", auth, async (req, res) => {
   }
 });
 
-router.post("/", auth, async (req, res) => {
+router.post("/", authenticate, async (req, res) => {
   const { title } = req.body;
   try {
     const result = await pool.query(
@@ -29,7 +29,7 @@ router.post("/", auth, async (req, res) => {
   }
 });
 
-router.put("/:id", auth, async (req, res) => {
+router.put("/:id", authenticate, async (req, res) => {
   const { title } = req.body;
   try {
     const result = await pool.query(
@@ -43,7 +43,7 @@ router.put("/:id", auth, async (req, res) => {
   }
 });
 
-router.delete("/:id", auth, async (req, res) => {
+router.delete("/:id", authenticate, async (req, res) => {
   try {
     const result = await pool.query(
       "DELETE FROM boards WHERE id = $1 AND owner_id = $2",
