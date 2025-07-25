@@ -16,9 +16,6 @@ const DashboardPage = () => {
     try {
       const response = await axios.get(
         "https://meski-kanban.onrender.com/boards",
-        {
-          withCredentials: true,
-        }
       );
       setBoards(response.data);
     } catch (error) {
@@ -32,11 +29,6 @@ const DashboardPage = () => {
       const response = await axios.post(
         "https://meski-kanban.onrender.com/boards",
         { title: newBoardTitle },
-        {
-          withCredentials: true,
-          // Eğer JWT gerekiyorsa şunu ekle:
-          // headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-        }
       );
       setBoards([...boards, response.data]);
       setNewBoardTitle("");
