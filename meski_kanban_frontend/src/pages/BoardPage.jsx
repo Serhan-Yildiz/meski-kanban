@@ -1,72 +1,91 @@
-import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import api from "../api/axios";
-import Input from "../components/Input";
-import Button from "../components/Button";
+import React from "react";
 import ListColumn from "../components/ListColumn";
+import "../App.css"; // özel stil dosyan
 
-export default function BoardPage() {
-  const { id } = useParams(); // board ID
-  const [lists, setLists] = useState([]);
-  const [newListTitle, setNewListTitle] = useState("");
+const BoardPage = () => {
+  const boardTitle = "Project Alpha";
 
-  useEffect(() => {
-    fetchLists();
-  }, [id]);
-
-  const fetchLists = async () => {
-    try {
-      const res = await api.get(`/lists/${id}`);
-      setLists(res.data);
-    } catch (err) {
-      console.error("Listeler alınamadı:", err);
-    }
-  };
-
-  const handleAddList = async () => {
-    if (!newListTitle.trim()) return;
-    try {
-      await api.post("/lists", { title: newListTitle, board_id: id });
-      setNewListTitle("");
-      fetchLists();
-    } catch (err) {
-      console.error("Liste eklenemedi:", err);
-    }
-  };
-
-  const handleAddCard = async (listId, cardTitle) => {
-    try {
-      await api.post("/cards", { title: cardTitle, list_id: listId });
-      fetchLists();
-    } catch (err) {
-      console.error("Kart eklenemedi:", err);
-    }
-  };
+  const boardData = [
+    {
+      title: "To Do",
+      cards: [
+        {
+          title: "Design new landing page",
+          tags: ["Design", "High Priority"],
+          assignees: 2,
+        },
+        {
+          title: "Set up database schema",
+          tags: ["Backend"],
+          assignees: 1,
+        },
+        {
+          title: "Research user feedback",
+          tags: ["Research"],
+          assignees: 1,
+        },
+      ],
+    },
+    {
+      title: "In Progress",
+      cards: [
+        {
+          title: "Implement authentication",
+          tags: ["Backend", "Security"],
+          assignees: 2,
+        },
+        {
+          title: "Create mobile wireframes",
+          tags: ["Design", "Mobile"],
+          assignees: 1,
+        },
+      ],
+    },
+    {
+      title: "Review",
+      cards: [
+        {
+          title: "API documentation",
+          tags: ["Documentation"],
+          assignees: 1,
+        },
+      ],
+    },
+    {
+      title: "Done",
+      cards: [
+        {
+          title: "Project kickoff meeting",
+          tags: ["Meeting"],
+          assignees: 3,
+        },
+        {
+          title: "Initial project setup",
+          tags: ["Setup"],
+          assignees: 1,
+        },
+      ],
+    },
+  ];
 
   return (
-    <div className="boardpage">
-      <header className="board-header">
-        <h1 className="board-title">📋 Pano</h1>
-        <div className="list-adder">
-          <Input
-            value={newListTitle}
-            onChange={(e) => setNewListTitle(e.target.value)}
-            placeholder="Yeni liste adı"
-          />
-          <Button onClick={handleAddList}>+ Liste Ekle</Button>
-        </div>
-      </header>
+    <div className="board-page">
+      <div className="board-header">
+        <a href="/dashboard" className="back-link">
+          ← Back to Boards
+        </a>
+        <h1 className="board-title">{boardTitle}</h1>
+        <div className="board-options">&hellip;</div>
+      </div>
 
-      <section className="list-wrapper">
-        {lists.map((list) => (
-          <ListColumn
-            key={list.id}
-            title={list.title}
-            cards={list.cards}
-            onAddCard={(title) => handleAddCard(list.id, title)}
-          />
+      <div className="list-container">
+        {boardData.map((list, index) => (
+          <ListColumn key={index} title={list.title} cards={list.cards} />
         ))}
-      </section>
+        <div className="list-column placeholder">+ Add a list</div>
+      </div>
     </div>
   );
-}
+};
+
+export default BoardPage;

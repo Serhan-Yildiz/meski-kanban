@@ -1,47 +1,27 @@
-import { useState } from "react";
-import Input from "./Input";
-import Button from "./Button";
+import React from "react";
+import CardBox from "./CardBox";
+import "../App.css";
 
-export default function ListColumn({ title, cards = [], onAddCard }) {
-  const [newCardTitle, setNewCardTitle] = useState("");
-  const [showInput, setShowInput] = useState(false);
-
-  const handleAddCard = () => {
-    if (!newCardTitle.trim()) return;
-    onAddCard(newCardTitle.trim());
-    setNewCardTitle("");
-    setShowInput(false);
-  };
-
+const ListColumn = ({ title, cards }) => {
   return (
     <div className="list-column">
       <div className="list-header">
         <h3>{title}</h3>
         <span className="card-count">{cards.length}</span>
       </div>
-
       <div className="card-list">
-        {cards.map((card, index) => (
-          <div key={index} className="card-item">
-            <p>{card.title}</p>
-          </div>
-        ))}
-      </div>
-
-      {showInput ? (
-        <div className="add-card-form">
-          <Input
-            placeholder="Kart başlığı"
-            value={newCardTitle}
-            onChange={(e) => setNewCardTitle(e.target.value)}
+        {cards.map((card, idx) => (
+          <CardBox
+            key={idx}
+            title={card.title}
+            tags={card.tags}
+            assignees={card.assignees}
           />
-          <Button onClick={handleAddCard}>Ekle</Button>
-        </div>
-      ) : (
-        <button className="add-card-btn" onClick={() => setShowInput(true)}>
-          + Kart Ekle
-        </button>
-      )}
+        ))}
+        <div className="add-card-placeholder">+ Add a card</div>
+      </div>
     </div>
   );
-}
+};
+
+export default ListColumn;

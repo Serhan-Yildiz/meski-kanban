@@ -6,11 +6,18 @@ function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    if (password !== confirmPassword) {
+      setError("Şifreler eşleşmiyor.");
+      return;
+    }
+
     try {
       const res = await api.post("/auth/register", { name, email, password });
       localStorage.setItem("token", res.data.token);
@@ -18,7 +25,7 @@ function RegisterPage() {
     } catch (err) {
       setError(
         "Kayıt sırasında hata: " +
-          (err.response?.data?.message || "Sunucu hatası")
+        (err.response?.data?.message || "Sunucu hatası")
       );
     }
   };
@@ -52,6 +59,15 @@ function RegisterPage() {
           className="input"
           required
         />
+        <input
+          type="password"
+          placeholder="Şifre Tekrar"
+          value={confirmPassword}
+          onChange={(e) => setConfirmPassword(e.target.value)}
+          className="input"
+          required
+        />
+
         <button type="submit" className="button">
           Kayıt Ol
         </button>
