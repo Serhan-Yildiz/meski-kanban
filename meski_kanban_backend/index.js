@@ -6,6 +6,7 @@ import "./passport.js";
 import authRoutes from "./routes/authRoutes.js";
 import userRoutes from "./routes/userRoutes.js";
 import boardRoutes from "./routes/boardRoutes.js";
+import profileRoutes from "./routes/profileRoutes.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use(
 app.use("/auth", authRoutes);
 app.use("/users", userRoutes);
 app.use("/boards", boardRoutes);
+app.use("/auth", profileRoutes);
 
 app.get("/", (req, res) => {
   res.send("MESKI Trello-Clone API is running");
