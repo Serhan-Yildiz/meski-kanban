@@ -7,7 +7,7 @@ import {
 import LoginPage from "./pages/LoginPage";
 import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
-import BoardView from "./pages/BoardView";
+import BoardPage from "./pages/BoardPage";
 import AuthSuccess from "./pages/AuthSuccess"; // ✅ bunu ekle
 import ProfilePage from "./pages/ProfilePage";
 
@@ -33,7 +33,7 @@ function App() {
           <Route path="/auth/success" element={<AuthSuccess />} />
           <Route path="/profile" element={<ProfilePage />} />
           <Route path="/dashboard" element={<DashboardPage />} />
-          <Route path="/board/:id" element={<BoardView />} />
+          <Route path="/board/:id" element={<BoardPage />} />
           <Route path="*" element={<h2>404 - Sayfa bulunamadı</h2>} />
         </Routes>
       </div>
