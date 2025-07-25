@@ -14,7 +14,7 @@ export default function ProfilePage() {
     if (!token) return navigate("/login");
 
     axios
-      .get(`${import.meta.env.VITE_API_URL}/auth/profile`, {
+      .get(`${import.meta.env.VITE_API_URL}/profile`, {
         headers: { Authorization: `Bearer ${token}` },
       })
       .then((res) => setProfile(res.data))
