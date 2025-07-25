@@ -6,27 +6,56 @@ function RegisterPage() {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
+  const [confirm, setConfirm] = useState("");
   const [error, setError] = useState("");
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  const validateEmail = (email) => {
+    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    return regex.test(email);
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
 
-    if (password !== confirmPassword) {
-      setError("Şifreler eşleşmiyor.");
+    if (!name || !email || !password || !confirm) {
+      setError("Tüm alanlar zorunludur");
       return;
     }
 
+    if (!validateEmail(email)) {
+      setError("Geçerli bir e-posta adresi giriniz");
+      return;
+    }
+
+    if (password.length < 6) {
+      setError("Şifre en az 6 karakter olmalıdır");
+      return;
+    }
+
+    if (password !== confirm) {
+      setError("Şifreler eşleşmiyor");
+      return;
+    }
+
+    setLoading(true);
+
     try {
-      const res = await api.post("/auth/register", { name, email, password });
-      localStorage.setItem("token", res.data.token);
-      navigate("/dashboard");
+      await api.post("/auth/register", {
+        name,
+        email,
+        password,
+      });
+
+      navigate("/login");
     } catch (err) {
       setError(
-        "Kayıt sırasında hata: " +
-        (err.response?.data?.message || "Sunucu hatası")
+        "Kayıt hatası: " + (err.response?.data?.message || "Sunucu hatası")
       );
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -61,20 +90,20 @@ function RegisterPage() {
         />
         <input
           type="password"
-          placeholder="Şifre Tekrar"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
+          placeholder="Şifre (Tekrar)"
+          value={confirm}
+          onChange={(e) => setConfirm(e.target.value)}
           className="input"
           required
         />
-
-        <button type="submit" className="button">
-          Kayıt Ol
+        <button type="submit" className="button" disabled={loading}>
+          {loading ? "Kayıt yapılıyor..." : "Kayıt Ol"}
         </button>
 
         <div className="google-login-container">
           <p style={{ margin: "10px 0" }}>veya Google ile kayıt ol</p>
           <button
+            type="button"
             className="button google"
             onClick={() =>
               (window.location.href =
