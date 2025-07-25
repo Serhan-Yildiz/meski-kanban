@@ -5,11 +5,11 @@ import {
   updateBoard,
   deleteBoard,
 } from "../controllers/boardController.js";
-import { authenticate } from "../middleware/authMiddleware.js";
+import auth from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 
-router.use(authenticate);
+router.use(auth);
 
 router.get("/", getBoards);
 router.post("/", createBoard);
