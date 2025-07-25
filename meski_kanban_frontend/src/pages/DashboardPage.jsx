@@ -1,86 +1,122 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import api from "../api/axios";
+import BoardTile from "../components/BoardTile";
+import "../App.css";
 
-export default function DashboardPage() {
-  const [boards, setBoards] = useState([]);
-  const [newBoardName, setNewBoardName] = useState("");
+const DashboardPage = () => {
   const navigate = useNavigate();
-
-  const fetchBoards = async () => {
-    try {
-      const res = await api.get("/boards");
-      setBoards(res.data);
-    } catch (err) {
-      console.error("Panolar alınamadı:", err);
-    }
-  };
-
-  const handleCreateBoard = async () => {
-    if (!newBoardName.trim()) return;
-    try {
-      const res = await api.post("/boards", { name: newBoardName });
-      setNewBoardName("");
-      fetchBoards();
-      navigate(`/board/${res.data.id}`);
-    } catch (err) {
-      console.error("Pano oluşturulamadı:", err);
-    }
-  };
+  const [boards, setBoards] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [showInput, setShowInput] = useState(false);
+  const [newBoardTitle, setNewBoardTitle] = useState("");
 
   useEffect(() => {
-    fetchBoards();
+    // TODO: Replace with API call to fetch boards
+    setBoards([
+      {
+        id: 1,
+        title: "Project Alpha",
+        description: "Main development board",
+        color: "#4285F4",
+      },
+      {
+        id: 2,
+        title: "Marketing Campaign",
+        description: "Q1 marketing initiatives",
+        color: "#34A853",
+      },
+      {
+        id: 3,
+        title: "Bug Tracker",
+        description: "Track and fix issues",
+        color: "#EA4335",
+      },
+      {
+        id: 4,
+        title: "Design System",
+        description: "UI/UX components",
+        color: "#A142F4",
+      },
+      {
+        id: 5,
+        title: "User Research",
+        description: "Customer feedback",
+        color: "#FB8C00",
+      },
+    ]);
+    setLoading(false);
   }, []);
 
+  const handleCreateBoard = () => {
+    if (!newBoardTitle.trim()) return;
+
+    const newBoard = {
+      id: boards.length + 1,
+      title: newBoardTitle,
+      description: "New board",
+      color: "#ccc", // Default color, can enhance later
+    };
+
+    setBoards([...boards, newBoard]);
+    setNewBoardTitle("");
+    setShowInput(false);
+  };
+
+  const handleBoardClick = (id) => {
+    navigate(`/board/${id}`);
+  };
+
   return (
-    <div className="dashboard-container">
-      <div className="dashboard-header">
-        <div>
-          <h1 className="dashboard-title">Your Boards</h1>
-          <p className="dashboard-subtitle">Manage your projects and tasks</p>
-        </div>
-        <div className="user-info">👤 Kullanıcı</div>
-      </div>
+    <div className="dashboard-page">
+      <header className="dashboard-header">
+        <h1 className="logo">Trello Clone</h1>
+        <div className="user-info">👤 John Doe</div>
+      </header>
 
-      <div className="board-grid">
-        {/* Yeni pano kutusu */}
-        <div className="board-tile new-board">
-          <div className="dashed-box">
-            <div className="plus-icon">+</div>
-            <input
-              type="text"
-              placeholder="Yeni pano oluştur"
-              value={newBoardName}
-              onChange={(e) => setNewBoardName(e.target.value)}
-              onKeyDown={(e) => e.key === "Enter" && handleCreateBoard()}
-              className="new-board-input"
-            />
-          </div>
-        </div>
+      <main className="dashboard-main">
+        <h2>Your Boards</h2>
+        <p className="subtitle">Manage your projects and tasks</p>
 
-        {/* Panolar */}
-        {boards.map((board, i) => (
+        <div className="board-grid">
           <div
-            key={board.id}
-            className="board-tile"
-            onClick={() => navigate(`/board/${board.id}`)}
+            className="board-tile create-board"
+            onClick={() => setShowInput(true)}
           >
-            <div
-              className="board-color-bar"
-              style={{ backgroundColor: getColor(i) }}
-            />
-            <div className="board-content">
-              <h3 className="board-title">{board.name}</h3>
-              <p className="board-desc">Proje panosu</p>
-            </div>
+            {showInput ? (
+              <div className="create-board-form">
+                <input
+                  value={newBoardTitle}
+                  onChange={(e) => setNewBoardTitle(e.target.value)}
+                  placeholder="Enter board name"
+                  autoFocus
+                />
+                <button onClick={handleCreateBoard}>Create</button>
+              </div>
+            ) : (
+              <>
+                <span className="plus">+</span>
+                <p>Create new board</p>
+              </>
+            )}
           </div>
-        ))}
-      </div>
+
+          {loading ? (
+            <p>Loading...</p>
+          ) : (
+            boards.map((board) => (
+              <BoardTile
+                key={board.id}
+                title={board.title}
+                description={board.description}
+                color={board.color}
+                onClick={() => handleBoardClick(board.id)}
+              />
+            ))
+          )}
+        </div>
+      </main>
     </div>
   );
-}
+};
 
-function getColor(index) {
-  const colors = ["#007ba7", "#00838f", "#00acc1", "#0097a7", "#006064"];
-  return colors[index % colors.length];
-}
+export default DashboardPage;
