@@ -1,5 +1,5 @@
 import express from "express";
-import auth from "../authMiddleware.js";
+import auth from "../middleware/authMiddleware.js";
 import {
   getProfile,
   changePassword,

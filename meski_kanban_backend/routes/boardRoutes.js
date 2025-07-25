@@ -5,7 +5,7 @@ import {
   updateBoard,
   deleteBoard,
 } from "../controllers/boardController.js";
-import { authenticate } from "../authMiddleware.js";
+import { authenticate } from "../middleware/authMiddleware.js";
 
 const router = express.Router();
 

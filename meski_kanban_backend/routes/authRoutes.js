@@ -6,15 +6,15 @@ import {
   getProfile,
   changePassword,
 } from "../controllers/authController.js";
-import { authenticate } from "../authMiddleware.js";
+import auth from "../middleware/authMiddleware.js";
 import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
 router.post("/login", login);
 router.post("/register", register);
-router.get("/me", authenticate, getProfile);
-router.put("/change-password", authenticate, changePassword);
+router.get("/me", auth, getProfile);
+router.put("/change-password", auth, changePassword);
 
 router.get(
   "/google",
