@@ -1,6 +1,9 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
-import db from "./config/db.js";
+import dotenv from "dotenv";
+import pool from "./config/db.js"; // PostgreSQL bağlantısı
+
+dotenv.config();
 
 passport.use(
   new GoogleStrategy(
@@ -11,43 +14,35 @@ passport.use(
     },
     async (accessToken, refreshToken, profile, done) => {
       try {
-        const email = profile.emails?.[0]?.value;
-        if (!email)
-          return done(new Error("No email found from Google profile"));
+        const email = profile.emails[0].value;
+        const name = profile.displayName;
 
-        const existingUser = await db.query(
+        const existingUser = await pool.query(
           "SELECT * FROM users WHERE email = $1",
           [email]
         );
+
         if (existingUser.rows.length > 0) {
           return done(null, existingUser.rows[0]);
         }
 
-        const result = await db.query(
+        const newUser = await pool.query(
           "INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING *",
-          [profile.displayName, email, "google-oauth"]
+          [name, email, "google"]
         );
 
-        done(null, result.rows[0]);
+        return done(null, newUser.rows[0]);
       } catch (err) {
-        console.error(err);
-        done(err, null);
+        return done(err, null);
       }
     }
   )
 );
 
 passport.serializeUser((user, done) => {
-  done(null, user.id);
+  done(null, user);
 });
 
-passport.deserializeUser(async (id, done) => {
-  try {
-    const result = await db.query("SELECT * FROM users WHERE id = $1", [id]);
-    done(null, result.rows[0]);
-  } catch (err) {
-    done(err, null);
-  }
+passport.deserializeUser((obj, done) => {
+  done(null, obj);
 });
-
-export default passport;
