@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import axios from "axios";
+import ListColumn from "../components/ListColumn";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -55,14 +56,7 @@ export default function BoardPage() {
 
       <div>
         {lists.map((list) => (
-          <div key={list.id}>
-            <h3>{list.title}</h3>
-            <ul>
-              {list.cards.map((card) => (
-                <li key={card.id}>{card.title}</li>
-              ))}
-            </ul>
-          </div>
+          <ListColumn key={list.id} list={list} />
         ))}
       </div>
     </div>
