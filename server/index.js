@@ -6,6 +6,7 @@ import authRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import boardRoutes from "./routes/boardRoutes.js";
 import "./passport.js";
+import passport from "passport";
 
 dotenv.config();
 const app = express();
