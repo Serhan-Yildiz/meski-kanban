@@ -6,7 +6,7 @@ import ListColumn from "../components/ListColumn";
 const API = import.meta.env.VITE_API_URL;
 
 export default function BoardPage() {
-  const { id } = useParams(); // board ID
+  const { id } = useParams(); 
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -97,7 +97,7 @@ export default function BoardPage() {
         <button onClick={handleAddList}>Liste Ekle</button>
       </div>
 
-      <div style={{ display: "flex", gap: "10px", marginTop: "20px" }}>
+      <div >
         {lists.map((list) => (
           <ListColumn
             key={list.id}
