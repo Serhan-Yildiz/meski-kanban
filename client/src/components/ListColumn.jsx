@@ -33,6 +33,17 @@ export default function ListColumn({ list, onDelete, onUpdate }) {
       console.error("Kart eklenemedi", err);
     }
   };
+  const refreshCardList = async () => {
+    try {
+      const res = await axios.get(`${API}/lists/board/${list.board_id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const updatedList = res.data.find((l) => l.id === list.id);
+      if (updatedList) setCards(updatedList.cards);
+    } catch (err) {
+      console.error("Kartlar güncellenemedi:", err);
+    }
+  };
 
   return (
     <div>
@@ -52,11 +63,11 @@ export default function ListColumn({ list, onDelete, onUpdate }) {
 
       <div>
         {cards.map((card) => (
-          <Card key={card.id} card={card} />
+          <Card key={card.id} card={card} refreshCards={refreshCardList} />
         ))}
       </div>
 
-      <div style={{ marginTop: "10px" }}>
+      <div >
         <input
           type="text"
           value={newCardTitle}

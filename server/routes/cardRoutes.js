@@ -15,5 +15,7 @@ router.get("/:id", getCardById);
 router.put("/:id", updateCard);
 router.delete("/:id", deleteCard);
 router.post("/", createCard);
+router.put("/:id/move-up", moveCardUp);
+router.put("/:id/move-down", moveCardDown);
 
 export default router;

@@ -66,3 +66,75 @@ export async function createCard(req, res) {
     res.status(500).json({ message: "Kart oluşturulamadı" });
   }
 }
+
+export async function moveCardUp(req, res) {
+  const cardId = req.params.id;
+
+  try {
+    const cardRes = await pool.query("SELECT * FROM cards WHERE id = $1", [
+      cardId,
+    ]);
+    const card = cardRes.rows[0];
+
+    if (!card) return res.status(404).json({ message: "Kart bulunamadı" });
+
+    const aboveRes = await pool.query(
+      "SELECT * FROM cards WHERE list_id = $1 AND position < $2 ORDER BY position DESC LIMIT 1",
+      [card.list_id, card.position]
+    );
+
+    if (aboveRes.rows.length === 0)
+      return res.status(400).json({ message: "Yukarı taşınamaz" });
+
+    const above = aboveRes.rows[0];
+
+    await pool.query("UPDATE cards SET position = $1 WHERE id = $2", [
+      above.position,
+      card.id,
+    ]);
+    await pool.query("UPDATE cards SET position = $1 WHERE id = $2", [
+      card.position,
+      above.id,
+    ]);
+
+    res.json({ message: "Kart yukarı taşındı" });
+  } catch {
+    res.status(500).json({ message: "Taşıma hatası" });
+  }
+}
+
+export async function moveCardDown(req, res) {
+  const cardId = req.params.id;
+
+  try {
+    const cardRes = await pool.query("SELECT * FROM cards WHERE id = $1", [
+      cardId,
+    ]);
+    const card = cardRes.rows[0];
+
+    if (!card) return res.status(404).json({ message: "Kart bulunamadı" });
+
+    const belowRes = await pool.query(
+      "SELECT * FROM cards WHERE list_id = $1 AND position > $2 ORDER BY position ASC LIMIT 1",
+      [card.list_id, card.position]
+    );
+
+    if (belowRes.rows.length === 0)
+      return res.status(400).json({ message: "Aşağı taşınamaz" });
+
+    const below = belowRes.rows[0];
+
+    await pool.query("UPDATE cards SET position = $1 WHERE id = $2", [
+      below.position,
+      card.id,
+    ]);
+    await pool.query("UPDATE cards SET position = $1 WHERE id = $2", [
+      card.position,
+      below.id,
+    ]);
+
+    res.json({ message: "Kart aşağı taşındı" });
+  } catch {
+    res.status(500).json({ message: "Taşıma hatası" });
+  }
+}
