@@ -5,6 +5,8 @@ import {
   updateCard,
   deleteCard,
   createCard,
+  moveCardUp,
+  moveCardDown,
 } from "../controllers/cardController.js";
 
 const router = express.Router();
