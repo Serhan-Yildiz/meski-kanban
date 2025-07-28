@@ -29,10 +29,14 @@ export default function DashboardPage() {
     };
 
     const fetchBoards = async () => {
-      const res = await axios.get(`${API}/boards`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setBoards(res.data);
+      try {
+        const res = await axios.get(`${API}/boards`, {
+          headers: { Authorization: `Bearer ${token}` },
+        });
+        setBoards(res.data);
+      } catch (err) {
+        console.error("Boardları alırken hata:", err);
+      }
     };
 
     fetchUser();
@@ -41,34 +45,42 @@ export default function DashboardPage() {
 
   const handleCreateBoard = async () => {
     if (!newTitle.trim()) return;
-    const res = await axios.post(
-      `${API}/boards`,
-      { title: newTitle },
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-    setBoards([...boards, res.data]);
-    setNewTitle("");
+    try {
+      const res = await axios.post(
+        `${API}/boards`,
+        { title: newTitle },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setBoards([...boards, res.data]);
+      setNewTitle("");
+    } catch (err) {
+      console.error("Board oluşturulamadı:", err);
+    }
   };
 
   const handleDeleteBoard = async (id) => {
-    await axios.delete(`${API}/boards/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    setBoards(boards.filter((b) => b.id !== id));
+    try {
+      await axios.delete(`${API}/boards/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setBoards(boards.filter((b) => b.id !== id));
+    } catch (err) {
+      console.error("Board silinemedi:", err);
+    }
   };
 
   return (
     <div>
-      <div>
+      <header>
         <h1>MESKİ Kanban</h1>
         {user && (
-          <button onClick={() => navigate("/me")}>
+          <button onClick={() => navigate("/profile")}>
             {user.name || user.email}
           </button>
         )}
-      </div>
+      </header>
 
-      <div>
+      <main>
         <div>
           <input
             type="text"
@@ -79,18 +91,15 @@ export default function DashboardPage() {
           <button onClick={handleCreateBoard}>Oluştur</button>
         </div>
 
-        <div>
+        <ul>
           {boards.map((board) => (
-            <div key={board.id}>
+            <li key={board.id}>
               <span>{board.title}</span>
-              <div>
-                <button>Düzenle</button>
-                <button onClick={() => handleDeleteBoard(board.id)}>Sil</button>
-              </div>
-            </div>
+              <button onClick={() => handleDeleteBoard(board.id)}>Sil</button>
+            </li>
           ))}
-        </div>
-      </div>
+        </ul>
+      </main>
     </div>
   );
 }
