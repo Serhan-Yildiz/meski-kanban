@@ -9,6 +9,7 @@ import authRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import boardRoutes from "./routes/boardRoutes.js";
 import listRoutes from "./routes/listRoutes.js";
+import cardRoutes from "./routes/cardRoutes.js";
 
 dotenv.config();
 
@@ -40,6 +41,7 @@ app.use("/auth", authRoutes);
 app.use("/auth", profileRoutes);
 app.use("/boards", boardRoutes);
 app.use("/lists", listRoutes);
+app.use("/cards", cardRoutes);
 
 app.get("/", (req, res) => {
   res.send("MESKİ Kanban API çalışıyor 🚀");
