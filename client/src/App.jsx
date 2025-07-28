@@ -6,6 +6,7 @@ import AuthSuccess from "./pages/AuthSuccess";
 import ProfilePage from "./pages/ProfilePage";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import BoardPage from "./pages/BoardPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/auth/success" element={<AuthSuccess />} />
         <Route path="/me" element={<ProfilePage />} />
+        <Route path="/boards/:id" element={<BoardPage />} />
         <Route path="*" element={<NotFoundPage />} />{" "}
       </Routes>
     </BrowserRouter>
