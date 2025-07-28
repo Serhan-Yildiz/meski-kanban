@@ -4,17 +4,20 @@ import RegisterPage from "./pages/RegisterPage";
 import DashboardPage from "./pages/DashboardPage";
 import AuthSuccess from "./pages/AuthSuccess";
 import ProfilePage from "./pages/ProfilePage";
+import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/" element={<LoginPage />} />
+        <Route path="/" element={<HomePage />} />{" "}
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/auth/success" element={<AuthSuccess />} />
         <Route path="/me" element={<ProfilePage />} />
+        <Route path="*" element={<NotFoundPage />} />{" "}
       </Routes>
     </BrowserRouter>
   );
