@@ -59,52 +59,33 @@ export default function DashboardPage() {
 
   return (
     <div>
-      <div className="flex justify-between items-center bg-blue-900 text-white px-4 py-3">
-        <h1 className="text-xl font-bold">MESKİ Kanban</h1>
+      <div>
+        <h1>MESKİ Kanban</h1>
         {user && (
-          <button
-            onClick={() => navigate("/profile")}
-            className="bg-white text-blue-900 px-3 py-1 rounded"
-          >
+          <button onClick={() => navigate("/me")}>
             {user.name || user.email}
           </button>
         )}
       </div>
 
-      <div className="p-4 max-w-3xl mx-auto">
-        <div className="flex gap-2 mb-4">
+      <div>
+        <div>
           <input
             type="text"
             placeholder="Yeni board başlığı"
             value={newTitle}
             onChange={(e) => setNewTitle(e.target.value)}
-            className="border px-2 py-1 flex-1"
           />
-          <button
-            onClick={handleCreateBoard}
-            className="bg-blue-900 text-white px-4 py-1 rounded"
-          >
-            Oluştur
-          </button>
+          <button onClick={handleCreateBoard}>Oluştur</button>
         </div>
 
-        <div className="grid gap-3">
+        <div>
           {boards.map((board) => (
-            <div
-              key={board.id}
-              className="border rounded px-4 py-2 flex justify-between items-center"
-            >
+            <div key={board.id}>
               <span>{board.title}</span>
-              <div className="flex gap-2">
-                <button className="text-sm px-2 py-1 bg-yellow-500 text-white rounded">
-                  Düzenle
-                </button>
-                <button
-                  onClick={() => handleDeleteBoard(board.id)}
-                  className="text-sm px-2 py-1 bg-red-600 text-white rounded"
-                >
-                  Sil
-                </button>
+              <div>
+                <button>Düzenle</button>
+                <button onClick={() => handleDeleteBoard(board.id)}>Sil</button>
               </div>
             </div>
           ))}
