@@ -101,4 +101,3 @@ export async function deleteList(req, res) {
     res.status(500).json({ message: "Liste silinemedi" });
   }
 }
-s;
