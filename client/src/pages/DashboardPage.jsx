@@ -19,7 +19,7 @@ export default function DashboardPage() {
 
     const fetchUser = async () => {
       try {
-        const res = await axios.get(`${API}/auth/profile`, {
+        const res = await axios.get(`${API}/auth/me`, {
           headers: { Authorization: `Bearer ${token}` },
         });
         setUser(res.data);
