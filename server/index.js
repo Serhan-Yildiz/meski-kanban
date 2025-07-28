@@ -12,7 +12,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use("/auth", authRoutes);
-app.use("/auth", profileRoutes); // 👈 Profil route'ları
+app.use("/auth", profileRoutes);
 app.use("/boards", boardRoutes);
 
 app.get("/", (req, res) => {
