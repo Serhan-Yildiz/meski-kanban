@@ -1,5 +1,6 @@
 import express from "express";
 import passport from "passport";
+import jwt from "jsonwebtoken";
 import {
   login,
   register,
@@ -7,7 +8,6 @@ import {
   changePassword,
 } from "../controllers/authController.js";
 import auth from "../middleware/authMiddleware.js";
-import jwt from "jsonwebtoken";
 
 const router = express.Router();
 
@@ -23,18 +23,17 @@ router.get(
 
 router.get(
   "/google/callback",
-  passport.authenticate("google", {
-    successRedirect: `${process.env.CLIENT_URL}/auth/success`,
-    failureRedirect: `${process.env.CLIENT_URL}/login`,
-  }),
+  passport.authenticate("google", { session: false }),
   (req, res) => {
     const token = jwt.sign(
-      { id: req.user.id, email: req.user.email },
-      process.env.JWT_SECRET,
       {
-        expiresIn: "1d",
-      }
+        id: req.user.id,
+        email: req.user.email,
+      },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
     );
+
     res.redirect(`${process.env.CLIENT_URL}/auth/success?token=${token}`);
   }
 );
