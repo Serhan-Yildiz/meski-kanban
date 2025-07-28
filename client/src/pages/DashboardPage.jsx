@@ -94,7 +94,9 @@ export default function DashboardPage() {
         <ul>
           {boards.map((board) => (
             <li key={board.id}>
-              <span>{board.title}</span>
+              <span onClick={() => navigate(`/boards/${board.id}`)}>
+                {board.title}
+              </span>
               <button onClick={() => handleDeleteBoard(board.id)}>Sil</button>
             </li>
           ))}
