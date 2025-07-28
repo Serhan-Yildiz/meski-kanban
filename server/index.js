@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import authRoutes from "./routes/authRoutes.js";
 import profileRoutes from "./routes/profileRoutes.js";
 import boardRoutes from "./routes/boardRoutes.js";
+import "./passport.js";
 
 dotenv.config();
 const app = express();
@@ -14,6 +15,18 @@ app.use(
     credentials: true,
   })
 );
+
+app.use(
+  session({
+    secret: process.env.SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+app.use(passport.initialize());
+app.use(passport.session());
+
 app.use(express.json());
 
 app.use("/auth", authRoutes);
