@@ -36,7 +36,8 @@ export async function updateBoard(req, res) {
       "UPDATE boards SET title = $1 WHERE id = $2 AND owner_id = $3 RETURNING *",
       [title, boardId, req.user.id]
     );
-    if (result.rowCount === 0) return res.status(404).json({ error: "Board bulunamadı." });
+    if (result.rowCount === 0)
+      return res.status(404).json({ error: "Board bulunamadı." });
 
     res.json(result.rows[0]);
   } catch {
@@ -52,10 +53,59 @@ export async function deleteBoard(req, res) {
       "DELETE FROM boards WHERE id = $1 AND owner_id = $2",
       [boardId, req.user.id]
     );
-    if (result.rowCount === 0) return res.status(404).json({ error: "Board bulunamadı." });
+    if (result.rowCount === 0)
+      return res.status(404).json({ error: "Board bulunamadı." });
 
     res.json({ message: "Board silindi." });
   } catch {
     res.status(500).json({ error: "Board silinemedi." });
+  }
+}
+
+export async function getBoardById(req, res) {
+  const boardId = req.params.id;
+
+  try {
+    const result = await pool.query(
+      "SELECT * FROM boards WHERE id = $1 AND owner_id = $2",
+      [boardId, req.user.id]
+    );
+
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Pano bulunamadı" });
+    }
+
+    res.json(result.rows[0]);
+  } catch {
+    res.status(500).json({ message: "Pano getirilemedi." });
+  }
+}
+
+export async function getListsWithCardsByBoardId(req, res) {
+  const boardId = req.params.id;
+
+  try {
+    const listsRes = await pool.query(
+      "SELECT * FROM lists WHERE board_id = $1",
+      [boardId]
+    );
+
+    const lists = [];
+
+    for (const list of listsRes.rows) {
+      const cardsRes = await pool.query(
+        "SELECT * FROM cards WHERE list_id = $1",
+        [list.id]
+      );
+
+      lists.push({
+        ...list,
+        cards: cardsRes.rows,
+      });
+    }
+
+    res.json(lists);
+  } catch {
+    res.status(500).json({ message: "Listeler getirilemedi." });
   }
 }
