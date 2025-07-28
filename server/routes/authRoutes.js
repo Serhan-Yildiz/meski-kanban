@@ -35,7 +35,7 @@ router.get(
         expiresIn: "1d",
       }
     );
-    res.redirect(`https://meski-kanban.vercel.app/auth/success?token=${token}`);
+    res.redirect(`${process.env.CLIENT_URL}/auth/success?token=${token}`);
   }
 );
 
