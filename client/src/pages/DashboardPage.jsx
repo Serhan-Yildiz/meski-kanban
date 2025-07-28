@@ -74,7 +74,7 @@ export default function DashboardPage() {
       <header>
         <h1>MESKİ Kanban</h1>
         {user && (
-          <button onClick={() => navigate("/profile")}>
+          <button onClick={() => navigate("/me")}>
             {user.name || user.email}
           </button>
         )}
