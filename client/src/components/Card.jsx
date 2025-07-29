@@ -26,13 +26,8 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
 
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between" }}>
-        <span
-          onClick={() => navigate(`/cards/${card.id}`)}
-          style={{ cursor: "pointer" }}
-        >
-          {card.title}
-        </span>
+      <div>
+        <span onClick={() => navigate(`/cards/${card.id}`)}>{card.title}</span>
         <div>
           {!isFirst && <button onClick={() => moveCard("up")}>⬆️</button>}
           {!isLast && <button onClick={() => moveCard("down")}>⬇️</button>}
