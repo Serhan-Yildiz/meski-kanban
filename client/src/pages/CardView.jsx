@@ -20,7 +20,7 @@ export default function CardView() {
     };
 
     fetchCard();
-  });
+  }, [id, token]);
 
   if (!card) return <div className="centered-page">Yükleniyor...</div>;
 
@@ -28,20 +28,10 @@ export default function CardView() {
     <div className="card-view">
       <h2>{card.title}</h2>
       <p>{card.description}</p>
-      <p>
-        <strong>Öncelik:</strong> {card.priority}
-      </p>
-      <p>
-        <strong>Etiketler:</strong> {(card.tags || []).join(", ")}
-      </p>
-      <p>
-        <strong>Oluşturulma:</strong>{" "}
-        {new Date(card.created_at).toLocaleString()}
-      </p>
-      <p>
-        <strong>Güncellenme:</strong>{" "}
-        {new Date(card.updated_at).toLocaleString()}
-      </p>
+      <p><strong>Öncelik:</strong> {card.priority || "Belirtilmemiş"}</p>
+      <p><strong>Etiketler:</strong> {(card.tags || []).join(", ")}</p>
+      <p><strong>Oluşturulma:</strong> {new Date(card.created_at).toLocaleString()}</p>
+      <p><strong>Güncellenme:</strong> {new Date(card.updated_at).toLocaleString()}</p>
     </div>
   );
 }

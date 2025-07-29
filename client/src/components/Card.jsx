@@ -10,7 +10,7 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   const moveCard = async (direction) => {
     try {
       await axios.put(
-        `${API}/cards/${card.id}/move-${direction}`,
+        `/cards/${card.id}/move-${direction}`,
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
@@ -27,7 +27,10 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   return (
     <div className="card-item">
       <div className="card-header">
-        <span onClick={() => navigate(`/cards/${card.id}`)} className="card-title">
+        <span
+          onClick={() => navigate(`/cards/${card.id}`)}
+          className="card-title"
+        >
           {card.title}
         </span>
         <div className="card-controls">

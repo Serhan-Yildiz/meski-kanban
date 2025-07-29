@@ -25,7 +25,9 @@ export default function DashboardPage() {
       await axios.post(
         "/boards",
         { title: newBoardTitle },
-        { headers: { Authorization: `Bearer ${token}` } }
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
       );
       setNewBoardTitle("");
       fetchBoards();

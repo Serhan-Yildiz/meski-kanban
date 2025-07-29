@@ -28,7 +28,7 @@ export default function BoardPage() {
 
   const fetchLists = async () => {
     try {
-      const res = await axios.get(`/board/${id}`, {
+      const res = await axios.get(`/lists/board/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -37,11 +37,11 @@ export default function BoardPage() {
       } else if (Array.isArray(res.data.lists)) {
         setLists(res.data.lists);
       } else {
-        console.warn("⚠️ List response unexpected:", res.data);
+        console.warn("Listeler dizi formatında değil:", res.data);
         setLists([]);
       }
     } catch (err) {
-      console.error("❌ Listeler alınamadı", err);
+      console.error("Listeler alınamadı", err);
     }
   };
 
