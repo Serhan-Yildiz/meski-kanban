@@ -1,13 +1,13 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import LoginPage from "./LoginPage";
-import RegisterPage from "./RegisterPage";
-import DashboardPage from "./DashboardPage";
-import ProfilePage from "./ProfilePage";
-import BoardPage from "./BoardPage";
-import AuthSuccess from "./AuthSuccess";
-import CardView from "./CardView";
-import HomePage from "./HomePage";
-import NotFoundPage from "./NotFoundPage";
+import LoginPage from "./pages/LoginPage";
+import RegisterPage from "./pages/RegisterPage";
+import DashboardPage from "./pages/DashboardPage";
+import ProfilePage from "./pages/ProfilePage";
+import BoardPage from "./pages/BoardPage";
+import AuthSuccess from "./pages/AuthSuccess";
+import CardView from "./pages/CardView";
+import HomePage from "./pages/HomePage";
+import NotFoundPage from "./pages/NotFoundPage";
 
 function App() {
   return (
