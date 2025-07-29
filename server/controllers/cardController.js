@@ -57,10 +57,17 @@ export async function createCard(req, res) {
   }
 
   try {
-    const result = await pool.query(
-      "INSERT INTO cards (title, list_id) VALUES ($1, $2) RETURNING *",
-      [title, listId]
+    const getMaxPos = await pool.query(
+      "SELECT MAX(position) FROM cards WHERE list_id = $1",
+      [listId]
     );
+    const newPos = (getMaxPos.rows[0].max || 0) + 1;
+
+    const result = await pool.query(
+      "INSERT INTO cards (title, list_id, position) VALUES ($1, $2, $3) RETURNING *",
+      [title, listId, newPos]
+    );
+
     res.status(201).json(result.rows[0]);
   } catch {
     res.status(500).json({ message: "Kart oluşturulamadı" });

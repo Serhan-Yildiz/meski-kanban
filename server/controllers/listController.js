@@ -32,16 +32,18 @@ export async function getListsByBoardId(req, res) {
 
   try {
     const listsRes = await pool.query(
-      "SELECT * FROM lists WHERE board_id = $1",
+      "SELECT * FROM lists WHERE board_id = $1 ORDER BY position ASC",
       [boardId]
     );
+
     const lists = [];
 
     for (const list of listsRes.rows) {
       const cardsRes = await pool.query(
-        "SELECT * FROM cards WHERE list_id = $1",
+        "SELECT * FROM cards WHERE list_id = $1 ORDER BY position ASC",
         [list.id]
       );
+
       lists.push({
         ...list,
         cards: cardsRes.rows,
