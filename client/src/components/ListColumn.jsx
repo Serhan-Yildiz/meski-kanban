@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "./axios";
+import axios from "axios";
 import Card from "./Card";
 
 export default function ListColumn({ list, fetchLists }) {
