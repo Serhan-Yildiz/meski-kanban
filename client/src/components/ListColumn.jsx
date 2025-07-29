@@ -62,12 +62,18 @@ export default function ListColumn({ list, onDelete, onUpdate }) {
       <button onClick={() => onDelete(list.id)}>Listeyi Sil</button>
 
       <div>
-        {cards.map((card) => (
-          <Card key={card.id} card={card} refreshCards={refreshCardList} />
+        {cards.map((card, index) => (
+          <Card
+            key={card.id}
+            card={card}
+            refreshCards={refreshCardList}
+            isFirst={index === 0}
+            isLast={index === cards.length - 1}
+          />
         ))}
       </div>
 
-      <div >
+      <div>
         <input
           type="text"
           value={newCardTitle}

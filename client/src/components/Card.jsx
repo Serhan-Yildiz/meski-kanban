@@ -3,7 +3,7 @@ import axios from "axios";
 
 const API = import.meta.env.VITE_API_URL;
 
-export default function Card({ card, refreshCards }) {
+export default function Card({ card, refreshCards, isFirst, isLast }) {
   const navigate = useNavigate();
   const token = localStorage.getItem("token");
 
@@ -16,13 +16,17 @@ export default function Card({ card, refreshCards }) {
       );
       if (refreshCards) refreshCards();
     } catch (err) {
-      console.error("Kart taşınamadı:", err);
+      if (err.response?.status === 400) {
+        alert("Kart zaten sınırda.");
+      } else {
+        console.error("Kart taşınamadı:", err);
+      }
     }
   };
 
   return (
     <div>
-      <div>
+      <div style={{ display: "flex", justifyContent: "space-between" }}>
         <span
           onClick={() => navigate(`/cards/${card.id}`)}
           style={{ cursor: "pointer" }}
@@ -30,8 +34,8 @@ export default function Card({ card, refreshCards }) {
           {card.title}
         </span>
         <div>
-          <button onClick={() => moveCard("up")}>⬆️</button>
-          <button onClick={() => moveCard("down")}>⬇️</button>
+          {!isFirst && <button onClick={() => moveCard("up")}>⬆️</button>}
+          {!isLast && <button onClick={() => moveCard("down")}>⬇️</button>}
         </div>
       </div>
     </div>
