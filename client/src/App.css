@@ -21,6 +21,7 @@ select {
   font-size: 1rem;
   padding: 8px;
   margin: 5px 0;
+  box-sizing: border-box;
 }
 
 button {
@@ -29,6 +30,7 @@ button {
   color: white;
   cursor: pointer;
   border-radius: 4px;
+  width: 100%;
 }
 
 button:hover {
@@ -56,6 +58,7 @@ button:hover {
 .auth-form button {
   width: 100%;
   margin-bottom: 10px;
+  box-sizing: border-box;
 }
 
 .auth-form .google-login,
@@ -75,6 +78,7 @@ button:hover {
   text-decoration: none;
   padding: 8px;
   border-radius: 4px;
+  box-sizing: border-box;
 }
 
 .google-login:hover {
@@ -262,6 +266,7 @@ label {
 input[type="checkbox"] {
   width: auto;
   margin: 0;
+  box-sizing: border-box;
 }
 
 label input[type="checkbox"] {
