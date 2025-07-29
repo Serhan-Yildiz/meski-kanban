@@ -8,6 +8,7 @@ import AuthSuccess from "./pages/AuthSuccess";
 import CardView from "./pages/CardView";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
+import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/auth/success" element={<AuthSuccess />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route path="/dashboard" element={<DashboardPage />} />
         <Route path="/profile" element={<ProfilePage />} />
         <Route path="/boards/:id" element={<BoardPage />} />

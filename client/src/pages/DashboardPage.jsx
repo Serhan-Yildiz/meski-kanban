@@ -15,8 +15,6 @@ export default function DashboardPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
-      console.log("📦 /boards response:", res.data);
-
       if (Array.isArray(res.data)) {
         setBoards(res.data);
       } else if (Array.isArray(res.data.boards)) {
