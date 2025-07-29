@@ -68,12 +68,12 @@ export default function RegisterPage() {
       />
 
       <label>
+        Şifreyi Göster
         <input
           type="checkbox"
           checked={showPassword}
           onChange={() => setShowPassword(!showPassword)}
         />
-        Şifreyi Göster
       </label>
 
       <p className="password-rules">

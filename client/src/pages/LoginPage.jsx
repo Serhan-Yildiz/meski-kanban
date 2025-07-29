@@ -39,21 +39,21 @@ export default function LoginPage() {
       />
 
       <label>
+        Şifreyi Göster
         <input
           type="checkbox"
           checked={showPassword}
           onChange={() => setShowPassword(!showPassword)}
         />
-        Şifreyi Göster
       </label>
 
       <label>
+        Beni Hatırla
         <input
           type="checkbox"
           checked={rememberMe}
           onChange={() => setRememberMe(!rememberMe)}
         />
-        Beni Hatırla
       </label>
 
       <button onClick={login}>Giriş</button>
