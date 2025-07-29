@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "axios";
+import axios from "../api/axios.js";
 import ListColumn from "../components/ListColumn";
 
 export default function BoardPage() {
