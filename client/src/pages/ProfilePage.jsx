@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [newPassword, setNewPassword] = useState("");
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
   const navigate = useNavigate();
 
   const fetchProfile = async () => {

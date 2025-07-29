@@ -8,7 +8,8 @@ export default function BoardPage() {
   const [board, setBoard] = useState(null);
   const [lists, setLists] = useState([]);
   const [newListTitle, setNewListTitle] = useState("");
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
 
   useEffect(() => {
     fetchBoard();

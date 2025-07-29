@@ -58,6 +58,13 @@ button:hover {
   margin-bottom: 10px;
 }
 
+.auth-form .google-login,
+.auth-form button {
+  display: block;
+  width: 100%;
+  box-sizing: border-box;
+}
+
 .google-login {
   display: inline-block;
   width: 100%;
@@ -190,12 +197,6 @@ button:hover {
   margin-bottom: 1rem;
 }
 
-@media (prefers-color-scheme: dark) {
-  .logo {
-    content: url("/logo-dark.png");
-  }
-}
-
 .profile-page {
   max-width: 500px;
   margin: 50px auto;
@@ -256,4 +257,13 @@ label {
   gap: 6px;
   font-size: 0.95rem;
   margin-bottom: 10px;
+}
+
+input[type="checkbox"] {
+  width: auto;
+  margin: 0;
+}
+
+label input[type="checkbox"] {
+  flex-shrink: 0;
 }

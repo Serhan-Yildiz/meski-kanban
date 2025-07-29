@@ -5,7 +5,8 @@ import { useNavigate } from "react-router-dom";
 export default function DashboardPage() {
   const [boards, setBoards] = useState([]);
   const [newBoardTitle, setNewBoardTitle] = useState("");
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
   const navigate = useNavigate();
 
   const fetchBoards = async () => {

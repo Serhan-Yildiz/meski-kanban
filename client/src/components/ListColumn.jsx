@@ -4,7 +4,8 @@ import Card from "./Card";
 
 export default function ListColumn({ list, fetchLists }) {
   const [newCardTitle, setNewCardTitle] = useState("");
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
 
   const cards = list.cards || [];
 

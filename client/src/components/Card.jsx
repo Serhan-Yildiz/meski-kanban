@@ -5,7 +5,8 @@ const API = import.meta.env.VITE_API_URL;
 
 export default function Card({ card, refreshCards, isFirst, isLast }) {
   const navigate = useNavigate();
-  const token = localStorage.getItem("token");
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
 
   const moveCard = async (direction) => {
     try {

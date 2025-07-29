@@ -12,7 +12,13 @@ export default function LoginPage() {
   const login = async () => {
     try {
       const res = await axios.post("/auth/login", { email, password });
-      localStorage.setItem("token", res.data.token);
+
+      if (rememberMe) {
+        localStorage.setItem("token", res.data.token);
+      } else {
+        sessionStorage.setItem("token", res.data.token);
+      }
+
       navigate("/dashboard");
     } catch (err) {
       console.error("Giriş hatası", err);
@@ -39,21 +45,21 @@ export default function LoginPage() {
       />
 
       <label>
-        Şifreyi Göster
         <input
           type="checkbox"
           checked={showPassword}
           onChange={() => setShowPassword(!showPassword)}
         />
+        Şifreyi Göster
       </label>
 
       <label>
-        Beni Hatırla
         <input
           type="checkbox"
           checked={rememberMe}
           onChange={() => setRememberMe(!rememberMe)}
         />
+        Beni Hatırla
       </label>
 
       <button onClick={login}>Giriş</button>
