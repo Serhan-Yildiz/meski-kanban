@@ -50,10 +50,11 @@ export default function BoardPage() {
     if (!newListTitle.trim()) return;
     try {
       await axios.post(
-        "/lists",
-        { title: newListTitle, boardId: id },
+        `/lists/board/${id}`,
+        { title: newListTitle },
         { headers: { Authorization: `Bearer ${token}` } }
       );
+
       setNewListTitle("");
       fetchLists();
     } catch (err) {
