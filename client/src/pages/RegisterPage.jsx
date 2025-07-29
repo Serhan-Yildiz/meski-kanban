@@ -90,7 +90,7 @@ export default function RegisterPage() {
       </a>
 
       <div className="auth-links">
-        <Link to="/login">Zaten hesabınız var mı? Giriş Yap</Link>
+        Zaten hesabınız var mı? <Link to="/login">Giriş Yap</Link>
       </div>
     </div>
   );
