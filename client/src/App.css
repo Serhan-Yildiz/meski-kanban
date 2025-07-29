@@ -190,6 +190,12 @@ button:hover {
   margin-bottom: 1rem;
 }
 
+@media (prefers-color-scheme: dark) {
+  .logo {
+    content: url("/logo-dark.png");
+  }
+}
+
 .profile-page {
   max-width: 500px;
   margin: 50px auto;
@@ -218,4 +224,28 @@ button:hover {
 .notfound-container p {
   font-size: 1.2rem;
   margin-bottom: 2rem;
+}
+
+.auth-links {
+  margin-top: 15px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-size: 0.95rem;
+  text-align: center;
+}
+
+.auth-links a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+.password-rules {
+  font-size: 0.85rem;
+  color: #666;
+  margin-bottom: 10px;
 }
