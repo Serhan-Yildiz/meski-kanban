@@ -32,16 +32,18 @@ export default function BoardPage() {
         headers: { Authorization: `Bearer ${token}` },
       });
 
+      console.log("🔥 Gelen veri:", res.data);
+
       if (Array.isArray(res.data)) {
         setLists(res.data);
       } else if (Array.isArray(res.data.lists)) {
         setLists(res.data.lists);
       } else {
-        console.warn("Beklenmeyen liste formatı:", res.data);
+        console.warn("⚠️ Unexpected format:", res.data);
         setLists([]);
       }
     } catch (err) {
-      console.error("Listeler alınamadı", err);
+      console.error("❌ Liste alınamadı:", err);
     }
   };
 
