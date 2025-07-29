@@ -25,12 +25,12 @@ select {
 }
 
 button {
+  display: inline-block;
   background-color: var(--primary-color);
   border: none;
   color: white;
   cursor: pointer;
   border-radius: 4px;
-  width: 100%;
 }
 
 button:hover {
