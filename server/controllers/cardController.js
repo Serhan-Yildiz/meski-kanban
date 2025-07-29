@@ -86,12 +86,15 @@ export async function moveCardUp(req, res) {
     if (!card) return res.status(404).json({ message: "Kart bulunamadı" });
 
     const aboveRes = await pool.query(
-      "SELECT * FROM cards WHERE list_id = $1 AND position < $2 ORDER BY position DESC LIMIT 1",
+      `SELECT * FROM cards 
+       WHERE list_id = $1 AND position < $2 
+       ORDER BY position DESC LIMIT 1`,
       [card.list_id, card.position]
     );
 
-    if (aboveRes.rows.length === 0)
-      return res.status(400).json({ message: "Yukarı taşınamaz" });
+    if (aboveRes.rows.length === 0) {
+      return res.status(400).json({ message: "Kart en üstte" });
+    }
 
     const above = aboveRes.rows[0];
 
@@ -105,8 +108,9 @@ export async function moveCardUp(req, res) {
     ]);
 
     res.json({ message: "Kart yukarı taşındı" });
-  } catch {
-    res.status(500).json({ message: "Taşıma hatası" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Kart yukarı taşınamadı" });
   }
 }
 
@@ -122,12 +126,15 @@ export async function moveCardDown(req, res) {
     if (!card) return res.status(404).json({ message: "Kart bulunamadı" });
 
     const belowRes = await pool.query(
-      "SELECT * FROM cards WHERE list_id = $1 AND position > $2 ORDER BY position ASC LIMIT 1",
+      `SELECT * FROM cards 
+       WHERE list_id = $1 AND position > $2 
+       ORDER BY position ASC LIMIT 1`,
       [card.list_id, card.position]
     );
 
-    if (belowRes.rows.length === 0)
-      return res.status(400).json({ message: "Aşağı taşınamaz" });
+    if (belowRes.rows.length === 0) {
+      return res.status(400).json({ message: "Kart en altta" });
+    }
 
     const below = belowRes.rows[0];
 
@@ -141,7 +148,8 @@ export async function moveCardDown(req, res) {
     ]);
 
     res.json({ message: "Kart aşağı taşındı" });
-  } catch {
-    res.status(500).json({ message: "Taşıma hatası" });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: "Kart aşağı taşınamadı" });
   }
 }
