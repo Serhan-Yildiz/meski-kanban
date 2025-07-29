@@ -5,7 +5,7 @@ export default function HomePage() {
 
   return (
     <div className="home-page">
-      <img src="../public/logo.png" alt="MESKİ Kanban Logo" className="logo" />
+      <img src="..\..\public\logo.png" alt="MESKİ Kanban Logo" className="logo" />
       <h1>MESKİ Kanban'a Hoşgeldiniz</h1>
       <p>Görevlerinizi düzenleyin, panolar oluşturun, kartlarla yönetin.</p>
       <div className="home-buttons">
