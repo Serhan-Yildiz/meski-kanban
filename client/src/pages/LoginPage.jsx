@@ -73,9 +73,6 @@ export default function LoginPage() {
 
       <div className="auth-links">
         Hesabınız yok mu? <Link to="/register">Kayıt Ol</Link>
-        <a href="/apk/meski-kanban.apk" download>
-          📱 Android Uygulamayı İndir
-        </a>
         <Link to="/forgot-password">Şifremi Unuttum</Link>
       </div>
     </div>
