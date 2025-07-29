@@ -62,7 +62,7 @@ export default function LoginPage() {
         Beni Hatırla
       </label>
 
-      <button onClick={login}>Giriş</button>
+      <button onClick={login}>Giriş Yap</button>
 
       <a
         href="https://meski-kanban.onrender.com/auth/google"
