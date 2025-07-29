@@ -1,5 +1,5 @@
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
+import axios from "./axios";
 
 const API = import.meta.env.VITE_API_URL;
 
@@ -25,10 +25,12 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   };
 
   return (
-    <div>
-      <div>
-        <span onClick={() => navigate(`/cards/${card.id}`)}>{card.title}</span>
-        <div>
+    <div className="card-item">
+      <div className="card-header">
+        <span onClick={() => navigate(`/cards/${card.id}`)} className="card-title">
+          {card.title}
+        </span>
+        <div className="card-controls">
           {!isFirst && <button onClick={() => moveCard("up")}>⬆️</button>}
           {!isLast && <button onClick={() => moveCard("down")}>⬇️</button>}
         </div>

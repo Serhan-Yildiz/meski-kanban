@@ -4,14 +4,10 @@ export default function HomePage() {
   const navigate = useNavigate();
 
   return (
-    <div>
+    <div className="home-page">
       <h1>MESKİ Kanban'a Hoşgeldiniz</h1>
-      <p>
-        Bu uygulama, görevlerinizi düzenlemenize ve projelerinizi kolayca takip
-        etmenize yardımcı olur.
-      </p>
-
-      <div>
+      <p>Görevlerinizi düzenleyin, panolar oluşturun, kartlarla yönetin.</p>
+      <div className="home-buttons">
         <button onClick={() => navigate("/login")}>Giriş Yap</button>
         <button onClick={() => navigate("/register")}>Kayıt Ol</button>
       </div>

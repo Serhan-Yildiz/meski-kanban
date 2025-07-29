@@ -1,22 +1,18 @@
 import { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 
-function AuthSuccess() {
+export default function AuthSuccess() {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const params = new URLSearchParams(window.location.search);
-    const token = params.get("token");
-
-    if (token) {
-      localStorage.setItem("token", token);
+    setTimeout(() => {
       navigate("/dashboard");
-    } else {
-      navigate("/login");
-    }
-  }, []);
+    }, 1500);
+  }, [navigate]);
 
-  return <p>Yönlendiriliyorsunuz...</p>;
+  return (
+    <div className="centered-page">
+      <h2>Giriş başarılı! Yönlendiriliyorsunuz...</h2>
+    </div>
+  );
 }
-
-export default AuthSuccess;

@@ -1,107 +1,71 @@
 import { useEffect, useState } from "react";
+import axios from "./axios";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
-const API = import.meta.env.VITE_API_URL;
 
 export default function DashboardPage() {
   const [boards, setBoards] = useState([]);
-  const [newTitle, setNewTitle] = useState("");
-  const [user, setUser] = useState(null);
-  const navigate = useNavigate();
+  const [newBoardTitle, setNewBoardTitle] = useState("");
   const token = localStorage.getItem("token");
+  const navigate = useNavigate();
 
-  useEffect(() => {
-    if (!token) {
-      navigate("/login");
-      return;
-    }
-
-    const fetchUser = async () => {
-      try {
-        const res = await axios.get(`${API}/auth/me`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setUser(res.data);
-      } catch {
-        navigate("/login");
-      }
-    };
-
-    const fetchBoards = async () => {
-      try {
-        const res = await axios.get(`${API}/boards`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setBoards(res.data);
-      } catch (err) {
-        console.error("Boardları alırken hata:", err);
-      }
-    };
-
-    fetchUser();
-    fetchBoards();
-  }, [navigate, token]);
-
-  const handleCreateBoard = async () => {
-    if (!newTitle.trim()) return;
+  const fetchBoards = async () => {
     try {
-      const res = await axios.post(
-        `${API}/boards`,
-        { title: newTitle },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setBoards([...boards, res.data]);
-      setNewTitle("");
-    } catch (err) {
-      console.error("Board oluşturulamadı:", err);
-    }
-  };
-
-  const handleDeleteBoard = async (id) => {
-    try {
-      await axios.delete(`${API}/boards/${id}`, {
+      const res = await axios.get("/boards", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setBoards(boards.filter((b) => b.id !== id));
+      setBoards(res.data);
     } catch (err) {
-      console.error("Board silinemedi:", err);
+      console.error("Panolar alınamadı", err);
     }
   };
 
+  const createBoard = async () => {
+    if (!newBoardTitle.trim()) return;
+    try {
+      await axios.post(
+        "/boards",
+        { title: newBoardTitle },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setNewBoardTitle("");
+      fetchBoards();
+    } catch (err) {
+      console.error("Pano oluşturulamadı", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchBoards();
+  });
+
   return (
-    <div>
-      <header>
-        <h1>MESKİ Kanban</h1>
-        {user && (
-          <button onClick={() => navigate("/me")}>
-            {user.name || user.email}
-          </button>
-        )}
-      </header>
+    <div className="dashboard">
+      <div className="dashboard-header">
+        <h1>Panolarım</h1>
+        <button onClick={() => navigate("/profile")}>Profilim</button>
+      </div>
 
-      <main>
-        <div>
-          <input
-            type="text"
-            placeholder="Yeni board başlığı"
-            value={newTitle}
-            onChange={(e) => setNewTitle(e.target.value)}
-          />
-          <button onClick={handleCreateBoard}>Oluştur</button>
-        </div>
+      <div className="dashboard-new-board">
+        <input
+          type="text"
+          value={newBoardTitle}
+          onChange={(e) => setNewBoardTitle(e.target.value)}
+          placeholder="Yeni pano adı"
+        />
+        <button onClick={createBoard}>Ekle</button>
+      </div>
 
-        <ul>
-          {boards.map((board) => (
-            <li key={board.id}>
-              <span onClick={() => navigate(`/boards/${board.id}`)}>
-                {board.title}
-              </span>
-              <button onClick={() => handleDeleteBoard(board.id)}>Sil</button>
-            </li>
-          ))}
-        </ul>
-      </main>
+      <div className="dashboard-board-list">
+        {boards.map((board) => (
+          <div
+            key={board.id}
+            className="dashboard-board"
+            onClick={() => navigate(`/boards/${board.id}`)}
+          >
+            {board.title}
+          </div>
+        ))}
+      </div>
     </div>
   );
 }

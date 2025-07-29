@@ -1,94 +1,66 @@
 import { useEffect, useState } from "react";
+import axios from "./axios";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
-
-const API = import.meta.env.VITE_API_URL;
 
 export default function ProfilePage() {
-  const [profile, setProfile] = useState(null);
-  const [currentPassword, setCurrentPassword] = useState("");
+  const [user, setUser] = useState(null);
   const [newPassword, setNewPassword] = useState("");
-  const [message, setMessage] = useState("");
+  const token = localStorage.getItem("token");
   const navigate = useNavigate();
 
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    if (!token) return navigate("/login");
-
-    axios
-      .get(`${API}/auth/me`, {
-        headers: { Authorization: `Bearer ${token}` },
-      })
-      .then((res) => setProfile(res.data))
-      .catch(() => navigate("/login"));
-  }, [navigate]);
-
-  const handleLogout = () => {
-    localStorage.removeItem("token");
-    navigate("/login");
-  };
-
-  const handleChangePassword = async (e) => {
-    e.preventDefault();
-    const token = localStorage.getItem("token");
+  const fetchProfile = async () => {
     try {
-      const res = await axios.put(
-        `${API}/auth/change-password`,
-        { currentPassword, newPassword },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setMessage(res.data.message);
-      setCurrentPassword("");
-      setNewPassword("");
+      const res = await axios.get("/auth/profile", {
+        headers: { Authorization: `Bearer token ${token}` },
+      });
+      setUser(res.data);
     } catch (err) {
-      setMessage(err.response?.data?.message || "Bir hata oluştu");
+      console.error("Profil alınamadı", err);
     }
   };
 
-  if (!profile) return <p className="auth-container">Profil yükleniyor...</p>;
+  const changePassword = async () => {
+    try {
+      await axios.post(
+        "/auth/change-password",
+        { password: newPassword },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      alert("Şifre değiştirildi");
+    } catch {
+      alert("Şifre değiştirilemedi");
+    }
+  };
+
+  useEffect(() => {
+    fetchProfile();
+  });
 
   return (
-    <div className="auth-container">
-      <h2 className="auth-title">Profil Bilgileri</h2>
-      <p>
-        <strong>Ad:</strong> {profile.name}
-      </p>
-      <p>
-        <strong>Email:</strong> {profile.email}
-      </p>
-
-      <form
-        onSubmit={handleChangePassword}
-        className="auth-form"
-        style={{ marginTop: "20px" }}
-      >
-        <h3 style={{ color: "#004d66" }}>Parola Değiştir</h3>
-        <input
-          type="password"
-          className="input"
-          value={currentPassword}
-          onChange={(e) => setCurrentPassword(e.target.value)}
-          placeholder="Mevcut Parola"
-          required
-        />
-        <input
-          type="password"
-          className="input"
-          value={newPassword}
-          onChange={(e) => setNewPassword(e.target.value)}
-          placeholder="Yeni Parola"
-          required
-        />
-        <button type="submit" className="button">
-          Güncelle
-        </button>
-        {message && <p className="error">{message}</p>}
-      </form>
-
+    <div className="profile-page">
+      <h2>Profil</h2>
+      {user && (
+        <>
+          <p>
+            <strong>Ad:</strong> {user.name}
+          </p>
+          <p>
+            <strong>E-posta:</strong> {user.email}
+          </p>
+        </>
+      )}
+      <input
+        type="password"
+        placeholder="Yeni şifre"
+        value={newPassword}
+        onChange={(e) => setNewPassword(e.target.value)}
+      />
+      <button onClick={changePassword}>Şifreyi Güncelle</button>
       <button
-        onClick={handleLogout}
-        className="button"
-        style={{ backgroundColor: "#c62828", marginTop: "20px" }}
+        onClick={() => {
+          localStorage.removeItem("token");
+          navigate("/");
+        }}
       >
         Çıkış Yap
       </button>

@@ -1,110 +1,74 @@
 import { useEffect, useState } from "react";
-import { useNavigate, useParams } from "react-router-dom";
-import axios from "axios";
-import ListColumn from "../components/ListColumn";
-
-const API = import.meta.env.VITE_API_URL;
+import { useParams } from "react-router-dom";
+import axios from "./axios";
+import ListColumn from "./ListColumn";
 
 export default function BoardPage() {
-  const { id } = useParams(); 
-  const navigate = useNavigate();
-  const token = localStorage.getItem("token");
-
+  const { id } = useParams();
   const [board, setBoard] = useState(null);
   const [lists, setLists] = useState([]);
   const [newListTitle, setNewListTitle] = useState("");
+  const token = localStorage.getItem("token");
 
   useEffect(() => {
-    if (!token) return navigate("/login");
-
-    const fetchBoard = async () => {
-      try {
-        const res = await axios.get(`${API}/boards/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setBoard(res.data);
-      } catch {
-        navigate("/dashboard");
-      }
-    };
-
-    const fetchLists = async () => {
-      try {
-        const res = await axios.get(`${API}/lists/board/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setLists(res.data);
-      } catch (err) {
-        console.error("Listeler alınamadı", err);
-      }
-    };
-
     fetchBoard();
     fetchLists();
-  }, [id, navigate, token]);
+  });
 
-  const handleAddList = async () => {
-    if (!newListTitle.trim()) return;
+  const fetchBoard = async () => {
     try {
-      const res = await axios.post(
-        `${API}/lists/board/${id}`,
-        { title: newListTitle },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-      setLists([...lists, res.data]);
-      setNewListTitle("");
-    } catch (err) {
-      console.error("Liste eklenemedi", err);
-    }
-  };
-
-  const handleDeleteList = async (listId) => {
-    try {
-      await axios.delete(`${API}/lists/${listId}`, {
+      const res = await axios.get(`/boards/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setLists(lists.filter((l) => l.id !== listId));
+      setBoard(res.data);
     } catch (err) {
-      console.error("Liste silinemedi", err);
+      console.error("Pano alınamadı", err);
     }
   };
 
-  const handleUpdateList = async (listId, newTitle) => {
+  const fetchLists = async () => {
     try {
-      const res = await axios.put(
-        `${API}/lists/${listId}`,
-        { title: newTitle },
+      const res = await axios.get(`/lists/board/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setLists(res.data);
+    } catch (err) {
+      console.error("Listeler alınamadı", err);
+    }
+  };
+
+  const createList = async () => {
+    if (!newListTitle.trim()) return;
+    try {
+      await axios.post(
+        "/lists",
+        { title: newListTitle, boardId: id },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      setLists(lists.map((l) => (l.id === listId ? res.data : l)));
+      setNewListTitle("");
+      fetchLists();
     } catch (err) {
-      console.error("Liste güncellenemedi", err);
+      console.error("Liste oluşturulamadı", err);
     }
   };
 
-  if (!board) return <p>Yükleniyor...</p>;
-
   return (
-    <div>
-      <h1>{board.title}</h1>
+    <div className="board-page">
+      <h1>{board?.title || "Pano"}</h1>
 
-      <div>
+      <div className="list-input">
         <input
+          type="text"
           value={newListTitle}
           onChange={(e) => setNewListTitle(e.target.value)}
-          placeholder="Yeni liste başlığı"
+          placeholder="Yeni liste adı"
         />
-        <button onClick={handleAddList}>Liste Ekle</button>
+        <button onClick={createList}>Ekle</button>
       </div>
 
-      <div >
+      <div className="list-container">
         {lists.map((list) => (
-          <ListColumn
-            key={list.id}
-            list={list}
-            onDelete={handleDeleteList}
-            onUpdate={handleUpdateList}
-          />
+          <ListColumn key={list.id} list={list} fetchLists={fetchLists} />
         ))}
       </div>
     </div>
