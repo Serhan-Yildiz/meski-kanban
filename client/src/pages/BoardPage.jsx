@@ -31,7 +31,15 @@ export default function BoardPage() {
       const res = await axios.get(`/lists/board/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setLists(res.data);
+
+      if (Array.isArray(res.data)) {
+        setLists(res.data);
+      } else if (Array.isArray(res.data.lists)) {
+        setLists(res.data.lists);
+      } else {
+        console.warn("Beklenmeyen liste formatı:", res.data);
+        setLists([]);
+      }
     } catch (err) {
       console.error("Listeler alınamadı", err);
     }
@@ -67,9 +75,10 @@ export default function BoardPage() {
       </div>
 
       <div className="list-container">
-        {lists.map((list) => (
-          <ListColumn key={list.id} list={list} fetchLists={fetchLists} />
-        ))}
+        {Array.isArray(lists) &&
+          lists.map((list) => (
+            <ListColumn key={list.id} list={list} fetchLists={fetchLists} />
+          ))}
       </div>
     </div>
   );
