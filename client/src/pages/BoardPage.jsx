@@ -28,7 +28,7 @@ export default function BoardPage() {
 
   const fetchLists = async () => {
     try {
-      const res = await axios.get(`/lists/board/${id}`, {
+      const res = await axios.get(`/board/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
 
