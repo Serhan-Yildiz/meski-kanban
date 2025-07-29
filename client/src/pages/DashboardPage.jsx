@@ -13,7 +13,17 @@ export default function DashboardPage() {
       const res = await axios.get("/boards", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      setBoards(res.data);
+
+      console.log("📦 /boards response:", res.data);
+
+      if (Array.isArray(res.data)) {
+        setBoards(res.data);
+      } else if (Array.isArray(res.data.boards)) {
+        setBoards(res.data.boards);
+      } else {
+        console.warn("⚠️ Beklenmeyen format:", res.data);
+        setBoards([]);
+      }
     } catch (err) {
       console.error("Panolar alınamadı", err);
     }
@@ -58,15 +68,16 @@ export default function DashboardPage() {
       </div>
 
       <div className="dashboard-board-list">
-        {boards.map((board) => (
-          <div
-            key={board.id}
-            className="dashboard-board"
-            onClick={() => navigate(`/boards/${board.id}`)}
-          >
-            {board.title}
-          </div>
-        ))}
+        {Array.isArray(boards) &&
+          boards.map((board) => (
+            <div
+              key={board.id}
+              className="dashboard-board"
+              onClick={() => navigate(`/boards/${board.id}`)}
+            >
+              {board.title}
+            </div>
+          ))}
       </div>
     </div>
   );
