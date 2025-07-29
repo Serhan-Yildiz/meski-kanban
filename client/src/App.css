@@ -219,18 +219,3 @@ button:hover {
   font-size: 1.2rem;
   margin-bottom: 2rem;
 }
-
-.back-home-button {
-  background-color: #0078d4;
-  color: white;
-  padding: 10px 20px;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-  font-weight: bold;
-  transition: background 0.3s ease;
-}
-
-.back-home-button:hover {
-  background-color: #005fa3;
-}

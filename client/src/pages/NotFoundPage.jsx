@@ -9,7 +9,7 @@ export default function NotFound() {
         olabilir.
       </p>
       <Link to="/">
-        <button className="back-home-button">Ana Sayfaya Dön</button>
+        <button className="button">Ana Sayfaya Dön</button>
       </Link>
     </div>
   );
