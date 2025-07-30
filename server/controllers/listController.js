@@ -65,7 +65,7 @@ export const createList = async (req, res) => {
   }
 
   try {
-    const result = await db.query(
+    const result = await pool.query(
       "SELECT MAX(position) as max_position FROM lists WHERE board_id = $1",
       [boardId]
     );
@@ -73,7 +73,7 @@ export const createList = async (req, res) => {
     const max = result.rows[0].max_position ?? 0;
     const newPosition = max + 1;
 
-    const insertRes = await db.query(
+    const insertRes = await pool.query(
       `INSERT INTO lists (title, board_id, position, created_at, updated_at)
        VALUES ($1, $2, $3, NOW(), NOW())
        RETURNING *`,
@@ -129,7 +129,7 @@ export const moveList = async (req, res) => {
   }
 
   try {
-    const currentRes = await db.query("SELECT * FROM lists WHERE id = $1", [
+    const currentRes = await pool.query("SELECT * FROM lists WHERE id = $1", [
       id,
     ]);
     if (currentRes.rowCount === 0) {
@@ -138,7 +138,7 @@ export const moveList = async (req, res) => {
 
     const current = currentRes.rows[0];
 
-    const allRes = await db.query(
+    const allRes = await pool.query(
       "SELECT * FROM lists WHERE board_id = $1 ORDER BY position",
       [current.board_id]
     );
@@ -153,11 +153,11 @@ export const moveList = async (req, res) => {
 
     const target = lists[targetIndex];
 
-    await db.query("UPDATE lists SET position = $1 WHERE id = $2", [
+    await pool.query("UPDATE lists SET position = $1 WHERE id = $2", [
       target.position,
       current.id,
     ]);
-    await db.query("UPDATE lists SET position = $1 WHERE id = $2", [
+    await pool.query("UPDATE lists SET position = $1 WHERE id = $2", [
       current.position,
       target.id,
     ]);
