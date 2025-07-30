@@ -6,21 +6,27 @@ import Navbar from "../components/Navbar";
 export default function CardView() {
   const { id } = useParams();
   const [card, setCard] = useState(null);
+  const [desc, setDesc] = useState("");
+  const [priority, setPriority] = useState("");
   const token =
     localStorage.getItem("token") || sessionStorage.getItem("token");
 
+  const fetchCard = async () => {
+    try {
+      const res = await axios.get(`/cards/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      setCard(res.data);
+      setDesc(res.data.description || "");
+      setPriority(res.data.priority || "");
+    } catch (err) {
+      console.error("Kart detay alınamadı", err);
+    }
+  };
+
   useEffect(() => {
-    (async () => {
-      try {
-        const res = await axios.get(`/cards/${id}`, {
-          headers: { Authorization: `Bearer ${token}` },
-        });
-        setCard(res.data);
-      } catch (err) {
-        console.error("Kart detay alınamadı", err);
-      }
-    })();
-  }, [id, token]);
+    fetchCard();
+  });
 
   const getPriorityClass = (priority) => {
     switch (priority) {
@@ -35,6 +41,20 @@ export default function CardView() {
     }
   };
 
+  const updateCard = async () => {
+    try {
+      await axios.put(
+        `/cards/${id}`,
+        { description: desc, priority },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchCard();
+      alert("Kart güncellendi");
+    } catch (err) {
+      console.error("Kart güncellenemedi", err);
+    }
+  };
+
   return (
     <div className="card-view">
       <Navbar />
@@ -42,19 +62,30 @@ export default function CardView() {
         <>
           <h2>{card.title}</h2>
 
-          <p>
-            <strong>Açıklama:</strong>{" "}
-            {card.description ? card.description : "Açıklama yok"}
-          </p>
+          <label>
+            <strong>Açıklama:</strong>
+            <textarea
+              value={desc}
+              onChange={(e) => setDesc(e.target.value)}
+              rows={4}
+            />
+          </label>
 
-          <p>
-            <strong>Öncelik:</strong>{" "}
-            <span
-              className={`priority-badge ${getPriorityClass(card.priority)}`}
+          <label>
+            <strong>Öncelik:</strong>
+            <select
+              value={priority}
+              onChange={(e) => setPriority(e.target.value)}
+              className={`priority-badge ${getPriorityClass(priority)}`}
             >
-              {card.priority || "Belirtilmemiş"}
-            </span>
-          </p>
+              <option value="">Seç...</option>
+              <option value="düşük">düşük</option>
+              <option value="orta">orta</option>
+              <option value="yüksek">yüksek</option>
+            </select>
+          </label>
+
+          <button onClick={updateCard}>Güncelle</button>
 
           <p>
             <strong>Durum:</strong>{" "}
