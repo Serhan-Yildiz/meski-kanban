@@ -1,12 +1,12 @@
 import { useNavigate } from "react-router-dom";
+import { useState } from "react";
 import axios from "../api/axios.js";
-
-const API = import.meta.env.VITE_API_URL;
 
 export default function Card({ card, refreshCards, isFirst, isLast }) {
   const navigate = useNavigate();
   const token =
     localStorage.getItem("token") || sessionStorage.getItem("token");
+  const [checked, setChecked] = useState(card.is_done);
 
   const moveCard = async (direction) => {
     try {
@@ -15,7 +15,7 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
         {},
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      if (refreshCards) refreshCards();
+      refreshCards();
     } catch (err) {
       if (err.response?.status === 400) {
         alert("Kart zaten sınırda.");
@@ -25,18 +25,49 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
     }
   };
 
+  const toggleDone = async () => {
+    try {
+      await axios.put(
+        `/cards/${card.id}`,
+        { is_done: !checked },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setChecked(!checked);
+      refreshCards();
+    } catch (err) {
+      console.error("Kart durumu güncellenemedi", err);
+    }
+  };
+
+  const deleteCard = async () => {
+    if (!window.confirm("Bu kartı silmek istediğine emin misin?")) return;
+    try {
+      await axios.delete(`/cards/${card.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      refreshCards();
+    } catch (err) {
+      console.error("Kart silinemedi", err);
+    }
+  };
+
   return (
     <div className="card-item">
       <div className="card-header">
-        <span
-          onClick={() => navigate(`/cards/${card.id}`)}
-          className="card-title"
-        >
-          {card.title}
-        </span>
+        <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+          <input type="checkbox" checked={checked} onChange={toggleDone} />
+          <span
+            onClick={() => navigate(`/cards/${card.id}`)}
+            className="card-title"
+            style={{ textDecoration: checked ? "line-through" : "none" }}
+          >
+            {card.title}
+          </span>
+        </label>
         <div className="card-controls">
           {!isFirst && <button onClick={() => moveCard("up")}>⬆️</button>}
           {!isLast && <button onClick={() => moveCard("down")}>⬇️</button>}
+          <button onClick={deleteCard}>🗑️</button>
         </div>
       </div>
     </div>
