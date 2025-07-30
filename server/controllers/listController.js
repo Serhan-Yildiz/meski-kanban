@@ -56,22 +56,38 @@ export async function getListsByBoardId(req, res) {
   }
 }
 
-export async function createList(req, res) {
-  const boardId = req.params.boardId;
+export const createList = async (req, res) => {
+  const { boardId } = req.params;
   const { title } = req.body;
 
-  if (!title) return res.status(400).json({ message: "Başlık gerekli" });
+  if (!title?.trim()) {
+    return res.status(400).json({ message: "Başlık boş olamaz" });
+  }
 
   try {
-    const result = await pool.query(
-      "INSERT INTO lists (title, board_id) VALUES ($1, $2) RETURNING *",
-      [title, boardId]
+    const result = await db.query(
+      "SELECT MAX(position) as max_position FROM lists WHERE board_id = $1",
+      [boardId]
     );
-    res.status(201).json(result.rows[0]);
-  } catch {
-    res.status(500).json({ message: "Liste oluşturulamadı" });
+
+    const max = result.rows[0].max_position ?? 0;
+    const newPosition = max + 1;
+
+    const insertRes = await db.query(
+      `INSERT INTO lists (title, board_id, position, created_at, updated_at)
+       VALUES ($1, $2, $3, NOW(), NOW())
+       RETURNING *`,
+      [title, boardId, newPosition]
+    );
+
+    res.status(201).json(insertRes.rows[0]);
+  } catch (err) {
+    console.error("Liste oluşturulamadı:", err);
+    res
+      .status(500)
+      .json({ message: "Liste oluşturulamadı", error: err.message });
   }
-}
+};
 
 export async function updateList(req, res) {
   const listId = req.params.id;
