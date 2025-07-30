@@ -345,7 +345,6 @@ label input[type="checkbox"] {
 .priority-badge {
   padding: 4px 10px;
   border-radius: 12px;
-  color: white;
   font-weight: bold;
   display: inline-block;
 }
@@ -356,7 +355,6 @@ label input[type="checkbox"] {
 
 .priority-medium {
   background-color: #f1c40f;
-  color: black;
 }
 
 .priority-low {
