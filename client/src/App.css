@@ -272,3 +272,62 @@ input[type="checkbox"] {
 label input[type="checkbox"] {
   flex-shrink: 0;
 }
+
+.navbar {
+  width: 100%;
+  padding: 10px 20px;
+  background-color: #0067a3; /* MESKİ rengi */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+.nav-left,
+.nav-right,
+.nav-center,
+.nav-title {
+  display: flex;
+  align-items: center;
+}
+
+.back-btn {
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.nav-title {
+  font-weight: bold;
+  font-size: 20px;
+}
+
+.nav-center input {
+  padding: 6px;
+  border-radius: 4px;
+  border: none;
+  margin-right: 5px;
+}
+
+.nav-center button {
+  padding: 6px 10px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  background-color: white;
+  color: #0067a3;
+  font-weight: bold;
+}
+
+.nav-right button {
+  background-color: transparent;
+  border: none;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+}

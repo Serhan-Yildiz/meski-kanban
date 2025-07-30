@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import axios from "../api/axios.js";
 import ListColumn from "../components/ListColumn";
+import Navbar from "../components/Navbar";
 
 export default function BoardPage() {
   const { id } = useParams();
@@ -17,70 +18,43 @@ export default function BoardPage() {
   });
 
   const fetchBoard = async () => {
-    try {
-      const res = await axios.get(`/boards/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-      setBoard(res.data);
-    } catch (err) {
-      console.error("Pano alınamadı", err);
-    }
+    const res = await axios.get(`/boards/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setBoard(res.data);
   };
 
   const fetchLists = async () => {
-    try {
-      const res = await axios.get(`/lists/board/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
-
-      if (Array.isArray(res.data)) {
-        setLists(res.data);
-      } else if (Array.isArray(res.data.lists)) {
-        setLists(res.data.lists);
-      } else {
-        console.warn("Listeler dizi formatında değil:", res.data);
-        setLists([]);
-      }
-    } catch (err) {
-      console.error("Listeler alınamadı", err);
-    }
+    const res = await axios.get(`/lists/board/${id}`, {
+      headers: { Authorization: `Bearer ${token}` },
+    });
+    setLists(res.data);
   };
 
   const createList = async () => {
     if (!newListTitle.trim()) return;
-    try {
-      await axios.post(
-        `/lists/board/${id}`,
-        { title: newListTitle },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
-
-      setNewListTitle("");
-      fetchLists();
-    } catch (err) {
-      console.error("Liste oluşturulamadı", err);
-    }
+    await axios.post(
+      `/lists/board/${id}`,
+      { title: newListTitle },
+      { headers: { Authorization: `Bearer ${token}` } }
+    );
+    setNewListTitle("");
+    fetchLists();
   };
 
   return (
     <div className="board-page">
+      <Navbar
+        onAdd={createList}
+        inputValue={newListTitle}
+        setInputValue={setNewListTitle}
+      />
       <h1>{board?.title || "Pano"}</h1>
 
-      <div className="list-input">
-        <input
-          type="text"
-          value={newListTitle}
-          onChange={(e) => setNewListTitle(e.target.value)}
-          placeholder="Yeni liste adı"
-        />
-        <button onClick={createList}>Ekle</button>
-      </div>
-
       <div className="list-container">
-        {Array.isArray(lists) &&
-          lists.map((list) => (
-            <ListColumn key={list.id} list={list} fetchLists={fetchLists} />
-          ))}
+        {lists.map((list) => (
+          <ListColumn key={list.id} list={list} fetchLists={fetchLists} />
+        ))}
       </div>
     </div>
   );
