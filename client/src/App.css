@@ -341,3 +341,24 @@ label input[type="checkbox"] {
   text-decoration: line-through;
   opacity: 0.7;
 }
+
+.priority-badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  color: white;
+  font-weight: bold;
+  display: inline-block;
+}
+
+.priority-high {
+  background-color: #e74c3c;
+}
+
+.priority-medium {
+  background-color: #f1c40f;
+  color: black;
+}
+
+.priority-low {
+  background-color: #3498db;
+}
