@@ -12,19 +12,16 @@ export default function ProfilePage() {
 
   const fetchProfile = async () => {
     if (!token) {
-      console.error("Token bulunamadı!");
       navigate("/login");
       return;
     }
 
-    console.log("Gönderilen token:", token);
 
     try {
       const res = await axios.get("/auth/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(res.data);
-      console.log("Başarılı:", res.data);
     } catch (error) {
       console.error("Hata oluştu:", error.response.data);
       navigate("/login");
