@@ -11,9 +11,11 @@ export default function Navbar({ onAdd, inputValue, setInputValue }) {
   return (
     <nav className="navbar">
       <div className="nav-left">
-        <button onClick={() => navigate(-1)} className="back-btn">
-          ← Geri
-        </button>
+        {!isDashboard && (
+          <button onClick={() => navigate(-1)} className="back-btn">
+            ← Geri
+          </button>
+        )}
       </div>
 
       <div className="nav-title">MESKİ Kanban</div>
