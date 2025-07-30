@@ -336,3 +336,8 @@ label input[type="checkbox"] {
   font-weight: bold;
   cursor: pointer;
 }
+
+.card-title.card-done {
+  text-decoration: line-through;
+  opacity: 0.7;
+}

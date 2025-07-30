@@ -54,12 +54,11 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   return (
     <div className="card-item">
       <div className="card-header">
-        <label style={{ display: "flex", alignItems: "center", gap: "8px" }}>
+        <label className="card-label">
           <input type="checkbox" checked={checked} onChange={toggleDone} />
           <span
             onClick={() => navigate(`/cards/${card.id}`)}
-            className="card-title"
-            style={{ textDecoration: checked ? "line-through" : "none" }}
+            className={`card-title ${checked ? "card-done" : ""}`}
           >
             {card.title}
           </span>
