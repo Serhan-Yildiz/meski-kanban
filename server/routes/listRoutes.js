@@ -7,6 +7,7 @@ import {
   createList,
   updateList,
   deleteList,
+  moveList,
 } from "../controllers/listController.js";
 
 const router = express.Router();
@@ -19,5 +20,7 @@ router.get("/board/:boardId", getListsByBoardId);
 router.post("/board/:boardId", createList);
 router.put("/:id", updateList);
 router.delete("/:id", deleteList);
+router.put("/:id/move", moveList);
+
 
 export default router;

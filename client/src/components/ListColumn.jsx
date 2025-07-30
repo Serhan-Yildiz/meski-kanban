@@ -2,11 +2,10 @@ import { useState } from "react";
 import axios from "../api/axios.js";
 import Card from "./Card";
 
-export default function ListColumn({ list, fetchLists }) {
+export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
   const [newCardTitle, setNewCardTitle] = useState("");
   const [editing, setEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(list.title);
-
   const token =
     localStorage.getItem("token") || sessionStorage.getItem("token");
   const cards = list.cards || [];
@@ -42,8 +41,7 @@ export default function ListColumn({ list, fetchLists }) {
   };
 
   const deleteList = async () => {
-    const confirm = window.confirm("Bu listeyi silmek istediğine emin misin?");
-    if (!confirm) return;
+    if (!window.confirm("Bu listeyi silmek istediğine emin misin?")) return;
 
     try {
       await axios.delete(`/lists/${list.id}`, {
@@ -52,6 +50,19 @@ export default function ListColumn({ list, fetchLists }) {
       fetchLists();
     } catch (err) {
       console.error("Liste silinemedi", err);
+    }
+  };
+
+  const moveList = async (direction) => {
+    try {
+      await axios.put(
+        `/lists/${list.id}/move`,
+        { direction },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      fetchLists();
+    } catch (err) {
+      console.error("Liste taşınamadı", err);
     }
   };
 
@@ -72,6 +83,8 @@ export default function ListColumn({ list, fetchLists }) {
           <>
             <h3>{list.title}</h3>
             <div className="card-controls">
+              {!isFirst && <button onClick={() => moveList("left")}>←</button>}
+              {!isLast && <button onClick={() => moveList("right")}>→</button>}
               <button onClick={() => setEditing(true)}>Düzenle</button>
               <button onClick={deleteList}>Sil</button>
             </div>

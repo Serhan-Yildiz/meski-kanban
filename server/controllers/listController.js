@@ -103,3 +103,54 @@ export async function deleteList(req, res) {
     res.status(500).json({ message: "Liste silinemedi" });
   }
 }
+
+export const moveList = async (req, res) => {
+  const { id } = req.params;
+  const { direction } = req.body;
+
+  if (!["left", "right"].includes(direction)) {
+    return res.status(400).json({ message: "Geçersiz yön (left/right)" });
+  }
+
+  try {
+    const currentRes = await db.query("SELECT * FROM lists WHERE id = $1", [
+      id,
+    ]);
+    if (currentRes.rowCount === 0) {
+      return res.status(404).json({ message: "Liste bulunamadı" });
+    }
+
+    const current = currentRes.rows[0];
+
+    const allRes = await db.query(
+      "SELECT * FROM lists WHERE board_id = $1 ORDER BY position",
+      [current.board_id]
+    );
+    const lists = allRes.rows;
+    const currentIndex = lists.findIndex((l) => l.id === current.id);
+
+    const targetIndex =
+      direction === "left" ? currentIndex - 1 : currentIndex + 1;
+    if (targetIndex < 0 || targetIndex >= lists.length) {
+      return res.status(400).json({ message: "Daha fazla hareket edemez" });
+    }
+
+    const target = lists[targetIndex];
+
+    await db.query("UPDATE lists SET position = $1 WHERE id = $2", [
+      target.position,
+      current.id,
+    ]);
+    await db.query("UPDATE lists SET position = $1 WHERE id = $2", [
+      current.position,
+      target.id,
+    ]);
+
+    res.json({ message: "Liste taşındı" });
+  } catch (err) {
+    console.error("Liste taşıma hatası:", err);
+    res
+      .status(500)
+      .json({ message: "Liste taşıma hatası", error: err.message });
+  }
+};

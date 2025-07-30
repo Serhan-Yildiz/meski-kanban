@@ -52,8 +52,14 @@ export default function BoardPage() {
       <h1>{board?.title || "Pano"}</h1>
 
       <div className="list-container">
-        {lists.map((list) => (
-          <ListColumn key={list.id} list={list} fetchLists={fetchLists} />
+        {lists.map((list, index) => (
+          <ListColumn
+            key={list.id}
+            list={list}
+            fetchLists={fetchLists}
+            isFirst={index === 0}
+            isLast={index === lists.length - 1}
+          />
         ))}
       </div>
     </div>
