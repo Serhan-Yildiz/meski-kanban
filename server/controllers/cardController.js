@@ -20,12 +20,12 @@ export async function getCardById(req, res) {
 
 export async function updateCard(req, res) {
   const cardId = req.params.id;
-  const { title, description } = req.body;
+  const { title } = req.body;
 
   try {
     const result = await pool.query(
-      "UPDATE cards SET title = $1, description = $2 WHERE id = $3 RETURNING *",
-      [title, description, cardId]
+      "UPDATE cards SET title = $1 WHERE id = $2 RETURNING *",
+      [title, cardId]
     );
 
     if (result.rows.length === 0) {
