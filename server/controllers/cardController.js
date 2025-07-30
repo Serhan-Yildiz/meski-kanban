@@ -18,25 +18,35 @@ export async function getCardById(req, res) {
   }
 }
 
-export async function updateCard(req, res) {
-  const cardId = req.params.id;
-  const { title } = req.body;
+export const updateCard = async (req, res) => {
+  const { id } = req.params;
+  const { title, priority, is_done } = req.body;
 
   try {
-    const result = await pool.query(
-      "UPDATE cards SET title = $1 WHERE id = $2 RETURNING *",
-      [title, cardId]
+    const result = await db.query(
+      `UPDATE cards 
+       SET 
+         title = COALESCE($1, title),
+         priority = COALESCE($2, priority),
+         is_done = COALESCE($3, is_done),
+         updated_at = NOW()
+       WHERE id = $4
+       RETURNING *`,
+      [title, priority, is_done, id]
     );
 
-    if (result.rows.length === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ message: "Kart bulunamadı" });
     }
 
     res.json(result.rows[0]);
-  } catch {
-    res.status(500).json({ message: "Kart güncellenemedi" });
+  } catch (err) {
+    console.error("Kart güncellenemedi:", err);
+    res
+      .status(500)
+      .json({ message: "Kart güncellenemedi", error: err.message });
   }
-}
+};
 
 export async function deleteCard(req, res) {
   const cardId = req.params.id;
