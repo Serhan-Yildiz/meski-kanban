@@ -88,7 +88,7 @@ button:hover {
 .dashboard {
   max-width: 1000px;
   margin: 20px auto;
-  padding: 20px;
+  padding: 90px 20px 20px; /* extra padding-top for fixed navbar */
 }
 
 .dashboard-header {
@@ -118,7 +118,7 @@ button:hover {
 }
 
 .board-page {
-  padding: 20px;
+  padding: 90px 20px 20px; /* extra padding-top for fixed navbar */
 }
 
 .list-input {
@@ -176,7 +176,7 @@ button:hover {
 
 .card-view {
   max-width: 600px;
-  margin: 50px auto;
+  margin: 90px auto 50px; /* extra padding-top for fixed navbar */
   background: white;
   padding: 20px;
   border-radius: 6px;
@@ -203,7 +203,7 @@ button:hover {
 
 .profile-page {
   max-width: 500px;
-  margin: 50px auto;
+  margin: 90px auto 50px; /* extra padding-top for fixed navbar */
   padding: 20px;
   background: white;
   border-radius: 6px;
@@ -274,16 +274,19 @@ label input[type="checkbox"] {
 }
 
 .navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
-  padding: 10px 20px;
-  background-color: #0067a3; /* MESKİ rengi */
+  height: 60px;
+  background-color: #0067a3;
   color: white;
   display: flex;
-  justify-content: space-between;
   align-items: center;
-  position: sticky;
-  top: 0;
+  justify-content: space-between;
+  padding: 0 20px;
   z-index: 999;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
 
 .nav-left,
@@ -300,32 +303,34 @@ label input[type="checkbox"] {
   color: white;
   font-size: 16px;
   cursor: pointer;
+  font-weight: bold;
 }
 
 .nav-title {
-  font-weight: bold;
   font-size: 20px;
+  font-weight: bold;
+  margin: 0 20px;
 }
 
 .nav-center input {
-  padding: 6px;
+  padding: 6px 10px;
   border-radius: 4px;
   border: none;
   margin-right: 5px;
 }
 
 .nav-center button {
-  padding: 6px 10px;
+  padding: 6px 12px;
   border-radius: 4px;
   border: none;
-  cursor: pointer;
   background-color: white;
   color: #0067a3;
   font-weight: bold;
+  cursor: pointer;
 }
 
 .nav-right button {
-  background-color: transparent;
+  background: transparent;
   border: none;
   color: white;
   font-weight: bold;
