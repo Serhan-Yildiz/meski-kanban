@@ -5,20 +5,35 @@ import { useNavigate } from "react-router-dom";
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
   const [newPassword, setNewPassword] = useState("");
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
   const navigate = useNavigate();
 
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
+
   const fetchProfile = async () => {
+    if (!token) {
+      console.error("Token bulunamadı!");
+      navigate("/login");
+      return;
+    }
+
+    console.log("Gönderilen token:", token);
+
     try {
-      const res = await axios.get("/profile", {
-        headers: { Authorization: `Bearer token ${token}` },
+      const res = await axios.get("/auth/profile", {
+        headers: { Authorization: `Bearer ${token}` },
       });
       setUser(res.data);
-    } catch (err) {
-      console.error("Profil alınamadı", err);
+      console.log("Başarılı:", res.data);
+    } catch (error) {
+      console.error("Hata oluştu:", error.response.data);
+      navigate("/login");
     }
   };
+
+  useEffect(() => {
+    fetchProfile();
+  });
 
   const changePassword = async () => {
     try {
@@ -33,14 +48,10 @@ export default function ProfilePage() {
     }
   };
 
-  useEffect(() => {
-    fetchProfile();
-  });
-
   return (
     <div className="profile-page">
       <h2>Profil</h2>
-      {user && (
+      {user ? (
         <>
           <p>
             <strong>Ad:</strong> {user.name}
@@ -49,6 +60,8 @@ export default function ProfilePage() {
             <strong>E-posta:</strong> {user.email}
           </p>
         </>
+      ) : (
+        <p>Profil yükleniyor...</p>
       )}
       <input
         type="password"
@@ -60,6 +73,7 @@ export default function ProfilePage() {
       <button
         onClick={() => {
           localStorage.removeItem("token");
+          sessionStorage.removeItem("token");
           navigate("/");
         }}
       >
