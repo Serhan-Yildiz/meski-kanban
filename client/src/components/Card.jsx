@@ -54,19 +54,24 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   return (
     <div className="card-item">
       <div className="card-header">
-        <label className="card-label">
+        <div
+          className="card-label"
+          style={{ display: "flex", alignItems: "center", gap: "8px" }}
+        >
           <input type="checkbox" checked={checked} onChange={toggleDone} />
+
           <span
             onClick={() => navigate(`/cards/${card.id}`)}
             className={`card-title ${checked ? "card-done" : ""}`}
+            style={{ cursor: "pointer" }}
           >
             <span className={`priority-dot ${card.priority}`}>
               {card.priority}
-            </span>
-
+            </span>{" "}
             {card.title}
           </span>
-        </label>
+        </div>
+
         <div className="card-controls">
           {!isFirst && <button onClick={() => moveCard("up")}>⬆️</button>}
           {!isLast && <button onClick={() => moveCard("down")}>⬇️</button>}
