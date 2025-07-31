@@ -15,7 +15,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await axios.post("/login", { email, password });
+      const res = await axios.post("/auth/login", { email, password });
 
       const token = res.data.token;
       const name = res.data.name;
