@@ -95,3 +95,49 @@ export const resetPassword = async (req, res) => {
       .json({ message: "Şifre sıfırlanamadı", error: err.message });
   }
 };
+
+export const getProfile = async (req, res) => {
+  try {
+    const result = await db.query(
+      "SELECT id, name, email FROM users WHERE id = $1",
+      [req.user.id]
+    );
+    if (result.rows.length === 0)
+      return res.status(404).json({ message: "User not found" });
+
+    res.status(200).json(result.rows[0]);
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
+
+export const changePassword = async (req, res) => {
+  const { currentPassword, newPassword } = req.body;
+
+  try {
+    const result = await db.query("SELECT * FROM users WHERE id = $1", [
+      req.user.id,
+    ]);
+    const user = result.rows[0];
+
+    if (!user || user.password_hash === "google-oauth") {
+      return res
+        .status(400)
+        .json({ message: "Bu kullanıcı parola değiştiremez" });
+    }
+
+    const match = await bcrypt.compare(currentPassword, user.password_hash);
+    if (!match)
+      return res.status(400).json({ message: "Mevcut parola hatalı" });
+
+    const newHash = await bcrypt.hash(newPassword, 10);
+    await db.query("UPDATE users SET password_hash = $1 WHERE id = $2", [
+      newHash,
+      req.user.id,
+    ]);
+
+    res.status(200).json({ message: "Parola başarıyla güncellendi" });
+  } catch (err) {
+    res.status(500).json({ message: "Server error" });
+  }
+};
