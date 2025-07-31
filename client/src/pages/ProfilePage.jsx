@@ -12,7 +12,7 @@ export default function ProfilePage() {
 
   const fetchProfile = useCallback(async () => {
     try {
-      const res = await axios.get("/auth/profile", {
+      const res = await axios.get("/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
       setUser(res.data);
