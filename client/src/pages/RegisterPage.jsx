@@ -8,6 +8,8 @@ export default function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
+  const [securityQuestion, setSecurityQuestion] = useState("");
+  const [securityAnswer, setSecurityAnswer] = useState("");
   const navigate = useNavigate();
 
   const register = async () => {
@@ -21,11 +23,18 @@ export default function RegisterPage() {
       return;
     }
 
+    if (!securityQuestion || !securityAnswer) {
+      alert("Lütfen güvenlik sorusu ve cevabını doldurun.");
+      return;
+    }
+
     try {
       await axios.post("/auth/register", {
         email,
         password,
         name,
+        security_question: securityQuestion,
+        security_answer: securityAnswer,
       });
       alert("Kayıt başarılı! Giriş yapabilirsiniz.");
       navigate("/login");
@@ -79,6 +88,28 @@ export default function RegisterPage() {
       <p className="password-rules">
         Şifreniz en az 6 karakter uzunluğunda olmalıdır.
       </p>
+
+      <label>Güvenlik Sorusu</label>
+      <select
+        value={securityQuestion}
+        onChange={(e) => setSecurityQuestion(e.target.value)}
+      >
+        <option value="">Bir soru seçin</option>
+        <option value="İlk evcil hayvanının adı?">
+          İlk evcil hayvanının adı?
+        </option>
+        <option value="Doğduğun şehir?">Doğduğun şehir?</option>
+        <option value="En sevdiğin öğretmen kimdi?">
+          En sevdiğin öğretmen kimdi?
+        </option>
+      </select>
+
+      <input
+        type="text"
+        placeholder="Cevabınız"
+        value={securityAnswer}
+        onChange={(e) => setSecurityAnswer(e.target.value)}
+      />
 
       <button onClick={register}>Kayıt Ol</button>
 

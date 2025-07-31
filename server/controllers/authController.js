@@ -1,91 +1,97 @@
-import db from "../config/db.js";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
+import db from "../config/db.js";
 
 export const register = async (req, res) => {
-  const { name, email, password } = req.body;
+  const { name, email, password, security_question, security_answer } =
+    req.body;
+
   try {
-    const hashedPassword = await bcrypt.hash(password, 10);
-    const result = await db.query(
-      "INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING *",
-      [name, email, hashedPassword]
+    const hash = await bcrypt.hash(password, 10);
+
+    await db.query(
+      `INSERT INTO users (name, email, password, security_question, security_answer)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [name, email, hash, security_question, security_answer]
     );
-    const token = jwt.sign(
-      { id: result.rows[0].id, email },
-      process.env.JWT_SECRET,
-      { expiresIn: "1d" }
-    );
-    res.status(201).json({ token });
+
+    res.status(201).json({ message: "Kayıt başarılı" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Kayıt hatası:", err);
+    res.status(500).json({ message: "Kayıt başarısız", error: err.message });
   }
 };
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
+
   try {
     const result = await db.query("SELECT * FROM users WHERE email = $1", [
       email,
     ]);
-    if (result.rows.length === 0)
-      return res.status(400).json({ message: "Invalid credentials" });
+
+    if (result.rowCount === 0)
+      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
 
     const user = result.rows[0];
-    const match = await bcrypt.compare(password, user.password_hash);
-    if (!match) return res.status(400).json({ message: "Invalid credentials" });
+    const match = await bcrypt.compare(password, user.password);
 
-    const token = jwt.sign({ id: user.id, email }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+    if (!match) return res.status(401).json({ message: "Şifre yanlış" });
+
+    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+      expiresIn: "7d",
     });
-    res.status(200).json({ token });
+
+    res.json({ token, name: user.name });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    console.error("Giriş hatası:", err);
+    res.status(500).json({ message: "Giriş başarısız", error: err.message });
   }
 };
 
-export const getProfile = async (req, res) => {
+export const getSecurityQuestion = async (req, res) => {
+  const { email } = req.body;
+
   try {
     const result = await db.query(
-      "SELECT id, name, email FROM users WHERE id = $1",
-      [req.user.id]
+      "SELECT security_question FROM users WHERE email = $1",
+      [email]
     );
-    if (result.rows.length === 0)
-      return res.status(404).json({ message: "User not found" });
 
-    res.status(200).json(result.rows[0]);
+    if (result.rowCount === 0)
+      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
+
+    res.json({ question: result.rows[0].security_question });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    res.status(500).json({ message: "Bir hata oluştu", error: err.message });
   }
 };
 
-// ✅ Parola değiştirme
-export const changePassword = async (req, res) => {
-  const { currentPassword, newPassword } = req.body;
+export const resetPassword = async (req, res) => {
+  const { email, answer, newPassword } = req.body;
 
   try {
-    const result = await db.query("SELECT * FROM users WHERE id = $1", [
-      req.user.id,
-    ]);
-    const user = result.rows[0];
+    const result = await db.query(
+      "SELECT security_answer FROM users WHERE email = $1",
+      [email]
+    );
 
-    if (!user || user.password_hash === "google-oauth") {
-      return res
-        .status(400)
-        .json({ message: "Bu kullanıcı parola değiştiremez" });
-    }
+    if (result.rowCount === 0)
+      return res.status(404).json({ message: "Kullanıcı bulunamadı" });
 
-    const match = await bcrypt.compare(currentPassword, user.password_hash);
-    if (!match)
-      return res.status(400).json({ message: "Mevcut parola hatalı" });
+    if (result.rows[0].security_answer !== answer)
+      return res.status(403).json({ message: "Güvenlik cevabı yanlış" });
 
-    const newHash = await bcrypt.hash(newPassword, 10);
-    await db.query("UPDATE users SET password_hash = $1 WHERE id = $2", [
-      newHash,
-      req.user.id,
+    const hash = await bcrypt.hash(newPassword, 10);
+    await db.query("UPDATE users SET password = $1 WHERE email = $2", [
+      hash,
+      email,
     ]);
 
-    res.status(200).json({ message: "Parola başarıyla güncellendi" });
+    res.json({ message: "Şifre başarıyla güncellendi" });
   } catch (err) {
-    res.status(500).json({ message: "Server error" });
+    res
+      .status(500)
+      .json({ message: "Şifre sıfırlanamadı", error: err.message });
   }
 };
