@@ -60,6 +60,10 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
             onClick={() => navigate(`/cards/${card.id}`)}
             className={`card-title ${checked ? "card-done" : ""}`}
           >
+            <span className={`priority-dot ${card.priority}`}>
+              {card.priority}
+            </span>
+
             {card.title}
           </span>
         </label>
