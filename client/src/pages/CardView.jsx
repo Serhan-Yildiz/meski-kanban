@@ -30,12 +30,15 @@ export default function CardView() {
 
   const updateCard = async () => {
     try {
-      await axios.put(
+      const res = await axios.put(
         `/cards/${id}`,
         { description: desc, priority },
         { headers: { Authorization: `Bearer ${token}` } }
       );
-      fetchCard();
+
+      setCard(res.data);
+      setDesc(res.data.description || "");
+      setPriority(res.data.priority || "");
       alert("Kart güncellendi");
     } catch (err) {
       console.error("Kart güncellenemedi", err);
