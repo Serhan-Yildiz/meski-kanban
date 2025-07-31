@@ -1,46 +1,87 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
 import axios from "../api/axios.js";
+import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
-  const [email, setEmail] = useState("");
-  const [name, setName] = useState("");
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [securityQuestion, setSecurityQuestion] = useState("");
-  const [securityAnswer, setSecurityAnswer] = useState("");
   const navigate = useNavigate();
+  const [form, setForm] = useState({
+    name: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
+    showPassword: false,
+    securityQuestion: "",
+    securityAnswer: "",
+  });
 
-  const register = async () => {
-    if (password.length < 6) {
-      alert("Şifre en az 6 karakter olmalıdır.");
-      return;
-    }
+  const [errors, setErrors] = useState([]);
+  const [serverMessage, setServerMessage] = useState("");
 
-    if (password !== confirmPassword) {
-      alert("Şifreler eşleşmiyor.");
-      return;
-    }
+  const securityQuestions = [
+    "İlk evcil hayvanınızın adı nedir?",
+    "En sevdiğiniz öğretmenin adı nedir?",
+    "Annenizin kızlık soyadı nedir?",
+    "İlkokulunuzun adı nedir?",
+    "Doğduğunuz şehir nedir?",
+  ];
 
-    if (!securityQuestion || !securityAnswer) {
-      alert("Lütfen güvenlik sorusu ve cevabını doldurun.");
-      return;
-    }
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
 
-    try {
-      await axios.post("/auth/register", {
-        email,
-        password,
-        name,
-        security_question: securityQuestion,
-        security_answer: securityAnswer,
-      });
-      alert("Kayıt başarılı! Giriş yapabilirsiniz.");
-      navigate("/login");
-    } catch (err) {
-      console.error("Kayıt hatası", err);
-      alert("Kayıt başarısız");
+  const validate = () => {
+    const newErrors = [];
+
+    if (!form.name.trim()) newErrors.push("Ad soyad alanı zorunludur.");
+    if (!form.email.includes("@")) newErrors.push("Geçerli bir e-posta girin.");
+
+    if (form.password.length < 8)
+      newErrors.push("Şifre en az 8 karakter olmalı.");
+    if (!/[a-z]/.test(form.password))
+      newErrors.push("Şifre küçük harf içermeli.");
+    if (!/[A-Z]/.test(form.password))
+      newErrors.push("Şifre büyük harf içermeli.");
+    if (!/[0-9]/.test(form.password)) newErrors.push("Şifre rakam içermeli.");
+    if (!/[!@#$%^&*()_+{}\\[\]:;<>,.?~\\/-]/.test(form.password))
+      newErrors.push("Şifre sembol içermeli.");
+
+    if (form.password !== form.confirmPassword)
+      newErrors.push("Şifreler aynı olmalı.");
+
+    if (!form.securityQuestion) newErrors.push("Güvenlik sorusu seçmelisiniz.");
+    if (!form.securityAnswer.trim())
+      newErrors.push("Güvenlik sorusu cevabı zorunludur.");
+
+    return newErrors;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const validationErrors = validate();
+    setErrors(validationErrors);
+
+    if (validationErrors.length === 0) {
+      try {
+        await axios.post("/auth/register", {
+          name: form.name,
+          email: form.email,
+          password: form.password,
+          security_question: form.securityQuestion,
+          security_answer: form.securityAnswer,
+        });
+
+        setServerMessage(
+          "Kayıt başarılı. Giriş sayfasına yönlendiriliyorsunuz."
+        );
+        setTimeout(() => navigate("/login"), 1500);
+      } catch (err) {
+        const msg = err.response?.data?.message || "Kayıt başarısız.";
+        setErrors([msg]);
+      }
     }
   };
 
@@ -50,78 +91,88 @@ export default function RegisterPage() {
 
       <input
         type="text"
+        name="name"
         placeholder="Ad Soyad"
-        value={name}
-        onChange={(e) => setName(e.target.value)}
+        value={form.name}
+        onChange={handleChange}
       />
 
       <input
         type="email"
+        name="email"
         placeholder="E-posta"
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={form.email}
+        onChange={handleChange}
       />
 
       <input
-        type={showPassword ? "text" : "password"}
+        type={form.showPassword ? "text" : "password"}
+        name="password"
         placeholder="Şifre"
-        value={password}
-        onChange={(e) => setPassword(e.target.value)}
+        value={form.password}
+        onChange={handleChange}
       />
 
       <input
-        type={showPassword ? "text" : "password"}
-        placeholder="Şifreyi tekrar girin"
-        value={confirmPassword}
-        onChange={(e) => setConfirmPassword(e.target.value)}
+        type={form.showPassword ? "text" : "password"}
+        name="confirmPassword"
+        placeholder="Şifre Tekrar"
+        value={form.confirmPassword}
+        onChange={handleChange}
       />
 
       <label>
-        Şifreyi Göster
         <input
           type="checkbox"
-          checked={showPassword}
-          onChange={() => setShowPassword(!showPassword)}
+          name="showPassword"
+          checked={form.showPassword}
+          onChange={handleChange}
         />
+        Şifreyi göster
       </label>
 
       <p className="password-rules">
-        Şifreniz en az 6 karakter uzunluğunda olmalıdır.
+        Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli ve en
+        az 8 karakter uzunluğunda olmalıdır.
       </p>
 
-      <label>Güvenlik Sorusu</label>
       <select
-        value={securityQuestion}
-        onChange={(e) => setSecurityQuestion(e.target.value)}
+        name="securityQuestion"
+        value={form.securityQuestion}
+        onChange={handleChange}
       >
-        <option value="">Bir soru seçin</option>
-        <option value="İlk evcil hayvanının adı?">
-          İlk evcil hayvanının adı?
-        </option>
-        <option value="Doğduğun şehir?">Doğduğun şehir?</option>
-        <option value="En sevdiğin öğretmen kimdi?">
-          En sevdiğin öğretmen kimdi?
-        </option>
+        <option value="">Güvenlik sorusu seçin</option>
+        {securityQuestions.map((q, i) => (
+          <option key={i} value={q}>
+            {q}
+          </option>
+        ))}
       </select>
 
       <input
         type="text"
-        placeholder="Cevabınız"
-        value={securityAnswer}
-        onChange={(e) => setSecurityAnswer(e.target.value)}
+        name="securityAnswer"
+        placeholder="Güvenlik sorusu cevabı"
+        value={form.securityAnswer}
+        onChange={handleChange}
       />
 
-      <button onClick={register}>Kayıt Ol</button>
+      <button onClick={handleSubmit}>Kayıt Ol</button>
 
-      <a
-        href="https://meski-kanban.onrender.com/auth/google"
-        className="google-login"
-      >
-        Google ile Kayıt Ol
+      <a href="/auth/google" className="google-login">
+        Google ile kayıt ol
       </a>
 
       <div className="auth-links">
-        Zaten hesabınız var mı? <Link to="/login">Giriş Yap</Link>
+        <p>Zaten hesabınız var mı?</p>
+        <a href="/login">Giriş Yap</a>
+      </div>
+
+      <div style={{ marginTop: "1rem", color: "red", fontSize: "0.95rem" }}>
+        {errors.map((err, i) => (
+          <div key={i}>{err}</div>
+        ))}
+        {serverMessage && <div style={{ color: "green" }}>{serverMessage}</div>}
       </div>
     </div>
   );
