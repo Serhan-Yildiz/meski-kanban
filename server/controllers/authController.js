@@ -7,12 +7,12 @@ export const register = async (req, res) => {
     req.body;
 
   try {
-    const hash = await bcrypt.hash(password, 10);
+    const password_hash = await bcrypt.hash(password, 10);
 
     await db.query(
-      `INSERT INTO users (name, email, password, security_question, security_answer)
+      `INSERT INTO users (name, email, password_hash, security_question, security_answer)
        VALUES ($1, $2, $3, $4, $5)`,
-      [name, email, hash, security_question, security_answer]
+      [name, email, password_hash, security_question, security_answer]
     );
 
     res.status(201).json({ message: "Kayıt başarılı" });
@@ -34,7 +34,7 @@ export const login = async (req, res) => {
       return res.status(404).json({ message: "Kullanıcı bulunamadı" });
 
     const user = result.rows[0];
-    const match = await bcrypt.compare(password, user.password);
+    const match = await bcrypt.compare(password, user.password_hash);
 
     if (!match) return res.status(401).json({ message: "Şifre yanlış" });
 
@@ -82,9 +82,9 @@ export const resetPassword = async (req, res) => {
     if (result.rows[0].security_answer !== answer)
       return res.status(403).json({ message: "Güvenlik cevabı yanlış" });
 
-    const hash = await bcrypt.hash(newPassword, 10);
-    await db.query("UPDATE users SET password = $1 WHERE email = $2", [
-      hash,
+    const password_hash = await bcrypt.hash(newPassword, 10);
+    await db.query("UPDATE users SET password_hash = $1 WHERE email = $2", [
+      password_hash,
       email,
     ]);
 
@@ -130,9 +130,9 @@ export const changePassword = async (req, res) => {
     if (!match)
       return res.status(400).json({ message: "Mevcut parola hatalı" });
 
-    const newHash = await bcrypt.hash(newPassword, 10);
+    const new_password_hash = await bcrypt.hash(newPassword, 10);
     await db.query("UPDATE users SET password_hash = $1 WHERE id = $2", [
-      newHash,
+      password_hash,
       req.user.id,
     ]);
 
