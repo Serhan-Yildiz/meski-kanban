@@ -23,7 +23,7 @@ export const updateCard = async (req, res) => {
   const { title, priority, is_done } = req.body;
 
   try {
-    const result = await pool.query(
+    const result = await db.query(
       `UPDATE cards 
        SET 
          title = COALESCE($1, title),
