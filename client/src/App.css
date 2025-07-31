@@ -349,14 +349,28 @@ label input[type="checkbox"] {
   display: inline-block;
 }
 
-.priority-high {
-  background-color: #e74c3c;
+.priority-radio-group {
+  display: flex;
+  gap: 15px;
+  margin-top: 6px;
 }
 
-.priority-medium {
-  background-color: #f1c40f;
+.priority-radio-group label {
+  display: flex;
+  align-items: center;
+  gap: 5px;
+  cursor: pointer;
+  font-weight: bold;
 }
 
 .priority-low {
-  background-color: #3498db;
+  color: #3498db;
+}
+
+.priority-medium {
+  color: #f1c40f;
+}
+
+.priority-high {
+  color: #e74c3c;
 }

@@ -28,19 +28,6 @@ export default function CardView() {
     fetchCard();
   });
 
-  const getPriorityClass = (priority) => {
-    switch (priority) {
-      case "yüksek":
-        return "priority-high";
-      case "orta":
-        return "priority-medium";
-      case "düşük":
-        return "priority-low";
-      default:
-        return "";
-    }
-  };
-
   const updateCard = async () => {
     try {
       await axios.put(
@@ -73,16 +60,40 @@ export default function CardView() {
 
           <label>
             <strong>Öncelik:</strong>
-            <select
-              value={priority}
-              onChange={(e) => setPriority(e.target.value)}
-              className={`priority-badge ${getPriorityClass(priority)}`}
-            >
-              <option value="">Seç...</option>
-              <option value="düşük">düşük</option>
-              <option value="orta">orta</option>
-              <option value="yüksek">yüksek</option>
-            </select>
+            <div className="priority-radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="priority"
+                  value="düşük"
+                  checked={priority === "düşük"}
+                  onChange={(e) => setPriority(e.target.value)}
+                />
+                <span className="priority-low">Düşük</span>
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="priority"
+                  value="orta"
+                  checked={priority === "orta"}
+                  onChange={(e) => setPriority(e.target.value)}
+                />
+                <span className="priority-medium">Orta</span>
+              </label>
+
+              <label>
+                <input
+                  type="radio"
+                  name="priority"
+                  value="yüksek"
+                  checked={priority === "yüksek"}
+                  onChange={(e) => setPriority(e.target.value)}
+                />
+                <span className="priority-high">Yüksek</span>
+              </label>
+            </div>
           </label>
 
           <button onClick={updateCard}>Güncelle</button>
