@@ -20,19 +20,20 @@ export async function getCardById(req, res) {
 
 export const updateCard = async (req, res) => {
   const { id } = req.params;
-  const { title, priority, is_done } = req.body;
+  const { title, description, priority, is_done } = req.body;
 
   try {
     const result = await pool.query(
       `UPDATE cards 
        SET 
          title = COALESCE($1, title),
-         priority = COALESCE($2, priority),
-         is_done = COALESCE($3, is_done),
+         description = COALESCE($2, description),
+         priority = COALESCE($3, priority),
+         is_done = COALESCE($4, is_done),
          updated_at = NOW()
-       WHERE id = $4
+       WHERE id = $5
        RETURNING *`,
-      [title, priority, is_done, id]
+      [title, description, priority, is_done, id]
     );
 
     if (result.rowCount === 0) {
