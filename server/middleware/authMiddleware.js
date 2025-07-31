@@ -11,7 +11,7 @@ const auth = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { id: decoded.id }; // 🔧 sadece kullanıcı ID'sini aktar
+    req.user = { id: decoded.id };
     next();
   } catch (error) {
     console.error("JWT doğrulama hatası:", error.message);

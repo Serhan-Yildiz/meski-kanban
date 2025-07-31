@@ -38,7 +38,7 @@ export const login = async (req, res) => {
 
     if (!match) return res.status(401).json({ message: "Şifre yanlış" });
 
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
+    const token = jwt.sign({ id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "7d",
     });
 
@@ -130,7 +130,7 @@ export const changePassword = async (req, res) => {
     if (!match)
       return res.status(400).json({ message: "Mevcut parola hatalı" });
 
-    const new_password_hash = await bcrypt.hash(newPassword, 10);
+    const password_hash = await bcrypt.hash(newPassword, 10);
     await db.query("UPDATE users SET password_hash = $1 WHERE id = $2", [
       password_hash,
       req.user.id,
