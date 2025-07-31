@@ -38,7 +38,7 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 app.use("/auth", authRoutes);
-app.use("/auth", profileRoutes);
+app.use("/profile", profileRoutes);
 app.use("/boards", boardRoutes);
 app.use("/lists", listRoutes);
 app.use("/cards", cardRoutes);
