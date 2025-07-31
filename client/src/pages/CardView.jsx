@@ -26,7 +26,7 @@ export default function CardView() {
 
   useEffect(() => {
     fetchCard();
-  });
+  }, [id, token]);
 
   const updateCard = async () => {
     try {

@@ -15,7 +15,7 @@ export default function DashboardPage() {
 
   useEffect(() => {
     fetchBoards();
-  });
+  }, [token]);
 
   const fetchBoards = async () => {
     try {

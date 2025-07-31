@@ -15,7 +15,7 @@ export default function BoardPage() {
   useEffect(() => {
     fetchBoard();
     fetchLists();
-  });
+  }, [id, token]);
 
   const fetchBoard = async () => {
     const res = await axios.get(`/boards/${id}`, {
