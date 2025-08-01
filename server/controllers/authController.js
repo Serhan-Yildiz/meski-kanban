@@ -72,7 +72,7 @@ export const resetPassword = async (req, res) => {
 
   try {
     const result = await db.query(
-      "SELECT security_answer FROM users WHERE email = $1",
+      "SELECT security_answer_hashed FROM users WHERE email = $1",
       [email]
     );
 
