@@ -92,7 +92,7 @@ export default function ProfilePage() {
     navigate("/");
   };
 
-  const isGoogleUser = user?.password === null || user?.password === undefined;
+  const isGoogleUser = user?.password === "google";
 
   const securityQuestions = [
     "İlk evcil hayvanınızın adı nedir?",
