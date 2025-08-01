@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 
 export async function getProfile(req, res) {
   try {
-    const result = await db.query(
+    const result = await pool.query(
       "SELECT id, name, email, password_hash FROM users WHERE id = $1",
       [req.user.id]
     );
@@ -70,7 +70,7 @@ export async function updateSecurityInfo(req, res) {
 
 export async function deleteAccount(req, res) {
   try {
-    await db.query("DELETE FROM users WHERE id = $1", [req.user.id]);
+    await pool.query("DELETE FROM users WHERE id = $1", [req.user.id]);
     res.json({ message: "Hesap silindi" });
   } catch (err) {
     res.status(500).json({ message: "Hesap silinemedi", error: err.message });
