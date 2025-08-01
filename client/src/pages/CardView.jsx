@@ -6,10 +6,13 @@ import Navbar from "../components/Navbar";
 export default function CardView() {
   const { id } = useParams();
   const [card, setCard] = useState(null);
+  const [title, setTitle] = useState("");
   const [desc, setDesc] = useState("");
   const [originalDesc, setOriginalDesc] = useState("");
   const [priority, setPriority] = useState("");
   const [isEditingDesc, setIsEditingDesc] = useState(true);
+  const [isEditingTitle, setIsEditingTitle] = useState(false);
+  const [originalTitle, setOriginalTitle] = useState("");
 
   const token =
     localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -21,6 +24,8 @@ export default function CardView() {
       });
       const data = res.data;
       setCard(data);
+      setTitle(data.title || "");
+      setOriginalTitle(data.title || "");
       setDesc(data.description || "");
       setOriginalDesc(data.description || "");
       setPriority(data.priority || "");
@@ -73,12 +78,53 @@ export default function CardView() {
     }
   };
 
+  const handleSaveTitle = async () => {
+    try {
+      const res = await axios.put(
+        `/cards/${id}`,
+        { title },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
+      setCard(res.data);
+      setOriginalTitle(res.data.title || "");
+      setIsEditingTitle(false);
+    } catch (err) {
+      console.error("Başlık güncellenemedi", err);
+    }
+  };
+
+  const handleCancelTitle = () => {
+    setTitle(originalTitle);
+    setIsEditingTitle(false);
+  };
+
+  const handleEditTitle = () => {
+    setIsEditingTitle(true);
+  };
+
   return (
     <div className="card-view">
       <Navbar />
       {card ? (
         <>
-          <h2>{card.title}</h2>
+          <div>
+            <strong>Başlık:</strong>{" "}
+            {isEditingTitle ? (
+              <>
+                <input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <button onClick={handleSaveTitle}>Kaydet</button>
+                <button onClick={handleCancelTitle}>İptal</button>
+              </>
+            ) : (
+              <>
+                <h2 style={{ display: "inline" }}>{title}</h2>{" "}
+                <button onClick={handleEditTitle}>Düzenle</button>
+              </>
+            )}
+          </div>
 
           <div>
             <strong>Açıklama:</strong>
