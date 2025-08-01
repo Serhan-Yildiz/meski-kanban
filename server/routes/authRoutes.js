@@ -33,9 +33,10 @@ router.get(
       {
         id: req.user.id,
         email: req.user.email,
+        provider: "google",
       },
       process.env.JWT_SECRET,
-      { expiresIn: "1d" }
+      { expiresIn: "7d" }
     );
 
     res.redirect(`${process.env.CLIENT_URL}/auth/success?token=${token}`);

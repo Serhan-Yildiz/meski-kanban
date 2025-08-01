@@ -69,7 +69,7 @@ export default function ProfilePage() {
     navigate("/");
   };
 
-  const isGoogleUser = user?.password_hash === "google";
+  const isGoogleUser = user?.provider === "google";
 
   return (
     <div className="profile-page">
@@ -120,6 +120,7 @@ export default function ProfilePage() {
       <button onClick={handleLogout} style={{ marginTop: "20px" }}>
         Çıkış Yap
       </button>
+
       <button
         onClick={async () => {
           if (window.confirm("Hesabınızı silmek istediğinize emin misiniz?")) {

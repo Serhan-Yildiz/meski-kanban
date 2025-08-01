@@ -11,11 +11,15 @@ const auth = (req, res, next) => {
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { id: decoded.id };
+    req.user = {
+      id: decoded.id,
+      provider: decoded.provider || "local",
+    };
     next();
   } catch (error) {
     console.error("JWT doğrulama hatası:", error.message);
     res.status(401).json({ message: "Geçersiz token" });
   }
 };
+
 export default auth;
