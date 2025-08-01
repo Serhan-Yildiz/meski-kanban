@@ -5,6 +5,7 @@ import Navbar from "../components/Navbar";
 
 export default function ProfilePage() {
   const [user, setUser] = useState(null);
+  const [currentPassword, setCurrentPassword] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -21,7 +22,6 @@ export default function ProfilePage() {
       const res = await axios.get("/auth/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
-      console.log("Kullanıcı:", res.data);
       setUser(res.data);
     } catch (error) {
       console.error("Hata oluştu:", error.response?.data);
@@ -32,7 +32,7 @@ export default function ProfilePage() {
   useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);
-  console.log("Profil verisi:", user);
+
   const changePassword = async (e) => {
     e.preventDefault();
     setStatus("");
@@ -53,12 +53,13 @@ export default function ProfilePage() {
     try {
       await axios.put(
         "/profile/change-password",
-        { newPassword },
+        { currentPassword, newPassword },
         {
           headers: { Authorization: `Bearer ${token}` },
         }
       );
       setStatus("✅ Şifre başarıyla güncellendi");
+      setCurrentPassword("");
       setNewPassword("");
       setConfirmPassword("");
     } catch (err) {
@@ -118,6 +119,13 @@ export default function ProfilePage() {
         <>
           <form onSubmit={changePassword} style={{ marginTop: "20px" }}>
             <h3>Şifre Güncelle</h3>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Mevcut şifre"
+              value={currentPassword}
+              onChange={(e) => setCurrentPassword(e.target.value)}
+              required
+            />
             <input
               type={showPassword ? "text" : "password"}
               placeholder="Yeni şifre"
