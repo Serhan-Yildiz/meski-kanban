@@ -7,11 +7,17 @@ export async function getProfile(req, res) {
       "SELECT id, name, email, password_hash FROM users WHERE id = $1",
       [req.user.id]
     );
+
     if (result.rows.length === 0)
       return res.status(404).json({ message: "Kullanıcı bulunamadı" });
 
     const user = result.rows[0];
-    res.json(user);
+    res.json({
+      id: user.id,
+      name: user.name,
+      email: user.email,
+      isGoogleUser: user.password_hash === "google",
+    });
   } catch (err) {
     console.error("getProfile hatası:", err);
     res.status(500).json({ message: "Sunucu hatası" });
@@ -35,8 +41,7 @@ export async function changePassword(req, res) {
     }
 
     const match = await bcrypt.compare(currentPassword, user.password_hash);
-    if (!match)
-      return res.status(401).json({ message: "Mevcut şifre hatalı" });
+    if (!match) return res.status(401).json({ message: "Mevcut şifre hatalı" });
 
     const hashed = await bcrypt.hash(newPassword, 10);
     await pool.query("UPDATE users SET password_hash = $1 WHERE id = $2", [
