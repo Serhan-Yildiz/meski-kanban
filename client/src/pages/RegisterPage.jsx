@@ -38,7 +38,8 @@ export default function RegisterPage() {
 
     if (!form.name.trim()) newErrors.push("Ad soyad alanı zorunludur.");
     if (!form.email.includes("@")) newErrors.push("Geçerli bir e-posta girin.");
-
+    if (/\s/.test(form.email)) newErrors.push("E-posta boşluk içeremez.");
+    
     if (form.password.length < 8)
       newErrors.push("Şifre en az 8 karakter olmalı.");
     if (!/[a-z]/.test(form.password))
