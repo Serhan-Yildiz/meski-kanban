@@ -25,12 +25,9 @@ export async function changePassword(req, res) {
     const user = userQuery.rows[0];
 
     if (!user.password)
-      return res
-        .status(400)
-        .json({
-          message:
-            "Google hesabı ile giriş yapan kullanıcı şifre değiştiremez.",
-        });
+      return res.status(400).json({
+        message: "Google hesabı ile giriş yapan kullanıcı şifre değiştiremez.",
+      });
 
     const match = await bcrypt.compare(currentPassword, user.password);
     if (!match) return res.status(401).json({ message: "Mevcut şifre hatalı" });
@@ -43,6 +40,30 @@ export async function changePassword(req, res) {
 
     res.json({ message: "Şifre başarıyla güncellendi" });
   } catch {
+    res.status(500).json({ message: "Sunucu hatası" });
+  }
+}
+
+export async function updateSecurityInfo(req, res) {
+  const { question, answer } = req.body;
+
+  if (!question || !answer) {
+    return res
+      .status(400)
+      .json({ message: "Güvenlik sorusu ve cevabı zorunludur." });
+  }
+
+  try {
+    const hashedAnswer = await bcrypt.hash(answer, 10);
+
+    await pool.query(
+      "UPDATE users SET security_question = $1, security_answer_hashed = $2 WHERE id = $3",
+      [question, hashedAnswer, req.user.id]
+    );
+
+    res.json({ message: "Güvenlik sorusu ve cevabı güncellendi." });
+  } catch (err) {
+    console.error("Güvenlik sorusu güncelleme hatası:", err);
     res.status(500).json({ message: "Sunucu hatası" });
   }
 }
