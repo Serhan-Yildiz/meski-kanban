@@ -79,6 +79,8 @@ export default function DashboardPage() {
         setInputValue={setNewBoardTitle}
       />
 
+      <h2 style={{ marginLeft: "1rem" }}>Panolarım</h2>
+
       <div className="dashboard-board-list">
         {boards.map((board) => (
           <div key={board.id} className="dashboard-board">
@@ -95,7 +97,6 @@ export default function DashboardPage() {
                     }
                   }}
                 />
-
                 <button onClick={saveEditedBoard}>Kaydet</button>
                 <button onClick={cancelEditing}>İptal</button>
               </>
