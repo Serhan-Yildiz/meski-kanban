@@ -87,7 +87,9 @@ export default function LoginPage() {
 
       <button type="submit">Giriş Yap</button>
 
-      <a href={`${API_URL}/auth/google`}>Google ile giriş yap</a>
+      <a href={`${API_URL}/auth/google`} className="google-login">
+        Google ile giriş yap
+      </a>
 
       <div className="auth-links">
         <p>Hesabınız yok mu?</p>
