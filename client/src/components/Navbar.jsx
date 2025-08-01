@@ -23,17 +23,24 @@ export default function Navbar({ onAdd, inputValue, setInputValue }) {
       <div className="nav-center">
         {showInput && (
           <>
-            <input
-              type="text"
-              value={inputValue}
-              onChange={(e) => setInputValue(e.target.value)}
-              placeholder={
-                isDashboard ? "Yeni pano adı..." : "Yeni liste adı..."
-              }
-            />
-            <button onClick={onAdd}>
-              {isDashboard ? "Pano Ekle" : "Liste Ekle"}
-            </button>
+            <form
+              onSubmit={(e) => {
+                e.preventDefault();
+                onAdd();
+              }}
+            >
+              <input
+                type="text"
+                value={inputValue}
+                onChange={(e) => setInputValue(e.target.value)}
+                placeholder={
+                  isDashboard ? "Yeni pano adı..." : "Yeni liste adı..."
+                }
+              />
+              <button type="submit">
+                {isDashboard ? "Pano Ekle" : "Liste Ekle"}
+              </button>
+            </form>
           </>
         )}
       </div>

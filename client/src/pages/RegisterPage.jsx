@@ -39,7 +39,7 @@ export default function RegisterPage() {
     if (!form.name.trim()) newErrors.push("Ad soyad alanı zorunludur.");
     if (!form.email.includes("@")) newErrors.push("Geçerli bir e-posta girin.");
     if (/\s/.test(form.email)) newErrors.push("E-posta boşluk içeremez.");
-    
+
     if (form.password.length < 8)
       newErrors.push("Şifre en az 8 karakter olmalı.");
     if (!/[a-z]/.test(form.password))
@@ -68,8 +68,8 @@ export default function RegisterPage() {
     if (validationErrors.length === 0) {
       try {
         await axios.post("/auth/register", {
-          name: form.name,
-          email: form.email,
+          name: form.name.trim(),
+          email: form.email.trim(),
           password: form.password,
           security_question: form.securityQuestion,
           security_answer: form.securityAnswer,
@@ -87,7 +87,7 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="auth-form">
+    <form className="auth-form" onSubmit={handleSubmit}>
       <h2>Kayıt Ol</h2>
 
       <input
@@ -96,6 +96,7 @@ export default function RegisterPage() {
         placeholder="Ad Soyad"
         value={form.name}
         onChange={handleChange}
+        required
       />
 
       <input
@@ -104,6 +105,7 @@ export default function RegisterPage() {
         placeholder="E-posta"
         value={form.email}
         onChange={handleChange}
+        required
       />
 
       <input
@@ -112,6 +114,7 @@ export default function RegisterPage() {
         placeholder="Şifre"
         value={form.password}
         onChange={handleChange}
+        required
       />
 
       <input
@@ -120,6 +123,7 @@ export default function RegisterPage() {
         placeholder="Şifre Tekrar"
         value={form.confirmPassword}
         onChange={handleChange}
+        required
       />
 
       <label>
@@ -141,6 +145,7 @@ export default function RegisterPage() {
         name="securityQuestion"
         value={form.securityQuestion}
         onChange={handleChange}
+        required
       >
         <option value="">Güvenlik sorusu seçin</option>
         {securityQuestions.map((q, i) => (
@@ -156,9 +161,10 @@ export default function RegisterPage() {
         placeholder="Güvenlik sorusu cevabı"
         value={form.securityAnswer}
         onChange={handleChange}
+        required
       />
 
-      <button onClick={handleSubmit}>Kayıt Ol</button>
+      <button type="submit">Kayıt Ol</button>
 
       <a href="/auth/google" className="google-login">
         Google ile kayıt ol
@@ -169,12 +175,14 @@ export default function RegisterPage() {
         <a href="/login">Giriş Yap</a>
       </div>
 
-      <div style={{ marginTop: "1rem", color: "red", fontSize: "0.95rem" }}>
+      <div style={{ marginTop: "1rem", fontSize: "0.95rem" }}>
         {errors.map((err, i) => (
-          <div key={i}>{err}</div>
+          <div key={i} style={{ color: "red" }}>
+            {err}
+          </div>
         ))}
         {serverMessage && <div style={{ color: "green" }}>{serverMessage}</div>}
       </div>
-    </div>
+    </form>
   );
 }

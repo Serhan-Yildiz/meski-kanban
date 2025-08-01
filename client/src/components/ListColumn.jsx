@@ -105,13 +105,20 @@ export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
       </div>
 
       <div className="list-addcard">
-        <input
-          type="text"
-          value={newCardTitle}
-          onChange={(e) => setNewCardTitle(e.target.value)}
-          placeholder="Yeni kart adı"
-        />
-        <button onClick={createCard}>Ekle</button>
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            createCard();
+          }}
+        >
+          <input
+            type="text"
+            value={newCardTitle}
+            onChange={(e) => setNewCardTitle(e.target.value)}
+            placeholder="Yeni kart adı"
+          />
+          <button type="submit">Ekle</button>
+        </form>
       </div>
     </div>
   );
