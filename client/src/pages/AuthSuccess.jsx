@@ -1,14 +1,21 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AuthSuccess() {
   const navigate = useNavigate();
+  const location = useLocation();
 
   useEffect(() => {
-    setTimeout(() => {
+    const params = new URLSearchParams(location.search);
+    const token = params.get("token");
+
+    if (token) {
+      localStorage.setItem("token", token);
       navigate("/dashboard");
-    }, 1500);
-  }, [navigate]);
+    } else {
+      navigate("/login");
+    }
+  }, [navigate, location]);
 
   return (
     <div className="centered-page">
