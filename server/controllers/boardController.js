@@ -3,7 +3,7 @@ import pool from "../config/db.js";
 export async function getBoards(req, res) {
   try {
     const result = await pool.query(
-      "SELECT * FROM boards WHERE owner_id = $1 ORDER BY created_at DESC",
+      "SELECT * FROM boards WHERE owner_id = $1",
       [req.user.id]
     );
     res.json(result.rows);

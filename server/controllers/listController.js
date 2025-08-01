@@ -74,8 +74,8 @@ export const createList = async (req, res) => {
     const newPosition = max + 1;
 
     const insertRes = await pool.query(
-      `INSERT INTO lists (title, board_id, position, created_at, updated_at)
-       VALUES ($1, $2, $3, NOW(), NOW())
+      `INSERT INTO lists (title, board_id, position)
+       VALUES ($1, $2, $3)
        RETURNING *`,
       [title, boardId, newPosition]
     );

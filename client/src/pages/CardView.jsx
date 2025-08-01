@@ -195,16 +195,6 @@ export default function CardView() {
             <strong>Durum:</strong>{" "}
             {card.is_done ? "✅ Tamamlandı" : "⏳ Devam ediyor"}
           </p>
-
-          <p>
-            <strong>Oluşturulma:</strong>{" "}
-            {new Date(card.created_at).toLocaleString()}
-          </p>
-
-          <p>
-            <strong>Güncellenme:</strong>{" "}
-            {new Date(card.updated_at).toLocaleString()}
-          </p>
         </>
       ) : (
         <p>Yükleniyor...</p>
