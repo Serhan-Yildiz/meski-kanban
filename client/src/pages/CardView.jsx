@@ -24,7 +24,7 @@ export default function CardView() {
       setDesc(data.description || "");
       setOriginalDesc(data.description || "");
       setPriority(data.priority || "");
-      setIsEditingDesc(!data.description); // açıklama yoksa direkt input göster
+      setIsEditingDesc(!data.description);
     } catch (err) {
       console.error("Kart detay alınamadı", err);
     }
@@ -88,7 +88,14 @@ export default function CardView() {
                   value={desc}
                   onChange={(e) => setDesc(e.target.value)}
                   rows={4}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSaveDesc();
+                    }
+                  }}
                 />
+
                 <div>
                   <button onClick={handleSaveDesc}>Kaydet</button>{" "}
                   <button onClick={handleCancelDesc}>İptal</button>
@@ -104,7 +111,7 @@ export default function CardView() {
 
           <div>
             <strong>Öncelik:</strong>
-            <div className="priority-radio-group" >
+            <div className="priority-radio-group">
               <label>
                 <input
                   type="radio"

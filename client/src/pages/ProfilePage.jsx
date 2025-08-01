@@ -17,7 +17,7 @@ export default function ProfilePage() {
       });
       setUser(res.data);
     } catch (error) {
-      console.error("Hata oluştu:", error.response.data);
+      console.error("Hata oluştu:", error.response?.data);
       navigate("/login");
     }
   }, [token, navigate]);
@@ -26,7 +26,8 @@ export default function ProfilePage() {
     fetchProfile();
   }, [fetchProfile]);
 
-  const changePassword = async () => {
+  const changePassword = async (e) => {
+    e.preventDefault();
     await axios.post(
       "/auth/change-password",
       { password: newPassword },
@@ -35,6 +36,13 @@ export default function ProfilePage() {
       }
     );
     alert("Şifre güncellendi");
+    setNewPassword("");
+  };
+
+  const handleLogout = () => {
+    localStorage.removeItem("token");
+    sessionStorage.removeItem("token");
+    navigate("/");
   };
 
   return (
@@ -47,22 +55,19 @@ export default function ProfilePage() {
       <p>
         <strong>E-posta:</strong> {user?.email}
       </p>
-      <input
-        type="password"
-        placeholder="Yeni şifre"
-        value={newPassword}
-        onChange={(e) => setNewPassword(e.target.value)}
-      />
-      <button onClick={changePassword}>Şifreyi Güncelle</button>
-      <button
-        onClick={() => {
-          localStorage.removeItem("token");
-          sessionStorage.removeItem("token");
-          navigate("/");
-        }}
-      >
-        Çıkış Yap
-      </button>
+
+      <form onSubmit={changePassword}>
+        <input
+          type="password"
+          placeholder="Yeni şifre"
+          value={newPassword}
+          onChange={(e) => setNewPassword(e.target.value)}
+          required
+        />
+        <button type="submit">Şifreyi Güncelle</button>
+      </form>
+
+      <button onClick={handleLogout}>Çıkış Yap</button>
     </div>
   );
 }

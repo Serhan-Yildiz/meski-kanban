@@ -88,7 +88,14 @@ export default function DashboardPage() {
                   type="text"
                   value={editBoardTitle}
                   onChange={(e) => setEditBoardTitle(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") {
+                      e.preventDefault();
+                      saveEditedBoard();
+                    }
+                  }}
                 />
+
                 <button onClick={saveEditedBoard}>Kaydet</button>
                 <button onClick={cancelEditing}>İptal</button>
               </>
