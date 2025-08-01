@@ -82,7 +82,7 @@ export default function ProfilePage() {
         <strong>E-posta:</strong> {user?.email}
       </p>
 
-      {!isGoogleUser && (
+      {isGoogleUser && (
         <form onSubmit={changePassword} style={{ marginTop: "20px" }}>
           <h3>Şifre Güncelle</h3>
           <input
