@@ -9,6 +9,9 @@ export default function ProfilePage() {
   const [confirmPassword, setConfirmPassword] = useState("");
   const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState("");
+  const [securityQuestion, setSecurityQuestion] = useState("");
+  const [securityAnswer, setSecurityAnswer] = useState("");
+
   const navigate = useNavigate();
   const token =
     localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -63,6 +66,26 @@ export default function ProfilePage() {
     }
   };
 
+  const updateSecurity = async (e) => {
+    e.preventDefault();
+    try {
+      await axios.put(
+        "/profile/security-question",
+        {
+          security_question: securityQuestion,
+          security_answer: securityAnswer,
+        },
+        {
+          headers: { Authorization: `Bearer ${token}` },
+        }
+      );
+      setStatus("✅ Güvenlik sorusu güncellendi");
+    } catch (err) {
+      console.error(err);
+      setStatus("❌ Güvenlik sorusu güncellenemedi");
+    }
+  };
+
   const handleLogout = () => {
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
@@ -70,6 +93,14 @@ export default function ProfilePage() {
   };
 
   const isGoogleUser = user?.provider === "google";
+
+  const securityQuestions = [
+    "İlk evcil hayvanınızın adı nedir?",
+    "En sevdiğiniz öğretmenin adı nedir?",
+    "Annenizin kızlık soyadı nedir?",
+    "İlkokulunuzun adı nedir?",
+    "Doğduğunuz şehir nedir?",
+  ];
 
   return (
     <div className="profile-page">
@@ -83,32 +114,58 @@ export default function ProfilePage() {
       </p>
 
       {!isGoogleUser && (
-        <form onSubmit={changePassword} style={{ marginTop: "20px" }}>
-          <h3>Şifre Güncelle</h3>
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Yeni şifre"
-            value={newPassword}
-            onChange={(e) => setNewPassword(e.target.value)}
-            required
-          />
-          <input
-            type={showPassword ? "text" : "password"}
-            placeholder="Yeni şifre (tekrar)"
-            value={confirmPassword}
-            onChange={(e) => setConfirmPassword(e.target.value)}
-            required
-          />
-          <label>
+        <>
+          <form onSubmit={changePassword} style={{ marginTop: "20px" }}>
+            <h3>Şifre Güncelle</h3>
             <input
-              type="checkbox"
-              checked={showPassword}
-              onChange={(e) => setShowPassword(e.target.checked)}
+              type={showPassword ? "text" : "password"}
+              placeholder="Yeni şifre"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
             />
-            Şifreyi göster
-          </label>
-          <button type="submit">Şifreyi Güncelle</button>
-        </form>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Yeni şifre (tekrar)"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+            <label>
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+              />
+              Şifreyi göster
+            </label>
+            <button type="submit">Şifreyi Güncelle</button>
+          </form>
+
+          <form onSubmit={updateSecurity} style={{ marginTop: "20px" }}>
+            <h3>Güvenlik Sorusu Güncelle</h3>
+            <select
+              value={securityQuestion}
+              onChange={(e) => setSecurityQuestion(e.target.value)}
+              required
+            >
+              <option value="">Soru seçin</option>
+              {securityQuestions.map((q, i) => (
+                <option key={i} value={q}>
+                  {q}
+                </option>
+              ))}
+            </select>
+            <input
+              type="text"
+              placeholder="Cevap"
+              value={securityAnswer}
+              onChange={(e) => setSecurityAnswer(e.target.value)}
+              required
+            />
+            <button type="submit">Güncelle</button>
+          </form>
+        </>
       )}
 
       {status && (
