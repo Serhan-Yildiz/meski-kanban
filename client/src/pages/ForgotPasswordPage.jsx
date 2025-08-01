@@ -8,6 +8,7 @@ export default function ForgotPasswordPage() {
   const [answer, setAnswer] = useState("");
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [status, setStatus] = useState("");
   const [errors, setErrors] = useState([]);
 
@@ -40,7 +41,7 @@ export default function ForgotPasswordPage() {
       setQuestion(res.data.question);
       setStep(2);
     } catch (err) {
-      console.error("Hata:", err);
+      console.error("Hata oluştu:", err.response?.data);
       setStatus("Kullanıcı bulunamadı");
     }
   };
@@ -61,19 +62,18 @@ export default function ForgotPasswordPage() {
         answer,
         newPassword,
       });
+
       setStatus("✅ Şifre başarıyla sıfırlandı");
       setStep(1);
       setEmail("");
       setAnswer("");
       setNewPassword("");
       setConfirmPassword("");
+      setShowPassword(false);
       setErrors([]);
     } catch (err) {
-      if (err.response?.status === 403) {
-        setErrors(["❌ Güvenlik cevabı yanlış"]);
-      } else {
-        setErrors(["Bir hata oluştu"]);
-      }
+      const serverErr = err.response?.data?.message;
+      setErrors([serverErr || "Sunucu hatası: Şifre sıfırlanamadı."]);
     }
   };
 
@@ -114,7 +114,7 @@ export default function ForgotPasswordPage() {
             />
 
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Yeni şifre"
               value={newPassword}
               onChange={(e) => setNewPassword(e.target.value)}
@@ -122,12 +122,21 @@ export default function ForgotPasswordPage() {
             />
 
             <input
-              type="password"
+              type={showPassword ? "text" : "password"}
               placeholder="Yeni şifre tekrar"
               value={confirmPassword}
               onChange={(e) => setConfirmPassword(e.target.value)}
               required
             />
+
+            <label style={{ margin: "5px 0" }}>
+              <input
+                type="checkbox"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+              />{" "}
+              Şifreyi göster
+            </label>
 
             <p
               className="password-rules"
