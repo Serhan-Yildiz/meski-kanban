@@ -92,7 +92,8 @@ export default function LoginPage() {
       </a>
 
       <div className="auth-links">
-        <a href="/register">Hesabınız yok mu? Kayıt Ol</a>
+        <p>Hesabınız yok mu?</p>
+        <a href="/register">Kayıt Ol</a>
         <a href="/forgot-password">Şifremi Unuttum</a>
       </div>
 
