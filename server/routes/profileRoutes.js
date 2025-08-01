@@ -7,7 +7,7 @@ import {
 
 const router = express.Router();
 
-router.get("/",getProfile);
-router.put("/change-password", changePassword);
+router.get("/", auth, getProfile); 
+router.put("/change-password", auth, changePassword); 
 
 export default router;
