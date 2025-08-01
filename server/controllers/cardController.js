@@ -29,7 +29,7 @@ export const updateCard = async (req, res) => {
          title = COALESCE($1, title),
          description = COALESCE($2, description),
          priority = COALESCE($3, priority),
-         is_done = COALESCE($4, is_done),
+         is_done = COALESCE($4, is_done)
        WHERE id = $5
        RETURNING *`,
       [title, description, priority, is_done, id]
