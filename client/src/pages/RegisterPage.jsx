@@ -13,6 +13,7 @@ export default function RegisterPage() {
     securityQuestion: "",
     securityAnswer: "",
   });
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [errors, setErrors] = useState([]);
   const [serverMessage, setServerMessage] = useState("");
@@ -166,7 +167,7 @@ export default function RegisterPage() {
 
       <button type="submit">Kayıt Ol</button>
 
-      <a href="/auth/google" className="google-login">
+      <a href={`${API_URL}/auth/google`} className="google-login">
         Google ile kayıt ol
       </a>
 
