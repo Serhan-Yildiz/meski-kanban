@@ -11,7 +11,7 @@ export default function LoginPage() {
     remember: false,
   });
   const [error, setError] = useState("");
-
+  const API_URL = import.meta.env.VITE_API_URL;
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
@@ -87,9 +87,7 @@ export default function LoginPage() {
 
       <button type="submit">Giriş Yap</button>
 
-      <a href="/auth/google" className="google-login">
-        Google ile giriş yap
-      </a>
+      <a href={`${API_URL}/auth/google`}>Google ile giriş yap</a>
 
       <div className="auth-links">
         <p>Hesabınız yok mu?</p>
