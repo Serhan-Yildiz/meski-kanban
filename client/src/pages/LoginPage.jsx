@@ -1,108 +1,102 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import axios from "../api/axios.js";
+import axios from "../api/axios";
+import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
   const navigate = useNavigate();
-
-  const [email, setEmail] = useState("");
-  const [password, setPassword] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
-  const [rememberMe, setRememberMe] = useState(false);
+  const [form, setForm] = useState({
+    email: "",
+    password: "",
+    showPassword: false,
+    remember: false,
+  });
   const [error, setError] = useState("");
 
-  const handleLogin = async () => {
+  const handleChange = (e) => {
+    const { name, value, type, checked } = e.target;
+    setForm((prev) => ({
+      ...prev,
+      [name]: type === "checkbox" ? checked : value,
+    }));
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
     setError("");
 
     try {
-      const res = await axios.post("/auth/login", { email, password });
+      const res = await axios.post("/auth/login", {
+        email: form.email.trim(),
+        password: form.password,
+      });
 
-      const token = res.data.token;
-      const name = res.data.name;
-
-      if (rememberMe) {
-        localStorage.setItem("token", token);
-        localStorage.setItem("name", name);
+      if (form.remember) {
+        localStorage.setItem("token", res.data.token);
       } else {
-        sessionStorage.setItem("token", token);
-        sessionStorage.setItem("name", name);
+        sessionStorage.setItem("token", res.data.token);
       }
 
       navigate("/dashboard");
     } catch (err) {
-      if (err.response?.status === 404) {
-        setError("Kullanıcı bulunamadı");
-      } else if (err.response?.status === 401) {
-        setError("Şifre yanlış");
-      } else {
-        setError("Giriş sırasında bir hata oluştu");
-      }
+      const msg = err.response?.data?.message || "Giriş başarısız.";
+      setError(msg);
     }
   };
 
   return (
-    <div className="centered-page">
-      <form className="auth-form" onSubmit={(e) => e.preventDefault()}>
-        <h2>Giriş Yap</h2>
+    <form className="auth-form" onSubmit={handleSubmit}>
+      <h2>Giriş Yap</h2>
 
+      <input
+        type="email"
+        name="email"
+        placeholder="E-posta"
+        value={form.email}
+        onChange={handleChange}
+        required
+      />
+
+      <input
+        type={form.showPassword ? "text" : "password"}
+        name="password"
+        placeholder="Şifre"
+        value={form.password}
+        onChange={handleChange}
+        required
+      />
+
+      <label>
         <input
-          type="email"
-          placeholder="E-posta"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
+          type="checkbox"
+          name="showPassword"
+          checked={form.showPassword}
+          onChange={handleChange}
         />
+        Şifreyi göster
+      </label>
 
+      <label>
         <input
-          type={showPassword ? "text" : "password"}
-          placeholder="Şifre"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
+          type="checkbox"
+          name="remember"
+          checked={form.remember}
+          onChange={handleChange}
         />
+        Beni hatırla
+      </label>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={showPassword}
-            onChange={() => setShowPassword(!showPassword)}
-          />
-          Şifreyi Göster
-        </label>
+      <button type="submit">Giriş Yap</button>
 
-        <label>
-          <input
-            type="checkbox"
-            checked={rememberMe}
-            onChange={() => setRememberMe(!rememberMe)}
-          />
-          Beni Hatırla
-        </label>
+      <a href="/auth/google" className="google-login">
+        Google ile giriş yap
+      </a>
 
-        <button onClick={handleLogin}>Giriş Yap</button>
+      <div className="auth-links">
+        <a href="/register">Hesabınız yok mu? Kayıt Ol</a>
+        <a href="/forgot-password">Şifremi Unuttum</a>
+      </div>
 
-        <a
-          href="https://meski-kanban.onrender.com/auth/google"
-          className="google-login"
-        >
-          Google ile Giriş Yap
-        </a>
-
-        <div className="auth-links">
-          <p>Hesabınız yok mu?</p>
-          <Link to="/register">Kayıt Ol</Link>
-        </div>
-
-        <div className="auth-links">
-          <Link to="/forgot">Şifremi Unuttum</Link>
-        </div>
-
-        {error && (
-          <p style={{ color: "red", marginTop: "10px", textAlign: "center" }}>
-            {error}
-          </p>
-        )}
-      </form>
-    </div>
+      {error && <div style={{ color: "red", marginTop: "1rem" }}>{error}</div>}
+    </form>
   );
 }
