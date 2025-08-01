@@ -69,7 +69,7 @@ export default function ProfilePage() {
     navigate("/");
   };
 
-  const isGoogleUser = user?.password_hash === "google-oauth";
+  const isGoogleUser = user?.password_hash === "google";
 
   return (
     <div className="profile-page">
