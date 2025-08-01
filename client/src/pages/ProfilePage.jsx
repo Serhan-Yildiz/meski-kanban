@@ -21,6 +21,7 @@ export default function ProfilePage() {
       const res = await axios.get("/auth/profile", {
         headers: { Authorization: `Bearer ${token}` },
       });
+      console.log("Kullanıcı:", res.data);
       setUser(res.data);
     } catch (error) {
       console.error("Hata oluştu:", error.response?.data);
@@ -31,7 +32,7 @@ export default function ProfilePage() {
   useEffect(() => {
     fetchProfile();
   }, [fetchProfile]);
-
+  console.log("Profil verisi:", user);
   const changePassword = async (e) => {
     e.preventDefault();
     setStatus("");

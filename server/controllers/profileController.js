@@ -16,6 +16,7 @@ export async function getProfile(req, res) {
       id: user.id,
       name: user.name,
       email: user.email,
+      password_hash: user.password_hash,
       isGoogleUser: user.password_hash === "google",
     });
   } catch (err) {
