@@ -8,11 +8,11 @@ export const register = async (req, res) => {
 
   try {
     const password_hash = await bcrypt.hash(password, 10);
-
+    const security_answer_hashed = await bcrypt.hash(security_answer, 10);
     await db.query(
-      `INSERT INTO users (name, email, password_hash, security_question, security_answer)
+      `INSERT INTO users (name, email, password_hash, security_question, security_answer_hashed)
        VALUES ($1, $2, $3, $4, $5)`,
-      [name, email, password_hash, security_question, security_answer]
+      [name, email, password_hash, security_question, security_answer_hashed]
     );
 
     res.status(201).json({ message: "Kayıt başarılı" });
@@ -79,7 +79,11 @@ export const resetPassword = async (req, res) => {
     if (result.rowCount === 0)
       return res.status(404).json({ message: "Kullanıcı bulunamadı" });
 
-    if (result.rows[0].security_answer !== answer)
+    const match = await bcrypt.compare(
+      answer,
+      result.rows[0].security_answer_hashed
+    );
+    if (!match)
       return res.status(403).json({ message: "Güvenlik cevabı yanlış" });
 
     const password_hash = await bcrypt.hash(newPassword, 10);
