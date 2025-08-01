@@ -4,21 +4,21 @@ import jwt from "jsonwebtoken";
 import {
   login,
   register,
-  getProfile,
-  changePassword,
   getSecurityQuestion,
   resetPassword,
 } from "../controllers/authController.js";
 import auth from "../middleware/authMiddleware.js";
+import { getProfile } from "../controllers/profileController.js";
 
 const router = express.Router();
 
 router.post("/login", login);
 router.post("/register", register);
-router.get("/profile", auth, getProfile);
-router.put("/change-password", auth, changePassword);
+
 router.post("/reset-step1", getSecurityQuestion);
 router.post("/reset-password", resetPassword);
+
+router.get("/profile", auth, getProfile);
 
 router.get(
   "/google",
@@ -30,13 +30,9 @@ router.get(
   passport.authenticate("google", { session: false }),
   (req, res) => {
     const token = jwt.sign(
-      {
-        id: req.user.id,
-        email: req.user.email,
-        provider: "google",
-      },
+      { id: req.user.id, provider: "google" },
       process.env.JWT_SECRET,
-      { expiresIn: "7d" }
+      { expiresIn: "1d" }
     );
 
     res.redirect(`${process.env.CLIENT_URL}/auth/success?token=${token}`);

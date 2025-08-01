@@ -12,12 +12,13 @@ export async function getProfile(req, res) {
       return res.status(404).json({ message: "Kullanıcı bulunamadı" });
 
     const user = result.rows[0];
+    const isGoogleUser = user.password_hash === "google";
+
     res.json({
       id: user.id,
       name: user.name,
       email: user.email,
-      password_hash: user.password_hash,
-      isGoogleUser: user.password_hash === "google",
+      isGoogleUser,
     });
   } catch (err) {
     console.error("getProfile hatası:", err);
@@ -30,15 +31,17 @@ export async function changePassword(req, res) {
 
   try {
     const userQuery = await pool.query(
-      "SELECT id, password_hash, provider FROM users WHERE id = $1",
+      "SELECT id, password_hash FROM users WHERE id = $1",
       [req.user.id]
     );
     const user = userQuery.rows[0];
 
-    if (!user || user.provider === "google") {
+    if (!user || user.password_hash === "google") {
       return res
         .status(400)
-        .json({ message: "Google hesabı şifre değiştiremez." });
+        .json({
+          message: "Google ile giriş yapan kullanıcı şifre değiştiremez.",
+        });
     }
 
     const match = await bcrypt.compare(currentPassword, user.password_hash);
@@ -67,6 +70,19 @@ export async function updateSecurityInfo(req, res) {
   }
 
   try {
+    const userQuery = await pool.query(
+      "SELECT password_hash FROM users WHERE id = $1",
+      [req.user.id]
+    );
+    const user = userQuery.rows[0];
+
+    if (!user || user.password_hash === "google") {
+      return res.status(400).json({
+        message:
+          "Google ile giriş yapan kullanıcı güvenlik sorusu değiştiremez.",
+      });
+    }
+
     const hashedAnswer = await bcrypt.hash(answer, 10);
 
     await pool.query(
