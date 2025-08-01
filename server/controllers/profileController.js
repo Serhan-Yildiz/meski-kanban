@@ -4,7 +4,7 @@ import bcrypt from "bcrypt";
 export async function getProfile(req, res) {
   try {
     const result = await pool.query(
-      "SELECT id, name, email, password_hash FROM users WHERE id = $1",
+      "SELECT id, name, email, password_hash, provider FROM users WHERE id = $1",
       [req.user.id]
     );
     if (result.rows.length === 0)
