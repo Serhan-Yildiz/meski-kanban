@@ -70,10 +70,10 @@ export default function ProfilePage() {
     e.preventDefault();
     try {
       await axios.put(
-        "/profile/security-question",
+        "/profile/update-security",
         {
-          security_question: securityQuestion,
-          security_answer: securityAnswer,
+          question: securityQuestion,
+          answer: securityAnswer,
         },
         {
           headers: { Authorization: `Bearer ${token}` },
@@ -92,7 +92,7 @@ export default function ProfilePage() {
     navigate("/");
   };
 
-  const isGoogleUser = user?.provider === "google";
+  const isGoogleUser = user?.password === null || user?.password === undefined;
 
   const securityQuestions = [
     "İlk evcil hayvanınızın adı nedir?",
