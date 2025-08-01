@@ -7,24 +7,54 @@ export default function ForgotPasswordPage() {
   const [question, setQuestion] = useState("");
   const [answer, setAnswer] = useState("");
   const [newPassword, setNewPassword] = useState("");
-
+  const [confirmPassword, setConfirmPassword] = useState("");
   const [status, setStatus] = useState("");
+  const [errors, setErrors] = useState([]);
+
+  const validatePassword = () => {
+    const validationErrors = [];
+
+    if (newPassword.length < 8)
+      validationErrors.push("Şifre en az 8 karakter olmalı.");
+    if (!/[a-z]/.test(newPassword))
+      validationErrors.push("Şifre küçük harf içermeli.");
+    if (!/[A-Z]/.test(newPassword))
+      validationErrors.push("Şifre büyük harf içermeli.");
+    if (!/[0-9]/.test(newPassword))
+      validationErrors.push("Şifre rakam içermeli.");
+    if (!/[!@#$%^&*()_+{}\\[\]:;<>,.?~\\/-]/.test(newPassword))
+      validationErrors.push("Şifre sembol içermeli.");
+    if (newPassword !== confirmPassword)
+      validationErrors.push("Şifreler aynı olmalı.");
+
+    return validationErrors;
+  };
 
   const handleEmailSubmit = async (e) => {
     e.preventDefault();
+    setStatus("");
+    setErrors([]);
+
     try {
       const res = await axios.post("/auth/reset-step1", { email });
       setQuestion(res.data.question);
       setStep(2);
-      setStatus("");
     } catch (err) {
-      console.error("Kullanıcı bulunamadı", err);
+      console.error("Hata:", err);
       setStatus("Kullanıcı bulunamadı");
     }
   };
 
   const handleResetSubmit = async (e) => {
     e.preventDefault();
+    setStatus("");
+    const validationErrors = validatePassword();
+
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
+
     try {
       await axios.post("/auth/reset-password", {
         email,
@@ -36,11 +66,13 @@ export default function ForgotPasswordPage() {
       setEmail("");
       setAnswer("");
       setNewPassword("");
+      setConfirmPassword("");
+      setErrors([]);
     } catch (err) {
       if (err.response?.status === 403) {
-        setStatus("❌ Güvenlik cevabı yanlış");
+        setErrors(["❌ Güvenlik cevabı yanlış"]);
       } else {
-        setStatus("Bir hata oluştu");
+        setErrors(["Bir hata oluştu"]);
       }
     }
   };
@@ -80,6 +112,7 @@ export default function ForgotPasswordPage() {
               onChange={(e) => setAnswer(e.target.value)}
               required
             />
+
             <input
               type="password"
               placeholder="Yeni şifre"
@@ -87,11 +120,39 @@ export default function ForgotPasswordPage() {
               onChange={(e) => setNewPassword(e.target.value)}
               required
             />
+
+            <input
+              type="password"
+              placeholder="Yeni şifre tekrar"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
+
+            <p
+              className="password-rules"
+              style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}
+            >
+              Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli
+              ve en az 8 karakter uzunluğunda olmalıdır.
+            </p>
+
             <button type="submit">Şifreyi Sıfırla</button>
           </>
         )}
 
-        {status && <p style={{ marginTop: "10px" }}>{status}</p>}
+        <div style={{ marginTop: "1rem", fontSize: "0.95rem" }}>
+          {errors.map((err, i) => (
+            <div key={i} style={{ color: "red" }}>
+              {err}
+            </div>
+          ))}
+          {status && !errors.length && (
+            <div style={{ color: status.includes("✅") ? "green" : "red" }}>
+              {status}
+            </div>
+          )}
+        </div>
       </form>
     </div>
   );
