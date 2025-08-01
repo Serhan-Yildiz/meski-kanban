@@ -14,6 +14,14 @@ export default function ProfilePage() {
   const [securityAnswer, setSecurityAnswer] = useState("");
   const [securityMessage, setSecurityMessage] = useState("");
 
+  const securityQuestions = [
+    "İlk evcil hayvanınızın adı nedir?",
+    "En sevdiğiniz öğretmenin adı nedir?",
+    "Annenizin kızlık soyadı nedir?",
+    "İlkokulunuzun adı nedir?",
+    "Doğduğunuz şehir nedir?",
+  ];
+
   const navigate = useNavigate();
   const token =
     localStorage.getItem("token") || sessionStorage.getItem("token");
@@ -153,21 +161,30 @@ export default function ProfilePage() {
 
       <form onSubmit={updateSecurityInfo} style={{ marginTop: "2rem" }}>
         <h3>Güvenlik Sorusu Güncelle</h3>
-        <input
-          type="text"
-          placeholder="Yeni güvenlik sorusu"
+
+        <select
           value={securityQuestion}
           onChange={(e) => setSecurityQuestion(e.target.value)}
           required
-        />
+        >
+          <option value="">Güvenlik sorusu seçin</option>
+          {securityQuestions.map((q, index) => (
+            <option key={index} value={q}>
+              {q}
+            </option>
+          ))}
+        </select>
+
         <input
           type="text"
-          placeholder="Yeni cevap"
+          placeholder="Cevabınız"
           value={securityAnswer}
           onChange={(e) => setSecurityAnswer(e.target.value)}
           required
         />
+
         <button type="submit">Güncelle</button>
+
         {securityMessage && (
           <p
             style={{
