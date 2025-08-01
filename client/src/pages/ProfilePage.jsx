@@ -82,7 +82,7 @@ export default function ProfilePage() {
         <strong>E-posta:</strong> {user?.email}
       </p>
 
-      {isGoogleUser && (
+      {!isGoogleUser && (
         <form onSubmit={changePassword} style={{ marginTop: "20px" }}>
           <h3>Şifre Güncelle</h3>
           <input
@@ -119,6 +119,26 @@ export default function ProfilePage() {
 
       <button onClick={handleLogout} style={{ marginTop: "20px" }}>
         Çıkış Yap
+      </button>
+      <button
+        onClick={async () => {
+          if (window.confirm("Hesabınızı silmek istediğinize emin misiniz?")) {
+            try {
+              await axios.delete("/profile/delete", {
+                headers: { Authorization: `Bearer ${token}` },
+              });
+              localStorage.removeItem("token");
+              sessionStorage.removeItem("token");
+              navigate("/");
+            } catch (err) {
+              console.error(err);
+              alert("❌ Hesap silinemedi");
+            }
+          }
+        }}
+        style={{ marginTop: "20px", backgroundColor: "red", color: "white" }}
+      >
+        Hesabımı Sil
       </button>
     </div>
   );

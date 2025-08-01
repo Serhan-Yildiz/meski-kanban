@@ -124,7 +124,7 @@ export const changePassword = async (req, res) => {
     ]);
     const user = result.rows[0];
 
-    if (!user || user.password_hash === "google-oauth") {
+    if (!user || user.password_hash === "google") {
       return res
         .status(400)
         .json({ message: "Bu kullanıcı parola değiştiremez" });

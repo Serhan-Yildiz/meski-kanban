@@ -3,8 +3,8 @@ import bcrypt from "bcrypt";
 
 export async function getProfile(req, res) {
   try {
-    const result = await pool.query(
-      "SELECT id, name, email FROM users WHERE id = $1",
+    const result = await db.query(
+      "SELECT id, name, email, password_hash FROM users WHERE id = $1",
       [req.user.id]
     );
     if (result.rows.length === 0)
@@ -65,5 +65,14 @@ export async function updateSecurityInfo(req, res) {
   } catch (err) {
     console.error("Güvenlik sorusu güncelleme hatası:", err);
     res.status(500).json({ message: "Sunucu hatası" });
+  }
+}
+
+export async function deleteAccount(req, res) {
+  try {
+    await db.query("DELETE FROM users WHERE id = $1", [req.user.id]);
+    res.json({ message: "Hesap silindi" });
+  } catch (err) {
+    res.status(500).json({ message: "Hesap silinemedi", error: err.message });
   }
 }
