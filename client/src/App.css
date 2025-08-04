@@ -284,7 +284,6 @@ label input[type="checkbox"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
   z-index: 999;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
