@@ -1,20 +1,14 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import axios from "../api/axios.js";
+import api from "../api/api.js";
 
 export default function Card({ card, refreshCards, isFirst, isLast }) {
   const navigate = useNavigate();
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
   const [checked, setChecked] = useState(card.is_done);
 
   const moveCard = async (direction) => {
     try {
-      await axios.put(
-        `/cards/${card.id}/move-${direction}`,
-        {},
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.put(`/cards/${card.id}/move-${direction}`);
       refreshCards();
     } catch (err) {
       if (err.response?.status === 400) {
@@ -27,11 +21,7 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
 
   const toggleDone = async () => {
     try {
-      await axios.put(
-        `/cards/${card.id}`,
-        { is_done: !checked },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.put(`/cards/${card.id}`, { is_done: !checked });
       setChecked(!checked);
       refreshCards();
     } catch (err) {
@@ -42,9 +32,7 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   const deleteCard = async () => {
     if (!window.confirm("Bu kartı silmek istediğine emin misin?")) return;
     try {
-      await axios.delete(`/cards/${card.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/cards/${card.id}`);
       refreshCards();
     } catch (err) {
       console.error("Kart silinemedi", err);
@@ -54,16 +42,18 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   return (
     <div className="card-item">
       <div className="card-header">
-        <div
-          className="card-label"
-          style={{ display: "flex", alignItems: "center", gap: "8px" }}
-        >
-          <input type="checkbox" checked={checked} onChange={toggleDone} />
+        <div className="card-label">
+          <input
+            type="checkbox"
+            checked={checked}
+            onChange={toggleDone}
+            className="card-checkbox"
+            aria-label="Tamamlandı olarak işaretle"
+          />
 
           <span
             onClick={() => navigate(`/cards/${card.id}`)}
             className={`card-title ${checked ? "card-done" : ""}`}
-            style={{ cursor: "pointer" }}
           >
             <span className={`priority-dot ${card.priority}`}>
               {card.priority}
@@ -73,9 +63,19 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
         </div>
 
         <div className="card-controls">
-          {!isFirst && <button onClick={() => moveCard("up")}>⬆️</button>}
-          {!isLast && <button onClick={() => moveCard("down")}>⬇️</button>}
-          <button onClick={deleteCard}>🗑️</button>
+          {!isFirst && (
+            <button onClick={() => moveCard("up")} aria-label="Yukarı taşı">
+              ⬆️
+            </button>
+          )}
+          {!isLast && (
+            <button onClick={() => moveCard("down")} aria-label="Aşağı taşı">
+              ⬇️
+            </button>
+          )}
+          <button onClick={deleteCard} aria-label="Kartı sil">
+            🗑️
+          </button>
         </div>
       </div>
     </div>

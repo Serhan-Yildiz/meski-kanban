@@ -3,10 +3,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AuthSuccess() {
   const navigate = useNavigate();
-  const location = useLocation();
+  const { search } = useLocation();
 
   useEffect(() => {
-    const params = new URLSearchParams(location.search);
+    const params = new URLSearchParams(search);
     const token = params.get("token");
 
     if (token) {
@@ -15,7 +15,7 @@ export default function AuthSuccess() {
     } else {
       navigate("/login");
     }
-  }, [navigate, location]);
+  }, [navigate, search]);
 
   return (
     <div className="centered-page">

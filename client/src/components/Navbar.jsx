@@ -4,10 +4,11 @@ export default function Navbar({ onAdd, inputValue, setInputValue }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  const isDashboard = location.pathname === "/dashboard";
-  const isBoardPage = location.pathname.startsWith("/boards/");
-  const isProfilePage = location.pathname === "/profile";
-  const showInput = isDashboard || isBoardPage;
+  const path = location.pathname;
+  const isDashboard = path === "/dashboard";
+  const isBoardPage = path.startsWith("/boards/");
+  const isProfilePage = path === "/profile";
+  const shouldShowInput = isDashboard || isBoardPage;
 
   return (
     <nav className="navbar">
@@ -22,7 +23,7 @@ export default function Navbar({ onAdd, inputValue, setInputValue }) {
       <div className="nav-title">MESKİ Kanban</div>
 
       <div className="nav-center">
-        {showInput && (
+        {shouldShowInput && (
           <form
             onSubmit={(e) => {
               e.preventDefault();

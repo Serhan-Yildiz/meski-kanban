@@ -398,3 +398,350 @@ label input[type="checkbox"] {
   background-color: #e74c3c;
   color: white;
 }
+
+.card-label {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  cursor: pointer;
+}
+
+.card-title {
+  cursor: pointer;
+  font-weight: 500;
+}
+
+.card-done {
+  text-decoration: line-through;
+  opacity: 0.6;
+}
+
+.priority-dot {
+  font-weight: bold;
+  margin-right: 6px;
+}
+
+.board-title {
+  text-align: center;
+  margin-bottom: 1rem;
+}
+
+.board-title h1 {
+  display: inline-block;
+  border-bottom: 2px dashed #ccc;
+  padding: 0.2rem 0.5rem;
+}
+
+.editable-title {
+  cursor: pointer;
+}
+
+.loading-text {
+  text-align: center;
+}
+
+.error-text {
+  text-align: center;
+  color: red;
+}
+
+.editable-title {
+  display: inline-block;
+  cursor: pointer;
+}
+
+.card-title-section,
+.card-desc-section,
+.card-priority-section {
+  margin-bottom: 1.5rem;
+}
+
+.loading-text {
+  text-align: center;
+}
+
+.priority-radio-group label {
+  margin-right: 10px;
+}
+
+.dashboard-heading {
+  margin-left: 1rem;
+}
+
+.dashboard-board-title {
+  cursor: pointer;
+  font-weight: bold;
+}
+
+.dashboard-board-controls {
+  margin-top: 10px;
+  display: flex;
+  gap: 0.5rem;
+}
+
+.password-rules {
+  font-size: 0.9rem;
+  margin-top: 0.5rem;
+}
+
+.show-password-label {
+  margin: 5px 0;
+  display: inline-block;
+  font-size: 0.95rem;
+}
+
+.form-status {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.error-text {
+  color: red;
+}
+
+.success-text {
+  color: green;
+}
+
+.home-page {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 2rem;
+  text-align: center;
+}
+
+.home-logo {
+  width: 120px;
+  height: auto;
+  margin-bottom: 1rem;
+}
+
+.home-title {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+  color: #004aad;
+}
+
+.home-subtitle {
+  font-size: 1.1rem;
+  color: #333;
+  margin-bottom: 2rem;
+}
+
+.home-buttons {
+  display: flex;
+  gap: 1rem;
+}
+
+.btn {
+  padding: 0.7rem 1.5rem;
+  font-size: 1rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.login-btn {
+  background-color: #007bff;
+  color: white;
+}
+
+.login-btn:hover {
+  background-color: #0056b3;
+}
+
+.register-btn {
+  background-color: #28a745;
+  color: white;
+}
+
+.register-btn:hover {
+  background-color: #1e7e34;
+}
+
+.auth-form {
+  display: flex;
+  flex-direction: column;
+  max-width: 400px;
+  width: 100%;
+  background: white;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+}
+
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="text"] {
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  border: 1px solid #ccc;
+  border-radius: 6px;
+}
+
+.auth-form button {
+  margin-top: 1rem;
+  padding: 0.7rem;
+  font-size: 1rem;
+  background-color: #004aad;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.auth-form button:hover {
+  background-color: #00337a;
+}
+
+.checkbox-label {
+  font-size: 0.9rem;
+  margin: 0.3rem 0;
+}
+
+.auth-links {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+}
+
+.google-login {
+  margin-top: 1rem;
+  text-align: center;
+  color: white;
+  background: #db4437;
+  padding: 0.6rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
+}
+
+.google-login:hover {
+  background: #c23321;
+}
+
+.form-error {
+  color: red;
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.notfound-page {
+  text-align: center;
+  padding: 4rem 2rem;
+}
+
+.notfound-page h1 {
+  font-size: 4rem;
+  color: #004aad;
+}
+
+.notfound-page p {
+  margin: 1rem 0 2rem;
+  font-size: 1.1rem;
+  color: #444;
+}
+
+.notfound-button {
+  display: inline-block;
+  background-color: #004aad;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
+  font-weight: bold;
+  transition: background-color 0.2s;
+}
+
+.notfound-button:hover {
+  background-color: #00337a;
+}
+
+.profile-page {
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
+}
+
+.profile-form {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.profile-form input,
+.profile-form select {
+  padding: 0.5rem;
+  font-size: 1rem;
+}
+
+.profile-form button {
+  padding: 0.5rem 1rem;
+  background-color: #004aad;
+  color: white;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.profile-form button:hover {
+  background-color: #00337a;
+}
+
+.success-text {
+  color: green;
+  margin-top: 1rem;
+}
+
+.error-text {
+  color: red;
+  margin-top: 1rem;
+}
+
+.logout-button,
+.delete-button {
+  margin-top: 1.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 5px;
+  font-weight: bold;
+  cursor: pointer;
+}
+
+.logout-button {
+  background-color: #555;
+  color: white;
+  border: none;
+}
+
+.delete-button {
+  background-color: red;
+  color: white;
+  border: none;
+  margin-left: 1rem;
+}
+
+.password-rules {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+}
+
+.form-feedback {
+  margin-top: 1rem;
+  font-size: 0.95rem;
+}
+
+.error-text {
+  color: red;
+}
+
+.success-text {
+  color: green;
+}

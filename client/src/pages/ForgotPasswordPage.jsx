@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../api/axios.js";
+import api from "../api/api.js";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -37,7 +37,7 @@ export default function ForgotPasswordPage() {
     setErrors([]);
 
     try {
-      const res = await axios.post("/auth/reset-step1", { email });
+      const res = await api.post("/auth/reset-step1", { email });
       setQuestion(res.data.question);
       setStep(2);
     } catch (err) {
@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
     }
 
     try {
-      await axios.post("/auth/reset-password", {
+      await api.post("/auth/reset-password", {
         email,
         answer,
         newPassword,
@@ -129,7 +129,7 @@ export default function ForgotPasswordPage() {
               required
             />
 
-            <label style={{ margin: "5px 0" }}>
+            <label className="show-password-label">
               <input
                 type="checkbox"
                 checked={showPassword}
@@ -138,10 +138,7 @@ export default function ForgotPasswordPage() {
               Şifreyi göster
             </label>
 
-            <p
-              className="password-rules"
-              style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}
-            >
+            <p className="password-rules">
               Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli
               ve en az 8 karakter uzunluğunda olmalıdır.
             </p>
@@ -150,14 +147,16 @@ export default function ForgotPasswordPage() {
           </>
         )}
 
-        <div style={{ marginTop: "1rem", fontSize: "0.95rem" }}>
+        <div className="form-status">
           {errors.map((err, i) => (
-            <div key={i} style={{ color: "red" }}>
+            <div key={i} className="error-text">
               {err}
             </div>
           ))}
           {status && !errors.length && (
-            <div style={{ color: status.includes("✅") ? "green" : "red" }}>
+            <div
+              className={status.includes("✅") ? "success-text" : "error-text"}
+            >
               {status}
             </div>
           )}

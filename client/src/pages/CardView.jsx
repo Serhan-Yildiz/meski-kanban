@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import axios from "../api/axios.js";
+import api from "../api/api.js";
 import Navbar from "../components/Navbar";
 
 export default function CardView() {
@@ -14,14 +14,9 @@ export default function CardView() {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [originalTitle, setOriginalTitle] = useState("");
 
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
-
   const fetchCard = async () => {
     try {
-      const res = await axios.get(`/cards/${id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get(`/cards/${id}`);
       const data = res.data;
       setCard(data);
       setTitle(data.title || "");
@@ -37,15 +32,11 @@ export default function CardView() {
 
   useEffect(() => {
     fetchCard();
-  }, [id, token]);
+  }, [id]);
 
   const handleSaveDesc = async () => {
     try {
-      const res = await axios.put(
-        `/cards/${id}`,
-        { description: desc },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await api.put(`/cards/${id}`, { description: desc });
       setCard(res.data);
       setDesc(res.data.description || "");
       setOriginalDesc(res.data.description || "");
@@ -66,11 +57,7 @@ export default function CardView() {
 
   const handlePriorityChange = async (newPriority) => {
     try {
-      const res = await axios.put(
-        `/cards/${id}`,
-        { priority: newPriority },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await api.put(`/cards/${id}`, { priority: newPriority });
       setPriority(newPriority);
       setCard(res.data);
     } catch (err) {
@@ -80,11 +67,7 @@ export default function CardView() {
 
   const handleSaveTitle = async () => {
     try {
-      const res = await axios.put(
-        `/cards/${id}`,
-        { title },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      const res = await api.put(`/cards/${id}`, { title });
       setCard(res.data);
       setOriginalTitle(res.data.title || "");
       setIsEditingTitle(false);
@@ -107,7 +90,7 @@ export default function CardView() {
       <Navbar />
       {card ? (
         <>
-          <div>
+          <div className="card-title-section">
             <strong>Başlık:</strong>{" "}
             {isEditingTitle ? (
               <>
@@ -120,13 +103,13 @@ export default function CardView() {
               </>
             ) : (
               <>
-                <h2 style={{ display: "inline" }}>{title}</h2>{" "}
+                <h2 className="editable-title">{title}</h2>
                 <button onClick={handleEditTitle}>Düzenle</button>
               </>
             )}
           </div>
 
-          <div>
+          <div className="card-desc-section">
             <strong>Açıklama:</strong>
             {isEditingDesc ? (
               <>
@@ -141,9 +124,8 @@ export default function CardView() {
                     }
                   }}
                 />
-
                 <div>
-                  <button onClick={handleSaveDesc}>Kaydet</button>{" "}
+                  <button onClick={handleSaveDesc}>Kaydet</button>
                   <button onClick={handleCancelDesc}>İptal</button>
                 </div>
               </>
@@ -155,7 +137,7 @@ export default function CardView() {
             )}
           </div>
 
-          <div>
+          <div className="card-priority-section">
             <strong>Öncelik:</strong>
             <div className="priority-radio-group">
               <label>
@@ -197,7 +179,7 @@ export default function CardView() {
           </p>
         </>
       ) : (
-        <p>Yükleniyor...</p>
+        <p className="loading-text">Yükleniyor...</p>
       )}
     </div>
   );

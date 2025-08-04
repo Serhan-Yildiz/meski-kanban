@@ -1,23 +1,20 @@
 import { useState } from "react";
-import axios from "../api/axios.js";
+import api from "../api/api.js";
 import Card from "./Card";
 
 export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
   const [newCardTitle, setNewCardTitle] = useState("");
   const [editing, setEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(list.title);
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
   const cards = list.cards || [];
 
   const createCard = async () => {
     if (!newCardTitle.trim()) return;
     try {
-      await axios.post(
-        "/cards",
-        { title: newCardTitle, listId: list.id },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.post("/cards", {
+        title: newCardTitle,
+        listId: list.id,
+      });
       setNewCardTitle("");
       fetchLists();
     } catch (err) {
@@ -28,11 +25,7 @@ export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
   const updateListTitle = async () => {
     if (!editedTitle.trim()) return;
     try {
-      await axios.put(
-        `/lists/${list.id}`,
-        { title: editedTitle },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.put(`/lists/${list.id}`, { title: editedTitle });
       setEditing(false);
       fetchLists();
     } catch (err) {
@@ -42,11 +35,8 @@ export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
 
   const deleteList = async () => {
     if (!window.confirm("Bu listeyi silmek istediğine emin misin?")) return;
-
     try {
-      await axios.delete(`/lists/${list.id}`, {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      await api.delete(`/lists/${list.id}`);
       fetchLists();
     } catch (err) {
       console.error("Liste silinemedi", err);
@@ -55,11 +45,7 @@ export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
 
   const moveList = async (direction) => {
     try {
-      await axios.put(
-        `/lists/${list.id}/move`,
-        { direction },
-        { headers: { Authorization: `Bearer ${token}` } }
-      );
+      await api.put(`/lists/${list.id}/move`, { direction });
       fetchLists();
     } catch (err) {
       console.error("Liste taşınamadı", err);

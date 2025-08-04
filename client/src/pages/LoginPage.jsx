@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../api/axios";
+import api from "../api/api";
 import { useNavigate } from "react-router-dom";
 
 export default function LoginPage() {
@@ -11,7 +11,7 @@ export default function LoginPage() {
     remember: false,
   });
   const [error, setError] = useState("");
-  const API_URL = import.meta.env.VITE_API_URL;
+
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setForm((prev) => ({
@@ -25,7 +25,7 @@ export default function LoginPage() {
     setError("");
 
     try {
-      const res = await axios.post("/auth/login", {
+      const res = await api.post("/auth/login", {
         email: form.email.trim(),
         password: form.password,
       });
@@ -44,60 +44,65 @@ export default function LoginPage() {
   };
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit}>
-      <h2>Giriş Yap</h2>
+    <div className="centered-page">
+      <form className="auth-form" onSubmit={handleSubmit}>
+        <h2>Giriş Yap</h2>
 
-      <input
-        type="email"
-        name="email"
-        placeholder="E-posta"
-        value={form.email}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        type={form.showPassword ? "text" : "password"}
-        name="password"
-        placeholder="Şifre"
-        value={form.password}
-        onChange={handleChange}
-        required
-      />
-
-      <label>
         <input
-          type="checkbox"
-          name="showPassword"
-          checked={form.showPassword}
+          type="email"
+          name="email"
+          placeholder="E-posta"
+          value={form.email}
           onChange={handleChange}
+          required
         />
-        Şifreyi göster
-      </label>
 
-      <label>
         <input
-          type="checkbox"
-          name="remember"
-          checked={form.remember}
+          type={form.showPassword ? "text" : "password"}
+          name="password"
+          placeholder="Şifre"
+          value={form.password}
           onChange={handleChange}
+          required
         />
-        Beni hatırla
-      </label>
 
-      <button type="submit">Giriş Yap</button>
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            name="showPassword"
+            checked={form.showPassword}
+            onChange={handleChange}
+          />
+          Şifreyi göster
+        </label>
 
-      <a href={`${API_URL}/auth/google`} className="google-login">
-        Google ile giriş yap
-      </a>
+        <label className="checkbox-label">
+          <input
+            type="checkbox"
+            name="remember"
+            checked={form.remember}
+            onChange={handleChange}
+          />
+          Beni hatırla
+        </label>
 
-      <div className="auth-links">
-        <p>Hesabınız yok mu?</p>
-        <a href="/register">Kayıt Ol</a>
-        <a href="/forgot-password">Şifremi Unuttum</a>
-      </div>
+        <button type="submit">Giriş Yap</button>
 
-      {error && <div style={{ color: "red", marginTop: "1rem" }}>{error}</div>}
-    </form>
+        <a
+          href={`${import.meta.env.VITE_API_URL}/auth/google`}
+          className="google-login"
+        >
+          Google ile giriş yap
+        </a>
+
+        <div className="auth-links">
+          <p>Hesabınız yok mu?</p>
+          <a href="/register">Kayıt Ol</a>
+          <a href="/forgot-password">Şifremi Unuttum</a>
+        </div>
+
+        {error && <div className="form-error">{error}</div>}
+      </form>
+    </div>
   );
 }
