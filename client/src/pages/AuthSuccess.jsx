@@ -3,10 +3,10 @@ import { useNavigate, useLocation } from "react-router-dom";
 
 export default function AuthSuccess() {
   const navigate = useNavigate();
-  const { search } = useLocation();
+  const location = useLocation();
 
   useEffect(() => {
-    const params = new URLSearchParams(search);
+    const params = new URLSearchParams(location.search);
     const token = params.get("token");
 
     if (token) {
@@ -15,11 +15,11 @@ export default function AuthSuccess() {
     } else {
       navigate("/login");
     }
-  }, [navigate, search]);
+  }, [navigate, location]);
 
   return (
-    <div className="centered-page text-center">
-      <h2 className="text-success">Giriş başarılı! Yönlendiriliyorsunuz...</h2>
+    <div className="centered-page">
+      <h2>Giriş başarılı! Yönlendiriliyorsunuz...</h2>
     </div>
   );
 }

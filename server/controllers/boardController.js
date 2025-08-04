@@ -7,18 +7,14 @@ export async function getBoards(req, res) {
       [req.user.id]
     );
     res.json(result.rows);
-  } catch (err) {
-    console.error("getBoards hatası:", err);
+  } catch {
     res.status(500).json({ error: "Boardlar getirilemedi." });
   }
 }
 
 export async function createBoard(req, res) {
   const { title } = req.body;
-
-  if (!title) {
-    return res.status(400).json({ error: "Başlık gerekli." });
-  }
+  if (!title) return res.status(400).json({ error: "Başlık gerekli." });
 
   try {
     const result = await pool.query(
@@ -26,8 +22,7 @@ export async function createBoard(req, res) {
       [title, req.user.id]
     );
     res.status(201).json(result.rows[0]);
-  } catch (err) {
-    console.error("createBoard hatası:", err);
+  } catch {
     res.status(500).json({ error: "Board oluşturulamadı." });
   }
 }
@@ -41,14 +36,11 @@ export async function updateBoard(req, res) {
       "UPDATE boards SET title = $1 WHERE id = $2 AND owner_id = $3 RETURNING *",
       [title, boardId, req.user.id]
     );
-
-    if (result.rowCount === 0) {
+    if (result.rowCount === 0)
       return res.status(404).json({ error: "Board bulunamadı." });
-    }
 
     res.json(result.rows[0]);
-  } catch (err) {
-    console.error("updateBoard hatası:", err);
+  } catch {
     res.status(500).json({ error: "Board güncellenemedi." });
   }
 }
@@ -61,14 +53,11 @@ export async function deleteBoard(req, res) {
       "DELETE FROM boards WHERE id = $1 AND owner_id = $2",
       [boardId, req.user.id]
     );
-
-    if (result.rowCount === 0) {
+    if (result.rowCount === 0)
       return res.status(404).json({ error: "Board bulunamadı." });
-    }
 
     res.json({ message: "Board silindi." });
-  } catch (err) {
-    console.error("deleteBoard hatası:", err);
+  } catch {
     res.status(500).json({ error: "Board silinemedi." });
   }
 }
@@ -82,13 +71,12 @@ export async function getBoardById(req, res) {
       [boardId, req.user.id]
     );
 
-    if (result.rowCount === 0) {
-      return res.status(404).json({ message: "Pano bulunamadı." });
+    if (result.rows.length === 0) {
+      return res.status(404).json({ message: "Pano bulunamadı" });
     }
 
     res.json(result.rows[0]);
-  } catch (err) {
-    console.error("getBoardById hatası:", err);
+  } catch {
     res.status(500).json({ message: "Pano getirilemedi." });
   }
 }
@@ -98,7 +86,7 @@ export async function getListsWithCardsByBoardId(req, res) {
 
   try {
     const listsRes = await pool.query(
-      "SELECT * FROM lists WHERE board_id = $1 ORDER BY position ASC",
+      "SELECT * FROM lists WHERE board_id = $1",
       [boardId]
     );
 
@@ -106,7 +94,7 @@ export async function getListsWithCardsByBoardId(req, res) {
 
     for (const list of listsRes.rows) {
       const cardsRes = await pool.query(
-        "SELECT * FROM cards WHERE list_id = $1 ORDER BY position ASC",
+        "SELECT * FROM cards WHERE list_id = $1",
         [list.id]
       );
 
@@ -117,8 +105,7 @@ export async function getListsWithCardsByBoardId(req, res) {
     }
 
     res.json(lists);
-  } catch (err) {
-    console.error("getListsWithCardsByBoardId hatası:", err);
+  } catch {
     res.status(500).json({ message: "Listeler getirilemedi." });
   }
 }

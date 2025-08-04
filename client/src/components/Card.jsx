@@ -1,14 +1,20 @@
 import { useNavigate } from "react-router-dom";
 import { useState } from "react";
-import api from "../api/api.js";
+import axios from "../api/axios.js";
 
 export default function Card({ card, refreshCards, isFirst, isLast }) {
   const navigate = useNavigate();
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
   const [checked, setChecked] = useState(card.is_done);
 
   const moveCard = async (direction) => {
     try {
-      await api.put(`/cards/${card.id}/move-${direction}`);
+      await axios.put(
+        `/cards/${card.id}/move-${direction}`,
+        {},
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       refreshCards();
     } catch (err) {
       if (err.response?.status === 400) {
@@ -21,7 +27,11 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
 
   const toggleDone = async () => {
     try {
-      await api.put(`/cards/${card.id}`, { is_done: !checked });
+      await axios.put(
+        `/cards/${card.id}`,
+        { is_done: !checked },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setChecked(!checked);
       refreshCards();
     } catch (err) {
@@ -32,7 +42,9 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   const deleteCard = async () => {
     if (!window.confirm("Bu kartı silmek istediğine emin misin?")) return;
     try {
-      await api.delete(`/cards/${card.id}`);
+      await axios.delete(`/cards/${card.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       refreshCards();
     } catch (err) {
       console.error("Kart silinemedi", err);
@@ -40,61 +52,30 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   };
 
   return (
-    <div className={`card-item ${checked ? "card-done" : ""}`}>
-      <div className="d-flex justify-content-between align-items-start">
-        <div className="form-check">
-          <input
-            type="checkbox"
-            className="form-check-input me-2"
-            checked={checked}
-            onChange={toggleDone}
-            id={`card-${card.id}`}
-            aria-label="Tamamlandı olarak işaretle"
-          />
-          <label
-            className={`form-check-label fw-semibold cursor-pointer`}
+    <div className="card-item">
+      <div className="card-header">
+        <div
+          className="card-label"
+          style={{ display: "flex", alignItems: "center", gap: "8px" }}
+        >
+          <input type="checkbox" checked={checked} onChange={toggleDone} />
+
+          <span
             onClick={() => navigate(`/cards/${card.id}`)}
-            htmlFor={`card-${card.id}`}
+            className={`card-title ${checked ? "card-done" : ""}`}
+            style={{ cursor: "pointer" }}
           >
-            <span
-              className={`priority-dot ${
-                card.priority === "yüksek"
-                  ? "priority-high"
-                  : card.priority === "orta"
-                  ? "priority-medium"
-                  : "priority-low"
-              }`}
-            ></span>
+            <span className={`priority-dot ${card.priority}`}>
+              {card.priority}
+            </span>{" "}
             {card.title}
-          </label>
+          </span>
         </div>
 
-        <div className="btn-group btn-group-sm" role="group">
-          {!isFirst && (
-            <button
-              onClick={() => moveCard("up")}
-              className="btn btn-outline-secondary"
-              aria-label="Yukarı taşı"
-            >
-              ⬆️
-            </button>
-          )}
-          {!isLast && (
-            <button
-              onClick={() => moveCard("down")}
-              className="btn btn-outline-secondary"
-              aria-label="Aşağı taşı"
-            >
-              ⬇️
-            </button>
-          )}
-          <button
-            onClick={deleteCard}
-            className="btn btn-outline-danger"
-            aria-label="Kartı sil"
-          >
-            🗑️
-          </button>
+        <div className="card-controls">
+          {!isFirst && <button onClick={() => moveCard("up")}>⬆️</button>}
+          {!isLast && <button onClick={() => moveCard("down")}>⬇️</button>}
+          <button onClick={deleteCard}>🗑️</button>
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "../api/api.js";
+import axios from "../api/axios.js";
 
 export default function ForgotPasswordPage() {
   const [email, setEmail] = useState("");
@@ -37,11 +37,11 @@ export default function ForgotPasswordPage() {
     setErrors([]);
 
     try {
-      const res = await api.post("/auth/reset-step1", { email });
+      const res = await axios.post("/auth/reset-step1", { email });
       setQuestion(res.data.question);
       setStep(2);
     } catch (err) {
-      console.error(err);
+      console.error("Hata oluştu:", err.response?.data);
       setStatus("Kullanıcı bulunamadı");
     }
   };
@@ -57,7 +57,7 @@ export default function ForgotPasswordPage() {
     }
 
     try {
-      await api.post("/auth/reset-password", {
+      await axios.post("/auth/reset-password", {
         email,
         answer,
         newPassword,
@@ -83,107 +83,85 @@ export default function ForgotPasswordPage() {
         className="auth-form"
         onSubmit={step === 1 ? handleEmailSubmit : handleResetSubmit}
       >
-        <h2 className="text-center mb-4">Şifremi Unuttum</h2>
+        <h2>Şifremi Unuttum</h2>
 
         {step === 1 && (
           <>
-            <div className="form-group">
-              <input
-                type="email"
-                className="form-control"
-                placeholder="Email adresiniz"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                required
-              />
-            </div>
-            <button type="submit" className="btn btn-primary w-100">
-              Devam Et
-            </button>
+            <input
+              type="email"
+              placeholder="Email adresiniz"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+              required
+            />
+            <button type="submit">Devam Et</button>
           </>
         )}
 
         {step === 2 && (
           <>
-            <div className="mb-3">
+            <p>
               <strong>Güvenlik Sorusu:</strong>
-              <p>{question}</p>
-            </div>
+              <br />
+              {question}
+            </p>
+            <input
+              type="text"
+              placeholder="Cevabınız"
+              value={answer}
+              onChange={(e) => setAnswer(e.target.value)}
+              required
+            />
 
-            <div className="form-group">
-              <input
-                type="text"
-                className="form-control"
-                placeholder="Cevabınız"
-                value={answer}
-                onChange={(e) => setAnswer(e.target.value)}
-                required
-              />
-            </div>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Yeni şifre"
+              value={newPassword}
+              onChange={(e) => setNewPassword(e.target.value)}
+              required
+            />
 
-            <div className="form-group">
-              <input
-                type={showPassword ? "text" : "password"}
-                className="form-control"
-                placeholder="Yeni şifre"
-                value={newPassword}
-                onChange={(e) => setNewPassword(e.target.value)}
-                required
-              />
-            </div>
+            <input
+              type={showPassword ? "text" : "password"}
+              placeholder="Yeni şifre tekrar"
+              value={confirmPassword}
+              onChange={(e) => setConfirmPassword(e.target.value)}
+              required
+            />
 
-            <div className="form-group">
-              <input
-                type={showPassword ? "text" : "password"}
-                className="form-control"
-                placeholder="Yeni şifre tekrar"
-                value={confirmPassword}
-                onChange={(e) => setConfirmPassword(e.target.value)}
-                required
-              />
-            </div>
-
-            <div className="form-group form-check mb-2">
+            <label style={{ margin: "5px 0" }}>
               <input
                 type="checkbox"
-                className="form-check-input"
-                id="showPassword"
                 checked={showPassword}
                 onChange={(e) => setShowPassword(e.target.checked)}
-              />
-              <label htmlFor="showPassword" className="form-check-label">
-                Şifreyi göster
-              </label>
-            </div>
+              />{" "}
+              Şifreyi göster
+            </label>
 
-            <p className="password-rules">
+            <p
+              className="password-rules"
+              style={{ fontSize: "0.9rem", marginTop: "0.5rem" }}
+            >
               Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli
               ve en az 8 karakter uzunluğunda olmalıdır.
             </p>
 
-            <button type="submit" className="btn btn-success w-100">
-              Şifreyi Sıfırla
-            </button>
+            <button type="submit">Şifreyi Sıfırla</button>
           </>
         )}
 
-        {errors.length > 0 && (
-          <div className="form-error alert alert-danger mt-3">
-            {errors.map((err, i) => (
-              <div key={i}>{err}</div>
-            ))}
-          </div>
-        )}
-
-        {status && !errors.length && (
-          <div
-            className={`mt-3 ${
-              status.includes("✅") ? "success-text" : "error-text"
-            }`}
-          >
-            {status}
-          </div>
-        )}
+        <div style={{ marginTop: "1rem", fontSize: "0.95rem" }}>
+          {errors.map((err, i) => (
+            <div key={i} style={{ color: "red" }}>
+              {err}
+            </div>
+          ))}
+          {status && !errors.length && (
+            <div style={{ color: status.includes("✅") ? "green" : "red" }}>
+              {status}
+            </div>
+          )}
+        </div>
       </form>
     </div>
   );

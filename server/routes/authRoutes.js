@@ -13,11 +13,9 @@ import { getProfile } from "../controllers/profileController.js";
 const router = express.Router();
 
 router.post("/login", login);
-
 router.post("/register", register);
 
 router.post("/reset-step1", getSecurityQuestion);
-
 router.post("/reset-password", resetPassword);
 
 router.get("/profile", auth, getProfile);

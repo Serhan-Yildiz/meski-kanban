@@ -1,20 +1,23 @@
 import { useState } from "react";
-import api from "../api/api.js";
+import axios from "../api/axios.js";
 import Card from "./Card";
 
 export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
   const [newCardTitle, setNewCardTitle] = useState("");
   const [editing, setEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(list.title);
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
   const cards = list.cards || [];
 
   const createCard = async () => {
     if (!newCardTitle.trim()) return;
     try {
-      await api.post("/cards", {
-        title: newCardTitle,
-        listId: list.id,
-      });
+      await axios.post(
+        "/cards",
+        { title: newCardTitle, listId: list.id },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setNewCardTitle("");
       fetchLists();
     } catch (err) {
@@ -25,7 +28,11 @@ export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
   const updateListTitle = async () => {
     if (!editedTitle.trim()) return;
     try {
-      await api.put(`/lists/${list.id}`, { title: editedTitle });
+      await axios.put(
+        `/lists/${list.id}`,
+        { title: editedTitle },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setEditing(false);
       fetchLists();
     } catch (err) {
@@ -35,8 +42,11 @@ export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
 
   const deleteList = async () => {
     if (!window.confirm("Bu listeyi silmek istediğine emin misin?")) return;
+
     try {
-      await api.delete(`/lists/${list.id}`);
+      await axios.delete(`/lists/${list.id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
       fetchLists();
     } catch (err) {
       console.error("Liste silinemedi", err);
@@ -45,7 +55,11 @@ export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
 
   const moveList = async (direction) => {
     try {
-      await api.put(`/lists/${list.id}/move`, { direction });
+      await axios.put(
+        `/lists/${list.id}/move`,
+        { direction },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       fetchLists();
     } catch (err) {
       console.error("Liste taşınamadı", err);
@@ -53,95 +67,58 @@ export default function ListColumn({ list, fetchLists, isFirst, isLast }) {
   };
 
   return (
-    <div className="list-container">
-      <div className="card shadow-sm" style={{ width: "18rem" }}>
-        <div className="card-body">
-          {editing ? (
-            <>
-              <input
-                type="text"
-                className="form-control mb-2"
-                value={editedTitle}
-                onChange={(e) => setEditedTitle(e.target.value)}
-              />
-              <div className="btn-group mb-2" role="group">
-                <button
-                  className="btn btn-primary btn-sm"
-                  onClick={updateListTitle}
-                >
-                  Kaydet
-                </button>
-                <button
-                  className="btn btn-secondary btn-sm"
-                  onClick={() => setEditing(false)}
-                >
-                  İptal
-                </button>
-              </div>
-            </>
-          ) : (
-            <>
-              <h5 className="card-title">{list.title}</h5>
-              <div className="btn-group btn-group-sm mb-2" role="group">
-                {!isFirst && (
-                  <button
-                    className="btn btn-outline-secondary"
-                    onClick={() => moveList("left")}
-                  >
-                    ←
-                  </button>
-                )}
-                {!isLast && (
-                  <button
-                    className="btn btn-outline-secondary"
-                    onClick={() => moveList("right")}
-                  >
-                    →
-                  </button>
-                )}
-                <button
-                  className="btn btn-outline-info"
-                  onClick={() => setEditing(true)}
-                >
-                  Düzenle
-                </button>
-                <button className="btn btn-outline-danger" onClick={deleteList}>
-                  Sil
-                </button>
-              </div>
-            </>
-          )}
-
-          <div className="mb-3">
-            {cards.map((card, index) => (
-              <Card
-                key={card.id}
-                card={card}
-                refreshCards={fetchLists}
-                isFirst={index === 0}
-                isLast={index === cards.length - 1}
-              />
-            ))}
-          </div>
-
-          <form
-            onSubmit={(e) => {
-              e.preventDefault();
-              createCard();
-            }}
-          >
+    <div className="list-column">
+      <div className="card-header">
+        {editing ? (
+          <>
             <input
               type="text"
-              className="form-control mb-2"
-              value={newCardTitle}
-              onChange={(e) => setNewCardTitle(e.target.value)}
-              placeholder="Yeni kart adı"
+              value={editedTitle}
+              onChange={(e) => setEditedTitle(e.target.value)}
             />
-            <button type="submit" className="btn btn-success btn-sm w-100">
-              Ekle
-            </button>
-          </form>
-        </div>
+            <button onClick={updateListTitle}>Kaydet</button>
+            <button onClick={() => setEditing(false)}>İptal</button>
+          </>
+        ) : (
+          <>
+            <h3>{list.title}</h3>
+            <div className="card-controls">
+              {!isFirst && <button onClick={() => moveList("left")}>←</button>}
+              {!isLast && <button onClick={() => moveList("right")}>→</button>}
+              <button onClick={() => setEditing(true)}>Düzenle</button>
+              <button onClick={deleteList}>Sil</button>
+            </div>
+          </>
+        )}
+      </div>
+
+      <div className="list-cardlist">
+        {cards.map((card, index) => (
+          <Card
+            key={card.id}
+            card={card}
+            refreshCards={fetchLists}
+            isFirst={index === 0}
+            isLast={index === cards.length - 1}
+          />
+        ))}
+      </div>
+
+      <div className="list-addcard">
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            createCard();
+          }}
+        >
+          <input
+            type="text"
+            value={newCardTitle}
+            onChange={(e) => setNewCardTitle(e.target.value)}
+            placeholder="Yeni kart adı"
+          />
+          <button type="submit">Ekle</button>
+        </form>
       </div>
     </div>
   );

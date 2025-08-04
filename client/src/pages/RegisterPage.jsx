@@ -1,5 +1,5 @@
 import { useState } from "react";
-import api from "../api/api.js";
+import axios from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
@@ -13,6 +13,7 @@ export default function RegisterPage() {
     securityQuestion: "",
     securityAnswer: "",
   });
+  const API_URL = import.meta.env.VITE_API_URL;
 
   const [errors, setErrors] = useState([]);
   const [serverMessage, setServerMessage] = useState("");
@@ -47,7 +48,7 @@ export default function RegisterPage() {
     if (!/[A-Z]/.test(form.password))
       newErrors.push("Şifre büyük harf içermeli.");
     if (!/[0-9]/.test(form.password)) newErrors.push("Şifre rakam içermeli.");
-    if (!/[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(form.password))
+    if (!/[!@#$%^&*()_+{}\\[\]:;<>,.?~\\/-]/.test(form.password))
       newErrors.push("Şifre sembol içermeli.");
 
     if (form.password !== form.confirmPassword)
@@ -62,164 +63,127 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    setErrors([]);
     const validationErrors = validate();
-    if (validationErrors.length > 0) {
-      setErrors(validationErrors);
-      return;
-    }
+    setErrors(validationErrors);
 
-    try {
-      await api.post("/auth/register", {
-        name: form.name.trim(),
-        email: form.email.trim(),
-        password: form.password,
-        security_question: form.securityQuestion,
-        security_answer: form.securityAnswer,
-      });
+    if (validationErrors.length === 0) {
+      try {
+        await axios.post("/auth/register", {
+          name: form.name.trim(),
+          email: form.email.trim(),
+          password: form.password,
+          security_question: form.securityQuestion,
+          security_answer: form.securityAnswer,
+        });
 
-      setServerMessage(
-        "✅ Kayıt başarılı. Giriş sayfasına yönlendiriliyorsunuz."
-      );
-      setTimeout(() => navigate("/login"), 1500);
-    } catch (err) {
-      const msg = err.response?.data?.message || "Kayıt başarısız.";
-      setErrors([msg]);
+        setServerMessage(
+          "Kayıt başarılı. Giriş sayfasına yönlendiriliyorsunuz."
+        );
+        setTimeout(() => navigate("/login"), 1500);
+      } catch (err) {
+        const msg = err.response?.data?.message || "Kayıt başarısız.";
+        setErrors([msg]);
+      }
     }
   };
 
   return (
-    <div className="centered-page">
-      <form className="auth-form" onSubmit={handleSubmit}>
-        <h2 className="text-center mb-4">Kayıt Ol</h2>
+    <form className="auth-form" onSubmit={handleSubmit}>
+      <h2>Kayıt Ol</h2>
 
-        <div className="form-group">
-          <label>Ad Soyad</label>
-          <input
-            type="text"
-            className="form-control"
-            name="name"
-            value={form.name}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      <input
+        type="text"
+        name="name"
+        placeholder="Ad Soyad"
+        value={form.name}
+        onChange={handleChange}
+        required
+      />
 
-        <div className="form-group">
-          <label>E-posta</label>
-          <input
-            type="email"
-            className="form-control"
-            name="email"
-            value={form.email}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      <input
+        type="email"
+        name="email"
+        placeholder="E-posta"
+        value={form.email}
+        onChange={handleChange}
+        required
+      />
 
-        <div className="form-group">
-          <label>Şifre</label>
-          <input
-            type={form.showPassword ? "text" : "password"}
-            className="form-control"
-            name="password"
-            value={form.password}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      <input
+        type={form.showPassword ? "text" : "password"}
+        name="password"
+        placeholder="Şifre"
+        value={form.password}
+        onChange={handleChange}
+        required
+      />
 
-        <div className="form-group">
-          <label>Şifre Tekrar</label>
-          <input
-            type={form.showPassword ? "text" : "password"}
-            className="form-control"
-            name="confirmPassword"
-            value={form.confirmPassword}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      <input
+        type={form.showPassword ? "text" : "password"}
+        name="confirmPassword"
+        placeholder="Şifre Tekrar"
+        value={form.confirmPassword}
+        onChange={handleChange}
+        required
+      />
 
-        <div className="form-check mb-2">
-          <input
-            className="form-check-input"
-            type="checkbox"
-            name="showPassword"
-            checked={form.showPassword}
-            onChange={handleChange}
-            id="showPassword"
-          />
-          <label className="form-check-label" htmlFor="showPassword">
-            Şifreyi göster
-          </label>
-        </div>
+      <label>
+        <input
+          type="checkbox"
+          name="showPassword"
+          checked={form.showPassword}
+          onChange={handleChange}
+        />
+        Şifreyi göster
+      </label>
 
-        <p className="password-rules">
-          Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli ve
-          en az 8 karakter olmalı.
-        </p>
+      <p className="password-rules">
+        Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli ve en
+        az 8 karakter uzunluğunda olmalıdır.
+      </p>
 
-        <div className="form-group">
-          <label>Güvenlik Sorusu</label>
-          <select
-            className="form-control"
-            name="securityQuestion"
-            value={form.securityQuestion}
-            onChange={handleChange}
-            required
-          >
-            <option value="">Güvenlik sorusu seçin</option>
-            {securityQuestions.map((q, i) => (
-              <option key={i} value={q}>
-                {q}
-              </option>
-            ))}
-          </select>
-        </div>
+      <select
+        name="securityQuestion"
+        value={form.securityQuestion}
+        onChange={handleChange}
+        required
+      >
+        <option value="">Güvenlik sorusu seçin</option>
+        {securityQuestions.map((q, i) => (
+          <option key={i} value={q}>
+            {q}
+          </option>
+        ))}
+      </select>
 
-        <div className="form-group">
-          <label>Cevap</label>
-          <input
-            type="text"
-            className="form-control"
-            name="securityAnswer"
-            value={form.securityAnswer}
-            onChange={handleChange}
-            required
-          />
-        </div>
+      <input
+        type="text"
+        name="securityAnswer"
+        placeholder="Güvenlik sorusu cevabı"
+        value={form.securityAnswer}
+        onChange={handleChange}
+        required
+      />
 
-        <button type="submit" className="btn btn-success w-100 mt-2">
-          Kayıt Ol
-        </button>
+      <button type="submit">Kayıt Ol</button>
 
-        <a
-          href={`${import.meta.env.VITE_API_URL}/auth/google`}
-          className="btn btn-outline-danger w-100 mt-2"
-        >
-          Google ile kayıt ol
-        </a>
+      <a href={`${API_URL}/auth/google`} className="google-login">
+        Google ile kayıt ol
+      </a>
 
-        <div className="text-center mt-3 auth-links">
-          <p className="mb-1">Zaten hesabınız var mı?</p>
-          <a href="/login" className="text-decoration-none">
-            Giriş Yap
-          </a>
-        </div>
+      <div className="auth-links">
+        <p>Zaten hesabınız var mı?</p>
+        <a href="/login">Giriş Yap</a>
+      </div>
 
-        {errors.length > 0 && (
-          <div className="form-error mt-3">
-            {errors.map((err, i) => (
-              <div key={i}>{err}</div>
-            ))}
+      <div style={{ marginTop: "1rem", fontSize: "0.95rem" }}>
+        {errors.map((err, i) => (
+          <div key={i} style={{ color: "red" }}>
+            {err}
           </div>
-        )}
-
-        {serverMessage && (
-          <div className="success-text mt-3">{serverMessage}</div>
-        )}
-      </form>
-    </div>
+        ))}
+        {serverMessage && <div style={{ color: "green" }}>{serverMessage}</div>}
+      </div>
+    </form>
   );
 }

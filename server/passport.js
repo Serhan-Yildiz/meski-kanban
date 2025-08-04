@@ -1,8 +1,8 @@
 import passport from "passport";
 import { Strategy as GoogleStrategy } from "passport-google-oauth20";
+import dotenv from "dotenv";
 import pool from "./config/db.js";
-
-const GOOGLE_AUTH = "google";
+dotenv.config();
 
 passport.use(
   new GoogleStrategy(
@@ -16,23 +16,22 @@ passport.use(
         const email = profile.emails[0].value;
         const name = profile.displayName;
 
-        const { rows } = await pool.query(
+        const existingUser = await pool.query(
           "SELECT * FROM users WHERE email = $1",
           [email]
         );
 
-        if (rows.length > 0) {
-          return done(null, rows[0]);
+        if (existingUser.rows.length > 0) {
+          return done(null, existingUser.rows[0]);
         }
 
-        const { rows: newUserRows } = await pool.query(
+        const newUser = await pool.query(
           "INSERT INTO users (name, email, password_hash) VALUES ($1, $2, $3) RETURNING *",
-          [name, email, GOOGLE_AUTH]
+          [name, email, "google"]
         );
 
-        return done(null, newUserRows[0]);
+        return done(null, newUser.rows[0]);
       } catch (err) {
-        console.error("Google OAuth error:", err);
         return done(err, null);
       }
     }

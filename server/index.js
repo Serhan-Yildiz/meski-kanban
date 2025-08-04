@@ -14,9 +14,9 @@ import cardRoutes from "./routes/cardRoutes.js";
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
 const allowedOrigins = [process.env.CLIENT_URL];
+
 app.use(
   cors({
     origin: allowedOrigins,
@@ -31,11 +31,6 @@ app.use(
     secret: process.env.SESSION_SECRET,
     resave: false,
     saveUninitialized: false,
-    cookie: {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-    },
   })
 );
 
@@ -52,6 +47,7 @@ app.get("/", (req, res) => {
   res.send("MESKİ Kanban API çalışıyor 🚀");
 });
 
+const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`✅ Server ${PORT} portunda çalışıyor`);
 });

@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import api from "../api/api.js";
+import axios from "../api/axios.js";
 import Navbar from "../components/Navbar";
 
 export default function CardView() {
@@ -14,29 +14,38 @@ export default function CardView() {
   const [isEditingTitle, setIsEditingTitle] = useState(false);
   const [originalTitle, setOriginalTitle] = useState("");
 
-  useEffect(() => {
-    const fetchCard = async () => {
-      try {
-        const res = await api.get(`/cards/${id}`);
-        const data = res.data;
-        setCard(data);
-        setTitle(data.title || "");
-        setOriginalTitle(data.title || "");
-        setDesc(data.description || "");
-        setOriginalDesc(data.description || "");
-        setPriority(data.priority || "");
-        setIsEditingDesc(!data.description);
-      } catch (err) {
-        console.error("Kart detay alınamadı", err);
-      }
-    };
+  const token =
+    localStorage.getItem("token") || sessionStorage.getItem("token");
 
+  const fetchCard = async () => {
+    try {
+      const res = await axios.get(`/cards/${id}`, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      const data = res.data;
+      setCard(data);
+      setTitle(data.title || "");
+      setOriginalTitle(data.title || "");
+      setDesc(data.description || "");
+      setOriginalDesc(data.description || "");
+      setPriority(data.priority || "");
+      setIsEditingDesc(!data.description);
+    } catch (err) {
+      console.error("Kart detay alınamadı", err);
+    }
+  };
+
+  useEffect(() => {
     fetchCard();
-  }, [id]);
+  }, [id, token]);
 
   const handleSaveDesc = async () => {
     try {
-      const res = await api.put(`/cards/${id}`, { description: desc });
+      const res = await axios.put(
+        `/cards/${id}`,
+        { description: desc },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setCard(res.data);
       setDesc(res.data.description || "");
       setOriginalDesc(res.data.description || "");
@@ -57,7 +66,11 @@ export default function CardView() {
 
   const handlePriorityChange = async (newPriority) => {
     try {
-      const res = await api.put(`/cards/${id}`, { priority: newPriority });
+      const res = await axios.put(
+        `/cards/${id}`,
+        { priority: newPriority },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setPriority(newPriority);
       setCard(res.data);
     } catch (err) {
@@ -67,7 +80,11 @@ export default function CardView() {
 
   const handleSaveTitle = async () => {
     try {
-      const res = await api.put(`/cards/${id}`, { title });
+      const res = await axios.put(
+        `/cards/${id}`,
+        { title },
+        { headers: { Authorization: `Bearer ${token}` } }
+      );
       setCard(res.data);
       setOriginalTitle(res.data.title || "");
       setIsEditingTitle(false);
@@ -86,159 +103,102 @@ export default function CardView() {
   };
 
   return (
-    <>
+    <div className="card-view">
       <Navbar />
-      <div className="container mt-4 card-view">
-        {card ? (
-          <div className="row justify-content-center">
-            <div className="col-lg-8">
-              <div className="mb-4 card-title-section">
-                <h5>Başlık:</h5>
-                {isEditingTitle ? (
-                  <div className="d-flex gap-2">
-                    <input
-                      className="form-control"
-                      value={title}
-                      onChange={(e) => setTitle(e.target.value)}
-                    />
-                    <button
-                      onClick={handleSaveTitle}
-                      className="btn btn-primary"
-                    >
-                      Kaydet
-                    </button>
-                    <button
-                      onClick={handleCancelTitle}
-                      className="btn btn-secondary"
-                    >
-                      İptal
-                    </button>
-                  </div>
-                ) : (
-                  <div className="d-flex align-items-center gap-2">
-                    <h3 className="editable-title">{title}</h3>
-                    <button
-                      onClick={handleEditTitle}
-                      className="btn btn-outline-secondary btn-sm"
-                    >
-                      Düzenle
-                    </button>
-                  </div>
-                )}
-              </div>
+      {card ? (
+        <>
+          <div>
+            <strong>Başlık:</strong>{" "}
+            {isEditingTitle ? (
+              <>
+                <input
+                  value={title}
+                  onChange={(e) => setTitle(e.target.value)}
+                />
+                <button onClick={handleSaveTitle}>Kaydet</button>
+                <button onClick={handleCancelTitle}>İptal</button>
+              </>
+            ) : (
+              <>
+                <h2 style={{ display: "inline" }}>{title}</h2>{" "}
+                <button onClick={handleEditTitle}>Düzenle</button>
+              </>
+            )}
+          </div>
 
-              <div className="mb-4 card-desc-section">
-                <h5>Açıklama:</h5>
-                {isEditingDesc ? (
-                  <>
-                    <textarea
-                      className="form-control"
-                      value={desc}
-                      onChange={(e) => setDesc(e.target.value)}
-                      rows={4}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && !e.shiftKey) {
-                          e.preventDefault();
-                          handleSaveDesc();
-                        }
-                      }}
-                    />
-                    <div className="mt-2">
-                      <button
-                        onClick={handleSaveDesc}
-                        className="btn btn-primary mx-1"
-                      >
-                        Kaydet
-                      </button>
-                      <button
-                        onClick={handleCancelDesc}
-                        className="btn btn-secondary"
-                      >
-                        İptal
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <p>{desc || "Açıklama yok"}</p>
-                    <button
-                      onClick={handleEditDesc}
-                      className="btn btn-outline-secondary btn-sm"
-                    >
-                      Düzenle
-                    </button>
-                  </>
-                )}
-              </div>
+          <div>
+            <strong>Açıklama:</strong>
+            {isEditingDesc ? (
+              <>
+                <textarea
+                  value={desc}
+                  onChange={(e) => setDesc(e.target.value)}
+                  rows={4}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter" && !e.shiftKey) {
+                      e.preventDefault();
+                      handleSaveDesc();
+                    }
+                  }}
+                />
 
-              <div className="mb-4 card-priority-section">
-                <h5>Öncelik:</h5>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="priority"
-                    id="priorityLow"
-                    value="düşük"
-                    checked={priority === "düşük"}
-                    onChange={() => handlePriorityChange("düşük")}
-                  />
-                  <label
-                    className="form-check-label priority-low"
-                    htmlFor="priorityLow"
-                  >
-                    Düşük
-                  </label>
+                <div>
+                  <button onClick={handleSaveDesc}>Kaydet</button>{" "}
+                  <button onClick={handleCancelDesc}>İptal</button>
                 </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="priority"
-                    id="priorityMedium"
-                    value="orta"
-                    checked={priority === "orta"}
-                    onChange={() => handlePriorityChange("orta")}
-                  />
-                  <label
-                    className="form-check-label priority-medium"
-                    htmlFor="priorityMedium"
-                  >
-                    Orta
-                  </label>
-                </div>
-                <div className="form-check form-check-inline">
-                  <input
-                    className="form-check-input"
-                    type="radio"
-                    name="priority"
-                    id="priorityHigh"
-                    value="yüksek"
-                    checked={priority === "yüksek"}
-                    onChange={() => handlePriorityChange("yüksek")}
-                  />
-                  <label
-                    className="form-check-label priority-high"
-                    htmlFor="priorityHigh"
-                  >
-                    Yüksek
-                  </label>
-                </div>
-              </div>
+              </>
+            ) : (
+              <>
+                <p>{desc || "Açıklama yok"}</p>
+                <button onClick={handleEditDesc}>Düzenle</button>
+              </>
+            )}
+          </div>
 
-              <p>
-                <strong>Durum:</strong>{" "}
-                {card.is_done ? "✅ Tamamlandı" : "⏳ Devam ediyor"}
-              </p>
+          <div>
+            <strong>Öncelik:</strong>
+            <div className="priority-radio-group">
+              <label>
+                <input
+                  type="radio"
+                  name="priority"
+                  value="düşük"
+                  checked={priority === "düşük"}
+                  onChange={() => handlePriorityChange("düşük")}
+                />
+                <span className="priority-low">Düşük</span>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="priority"
+                  value="orta"
+                  checked={priority === "orta"}
+                  onChange={() => handlePriorityChange("orta")}
+                />
+                <span className="priority-medium">Orta</span>
+              </label>
+              <label>
+                <input
+                  type="radio"
+                  name="priority"
+                  value="yüksek"
+                  checked={priority === "yüksek"}
+                  onChange={() => handlePriorityChange("yüksek")}
+                />
+                <span className="priority-high">Yüksek</span>
+              </label>
             </div>
           </div>
-        ) : (
-          <div className="text-center mt-5">
-            <div className="spinner-border text-primary" role="status"></div>
-            <p className="mt-3">Yükleniyor...</p>
-          </div>
-        )}
-      </div>
-    </>
+
+          <p>
+            <strong>Durum:</strong>{" "}
+            {card.is_done ? "✅ Tamamlandı" : "⏳ Devam ediyor"}
+          </p>
+        </>
+      ) : (
+        <p>Yükleniyor...</p>
+      )}
+    </div>
   );
 }

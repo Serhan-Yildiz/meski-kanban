@@ -9,14 +9,9 @@ import {
 
 const router = express.Router();
 
-router.use(auth);
-
-router.get("/", getProfile);
-
-router.put("/change-password", changePassword);
-
-router.put("/update-security", updateSecurityInfo);
-
-router.delete("/delete", deleteAccount);
+router.get("/", auth, getProfile);
+router.put("/change-password", auth, changePassword);
+router.put("/update-security", auth, updateSecurityInfo);
+router.delete("/delete", auth, deleteAccount);
 
 export default router;
