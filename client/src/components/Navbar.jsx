@@ -44,7 +44,7 @@ export default function Navbar({ onAdd, inputValue, setInputValue }) {
         )}
       </div>
 
-      <div className="nav-left">
+      <div className="nav-right">
         {!isProfilePage && (
           <button onClick={() => navigate("/profile")}>Profilim</button>
         )}
