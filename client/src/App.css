@@ -88,7 +88,7 @@ button:hover {
 .dashboard {
   max-width: 1000px;
   margin: 20px auto;
-  padding: 90px 20px 20px; /* extra padding-top for fixed navbar */
+  padding: 90px 20px 20px; 
 }
 
 .dashboard-header {
@@ -118,7 +118,7 @@ button:hover {
 }
 
 .board-page {
-  padding: 90px 20px 20px; /* extra padding-top for fixed navbar */
+  padding: 90px 20px 20px; 
 }
 
 .list-input {
@@ -176,7 +176,7 @@ button:hover {
 
 .card-view {
   max-width: 600px;
-  margin: 90px auto 50px; /* extra padding-top for fixed navbar */
+  margin: 90px auto 50px; 
   background: white;
   padding: 20px;
   border-radius: 6px;
@@ -203,7 +203,7 @@ button:hover {
 
 .profile-page {
   max-width: 500px;
-  margin: 90px auto 50px; /* extra padding-top for fixed navbar */
+  margin: 90px auto 50px;
   padding: 20px;
   background: white;
   border-radius: 6px;
@@ -284,7 +284,6 @@ label input[type="checkbox"] {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 20px;
   z-index: 999;
   box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
 }
