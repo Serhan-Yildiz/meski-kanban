@@ -47,7 +47,7 @@ export default function RegisterPage() {
     if (!/[A-Z]/.test(form.password))
       newErrors.push("Şifre büyük harf içermeli.");
     if (!/[0-9]/.test(form.password)) newErrors.push("Şifre rakam içermeli.");
-    if (!/[!@#$%^&*()_+{}\\[\]:;<>,.?~\\/-]/.test(form.password))
+    if (!/[!@#$%^&*()_+{}[\]:;<>,.?~\\/-]/.test(form.password))
       newErrors.push("Şifre sembol içermeli.");
 
     if (form.password !== form.confirmPassword)
@@ -89,105 +89,141 @@ export default function RegisterPage() {
   };
 
   return (
-    <form className="auth-form" onSubmit={handleSubmit}>
-      <h2>Kayıt Ol</h2>
-
-      <input
-        type="text"
-        name="name"
-        placeholder="Ad Soyad"
-        value={form.name}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        type="email"
-        name="email"
-        placeholder="E-posta"
-        value={form.email}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        type={form.showPassword ? "text" : "password"}
-        name="password"
-        placeholder="Şifre"
-        value={form.password}
-        onChange={handleChange}
-        required
-      />
-
-      <input
-        type={form.showPassword ? "text" : "password"}
-        name="confirmPassword"
-        placeholder="Şifre Tekrar"
-        value={form.confirmPassword}
-        onChange={handleChange}
-        required
-      />
-
-      <label>
-        <input
-          type="checkbox"
-          name="showPassword"
-          checked={form.showPassword}
-          onChange={handleChange}
-        />
-        Şifreyi göster
-      </label>
-
-      <p className="password-rules">
-        Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli ve en
-        az 8 karakter uzunluğunda olmalıdır.
-      </p>
-
-      <select
-        name="securityQuestion"
-        value={form.securityQuestion}
-        onChange={handleChange}
-        required
+    <div className="container d-flex justify-content-center align-items-center min-vh-100">
+      <form
+        className="p-4 border rounded shadow-sm bg-light dark:bg-dark text-dark dark:text-light w-100"
+        style={{ maxWidth: "450px" }}
+        onSubmit={handleSubmit}
       >
-        <option value="">Güvenlik sorusu seçin</option>
-        {securityQuestions.map((q, i) => (
-          <option key={i} value={q}>
-            {q}
-          </option>
-        ))}
-      </select>
+        <h2 className="text-center mb-4">Kayıt Ol</h2>
 
-      <input
-        type="text"
-        name="securityAnswer"
-        placeholder="Güvenlik sorusu cevabı"
-        value={form.securityAnswer}
-        onChange={handleChange}
-        required
-      />
+        <div className="form-group">
+          <label>Ad Soyad</label>
+          <input
+            type="text"
+            className="form-control"
+            name="name"
+            value={form.name}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-      <button type="submit">Kayıt Ol</button>
+        <div className="form-group">
+          <label>E-posta</label>
+          <input
+            type="email"
+            className="form-control"
+            name="email"
+            value={form.email}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-      <a
-        href={`${import.meta.env.VITE_API_URL}/auth/google`}
-        className="google-login"
-      >
-        Google ile kayıt ol
-      </a>
+        <div className="form-group">
+          <label>Şifre</label>
+          <input
+            type={form.showPassword ? "text" : "password"}
+            className="form-control"
+            name="password"
+            value={form.password}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-      <div className="auth-links">
-        <p>Zaten hesabınız var mı?</p>
-        <a href="/login">Giriş Yap</a>
-      </div>
+        <div className="form-group">
+          <label>Şifre Tekrar</label>
+          <input
+            type={form.showPassword ? "text" : "password"}
+            className="form-control"
+            name="confirmPassword"
+            value={form.confirmPassword}
+            onChange={handleChange}
+            required
+          />
+        </div>
 
-      <div className="form-feedback">
-        {errors.map((err, i) => (
-          <div key={i} className="error-text">
-            {err}
+        <div className="form-check mb-2">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            name="showPassword"
+            checked={form.showPassword}
+            onChange={handleChange}
+            id="showPassword"
+          />
+          <label className="form-check-label" htmlFor="showPassword">
+            Şifreyi göster
+          </label>
+        </div>
+
+        <small className="text-muted d-block mb-3">
+          Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli ve
+          en az 8 karakter olmalı.
+        </small>
+
+        <div className="form-group">
+          <label>Güvenlik Sorusu</label>
+          <select
+            className="form-control"
+            name="securityQuestion"
+            value={form.securityQuestion}
+            onChange={handleChange}
+            required
+          >
+            <option value="">Güvenlik sorusu seçin</option>
+            {securityQuestions.map((q, i) => (
+              <option key={i} value={q}>
+                {q}
+              </option>
+            ))}
+          </select>
+        </div>
+
+        <div className="form-group">
+          <label>Cevap</label>
+          <input
+            type="text"
+            className="form-control"
+            name="securityAnswer"
+            value={form.securityAnswer}
+            onChange={handleChange}
+            required
+          />
+        </div>
+
+        <button type="submit" className="btn btn-success w-100 mt-2">
+          Kayıt Ol
+        </button>
+
+        <a
+          href={`${import.meta.env.VITE_API_URL}/auth/google`}
+          className="btn btn-outline-danger w-100 mt-2"
+        >
+          Google ile kayıt ol
+        </a>
+
+        <div className="text-center mt-3">
+          <p className="mb-1">Zaten hesabınız var mı?</p>
+          <a href="/login" className="text-decoration-none">
+            Giriş Yap
+          </a>
+        </div>
+
+        {errors.length > 0 && (
+          <div className="alert alert-danger mt-3">
+            {errors.map((err, i) => (
+              <div key={i}>{err}</div>
+            ))}
           </div>
-        ))}
-        {serverMessage && <div className="success-text">{serverMessage}</div>}
-      </div>
-    </form>
+        )}
+
+        {serverMessage && (
+          <div className="alert alert-success mt-3">{serverMessage}</div>
+        )}
+      </form>
+    </div>
   );
 }

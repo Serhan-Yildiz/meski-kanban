@@ -106,91 +106,116 @@ export default function ProfilePage() {
   ];
 
   return (
-    <div className="profile-page">
+    <div className="container py-4">
       <Navbar />
-      <h2>Profil</h2>
-      <p>
-        <strong>Ad:</strong> {user?.name}
-      </p>
-      <p>
-        <strong>E-posta:</strong> {user?.email}
-      </p>
+      <div className="row justify-content-center">
+        <div className="col-md-8">
+          <h2 className="mb-4">Profil</h2>
+          <p>
+            <strong>Ad:</strong> {user?.name}
+          </p>
+          <p>
+            <strong>E-posta:</strong> {user?.email}
+          </p>
 
-      {!isGoogleUser && (
-        <>
-          <form className="profile-form" onSubmit={changePassword}>
-            <h3>Şifre Güncelle</h3>
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Mevcut şifre"
-              value={currentPassword}
-              onChange={(e) => setCurrentPassword(e.target.value)}
-              required
-            />
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Yeni şifre"
-              value={newPassword}
-              onChange={(e) => setNewPassword(e.target.value)}
-              required
-            />
-            <input
-              type={showPassword ? "text" : "password"}
-              placeholder="Yeni şifre (tekrar)"
-              value={confirmPassword}
-              onChange={(e) => setConfirmPassword(e.target.value)}
-              required
-            />
-            <label>
-              <input
-                type="checkbox"
-                checked={showPassword}
-                onChange={(e) => setShowPassword(e.target.checked)}
-              />
-              Şifreyi göster
-            </label>
-            <button type="submit">Şifreyi Güncelle</button>
-          </form>
+          {!isGoogleUser && (
+            <>
+              <form className="card p-3 mb-4" onSubmit={changePassword}>
+                <h5>Şifre Güncelle</h5>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="form-control mb-2"
+                  placeholder="Mevcut şifre"
+                  value={currentPassword}
+                  onChange={(e) => setCurrentPassword(e.target.value)}
+                  required
+                />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="form-control mb-2"
+                  placeholder="Yeni şifre"
+                  value={newPassword}
+                  onChange={(e) => setNewPassword(e.target.value)}
+                  required
+                />
+                <input
+                  type={showPassword ? "text" : "password"}
+                  className="form-control mb-2"
+                  placeholder="Yeni şifre (tekrar)"
+                  value={confirmPassword}
+                  onChange={(e) => setConfirmPassword(e.target.value)}
+                  required
+                />
+                <div className="form-check mb-3">
+                  <input
+                    type="checkbox"
+                    className="form-check-input"
+                    checked={showPassword}
+                    onChange={(e) => setShowPassword(e.target.checked)}
+                    id="showPasswordCheck"
+                  />
+                  <label
+                    className="form-check-label"
+                    htmlFor="showPasswordCheck"
+                  >
+                    Şifreyi göster
+                  </label>
+                </div>
+                <button className="btn btn-primary" type="submit">
+                  Şifreyi Güncelle
+                </button>
+              </form>
 
-          <form className="profile-form" onSubmit={updateSecurity}>
-            <h3>Güvenlik Sorusu Güncelle</h3>
-            <select
-              value={securityQuestion}
-              onChange={(e) => setSecurityQuestion(e.target.value)}
-              required
+              <form className="card p-3 mb-4" onSubmit={updateSecurity}>
+                <h5>Güvenlik Sorusu Güncelle</h5>
+                <select
+                  className="form-select mb-2"
+                  value={securityQuestion}
+                  onChange={(e) => setSecurityQuestion(e.target.value)}
+                  required
+                >
+                  <option value="">Soru seçin</option>
+                  {securityQuestions.map((q, i) => (
+                    <option key={i} value={q}>
+                      {q}
+                    </option>
+                  ))}
+                </select>
+                <input
+                  type="text"
+                  className="form-control mb-2"
+                  placeholder="Cevap"
+                  value={securityAnswer}
+                  onChange={(e) => setSecurityAnswer(e.target.value)}
+                  required
+                />
+                <button className="btn btn-secondary" type="submit">
+                  Güncelle
+                </button>
+              </form>
+            </>
+          )}
+
+          {status && (
+            <div
+              className={`alert ${
+                status.startsWith("✅") ? "alert-success" : "alert-danger"
+              }`}
             >
-              <option value="">Soru seçin</option>
-              {securityQuestions.map((q, i) => (
-                <option key={i} value={q}>
-                  {q}
-                </option>
-              ))}
-            </select>
-            <input
-              type="text"
-              placeholder="Cevap"
-              value={securityAnswer}
-              onChange={(e) => setSecurityAnswer(e.target.value)}
-              required
-            />
-            <button type="submit">Güncelle</button>
-          </form>
-        </>
-      )}
+              {status}
+            </div>
+          )}
 
-      {status && (
-        <p className={status.startsWith("✅") ? "success-text" : "error-text"}>
-          {status}
-        </p>
-      )}
-
-      <button className="logout-button" onClick={handleLogout}>
-        Çıkış Yap
-      </button>
-
-      <button className="delete-button" onClick={handleDeleteAccount}>
-        Hesabımı Sil
-      </button>
+          <div className="d-flex justify-content-between">
+            <button className="btn btn-outline-dark" onClick={handleLogout}>
+              Çıkış Yap
+            </button>
+            <button className="btn btn-danger" onClick={handleDeleteAccount}>
+              Hesabımı Sil
+            </button>
+          </div>
+        </div>
+      </div>
     </div>
   );
 }

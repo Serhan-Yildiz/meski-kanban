@@ -67,53 +67,70 @@ export default function BoardPage() {
 
   if (loading) {
     return (
-      <div className="board-page">
+      <>
         <Navbar
           onAdd={createList}
           inputValue={newListTitle}
           setInputValue={setNewListTitle}
         />
-        <p className="loading-text">Yükleniyor...</p>
-      </div>
+        <div className="container mt-5 text-center">
+          <div className="spinner-border text-primary" role="status"></div>
+          <p className="mt-3">Yükleniyor...</p>
+        </div>
+      </>
     );
   }
 
   if (error) {
     return (
-      <div className="board-page">
+      <>
         <Navbar />
-        <p className="error-text">{error}</p>
-      </div>
+        <div className="container mt-5 text-center">
+          <p className="text-danger">{error}</p>
+        </div>
+      </>
     );
   }
 
   return (
-    <div className="board-page">
+    <div className="pt-5">
       <Navbar
         onAdd={createList}
         inputValue={newListTitle}
         setInputValue={setNewListTitle}
       />
 
-      <div className="board-title">
+      <div className="container text-center mt-4 mb-3">
         {editingTitle ? (
-          <>
+          <div className="d-flex justify-content-center gap-2">
             <input
               type="text"
               value={editedTitle}
               onChange={(e) => setEditedTitle(e.target.value)}
+              className="form-control w-auto"
             />
-            <button onClick={updateBoardTitle}>Kaydet</button>
-            <button onClick={() => setEditingTitle(false)}>İptal</button>
-          </>
+            <button onClick={updateBoardTitle} className="btn btn-primary mx-1">
+              Kaydet
+            </button>
+            <button
+              onClick={() => setEditingTitle(false)}
+              className="btn btn-secondary"
+            >
+              İptal
+            </button>
+          </div>
         ) : (
-          <h1 onClick={() => setEditingTitle(true)} className="editable-title">
+          <h2
+            onClick={() => setEditingTitle(true)}
+            className="editable-title"
+            style={{ cursor: "pointer" }}
+          >
             {board.title} ✏️
-          </h1>
+          </h2>
         )}
       </div>
 
-      <div className="list-container">
+      <div className="d-flex overflow-auto px-3">
         {lists.map((list, index) => (
           <ListColumn
             key={list.id}

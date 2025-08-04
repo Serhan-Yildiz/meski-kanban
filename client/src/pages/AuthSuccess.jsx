@@ -18,8 +18,8 @@ export default function AuthSuccess() {
   }, [navigate, search]);
 
   return (
-    <div className="centered-page">
-      <h2>Giriş başarılı! Yönlendiriliyorsunuz...</h2>
+    <div className="d-flex flex-column justify-content-center align-items-center vh-100 text-center">
+      <h2 className="text-success">Giriş başarılı! Yönlendiriliyorsunuz...</h2>
     </div>
   );
 }

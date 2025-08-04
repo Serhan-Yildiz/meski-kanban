@@ -40,40 +40,63 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   };
 
   return (
-    <div className="card-item">
-      <div className="card-header">
-        <div className="card-label">
+    <div className="border rounded p-2 mb-2 bg-white shadow-sm">
+      <div className="d-flex justify-content-between align-items-start">
+        <div className="form-check">
           <input
             type="checkbox"
+            className="form-check-input me-2"
             checked={checked}
             onChange={toggleDone}
-            className="card-checkbox"
+            id={`card-${card.id}`}
             aria-label="Tamamlandı olarak işaretle"
           />
-
-          <span
+          <label
+            className={`form-check-label fw-semibold cursor-pointer ${
+              checked ? "text-decoration-line-through text-muted" : ""
+            }`}
             onClick={() => navigate(`/cards/${card.id}`)}
-            className={`card-title ${checked ? "card-done" : ""}`}
+            htmlFor={`card-${card.id}`}
           >
-            <span className={`priority-dot ${card.priority}`}>
+            <span
+              className={`badge rounded-pill me-2 ${
+                card.priority === "yüksek"
+                  ? "bg-danger"
+                  : card.priority === "orta"
+                  ? "bg-warning text-dark"
+                  : "bg-primary"
+              }`}
+            >
               {card.priority}
-            </span>{" "}
+            </span>
             {card.title}
-          </span>
+          </label>
         </div>
 
-        <div className="card-controls">
+        <div className="btn-group btn-group-sm" role="group">
           {!isFirst && (
-            <button onClick={() => moveCard("up")} aria-label="Yukarı taşı">
+            <button
+              onClick={() => moveCard("up")}
+              className="btn btn-outline-secondary"
+              aria-label="Yukarı taşı"
+            >
               ⬆️
             </button>
           )}
           {!isLast && (
-            <button onClick={() => moveCard("down")} aria-label="Aşağı taşı">
+            <button
+              onClick={() => moveCard("down")}
+              className="btn btn-outline-secondary"
+              aria-label="Aşağı taşı"
+            >
               ⬇️
             </button>
           )}
-          <button onClick={deleteCard} aria-label="Kartı sil">
+          <button
+            onClick={deleteCard}
+            className="btn btn-outline-danger"
+            aria-label="Kartı sil"
+          >
             🗑️
           </button>
         </div>

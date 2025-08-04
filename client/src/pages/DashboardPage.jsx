@@ -66,51 +66,81 @@ export default function DashboardPage() {
   };
 
   return (
-    <div className="dashboard">
+    <>
       <Navbar
         onAdd={createBoard}
         inputValue={newBoardTitle}
         setInputValue={setNewBoardTitle}
       />
 
-      <h2 className="dashboard-heading">Panolarım</h2>
+      <div className="container mt-4 dashboard">
+        <h2 className="mb-4">Panolarım</h2>
 
-      <div className="dashboard-board-list">
-        {boards.map((board) => (
-          <div key={board.id} className="dashboard-board">
-            {editBoardId === board.id ? (
-              <>
-                <input
-                  type="text"
-                  value={editBoardTitle}
-                  onChange={(e) => setEditBoardTitle(e.target.value)}
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      e.preventDefault();
-                      saveEditedBoard();
-                    }
-                  }}
-                />
-                <button onClick={saveEditedBoard}>Kaydet</button>
-                <button onClick={cancelEditing}>İptal</button>
-              </>
-            ) : (
-              <>
-                <div
-                  className="dashboard-board-title"
-                  onClick={() => navigate(`/boards/${board.id}`)}
-                >
-                  {board.title}
+        <div className="row">
+          {boards.map((board) => (
+            <div key={board.id} className="col-md-6 col-lg-4 mb-4">
+              <div className="card h-100 shadow-sm">
+                <div className="card-body d-flex flex-column justify-content-between">
+                  {editBoardId === board.id ? (
+                    <>
+                      <input
+                        type="text"
+                        className="form-control mb-2"
+                        value={editBoardTitle}
+                        onChange={(e) => setEditBoardTitle(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === "Enter") {
+                            e.preventDefault();
+                            saveEditedBoard();
+                          }
+                        }}
+                      />
+                      <div className="d-flex justify-content-end">
+                        <button
+                          onClick={saveEditedBoard}
+                          className="btn btn-primary btn-sm mr-2"
+                        >
+                          Kaydet
+                        </button>
+                        <button
+                          onClick={cancelEditing}
+                          className="btn btn-secondary btn-sm"
+                        >
+                          İptal
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    <>
+                      <h5
+                        className="card-title mb-3 cursor-pointer"
+                        onClick={() => navigate(`/boards/${board.id}`)}
+                        style={{ cursor: "pointer" }}
+                      >
+                        {board.title}
+                      </h5>
+                      <div className="d-flex justify-content-end gap-2">
+                        <button
+                          onClick={() => startEditing(board)}
+                          className="btn btn-outline-secondary btn-sm mr-2"
+                        >
+                          Düzenle
+                        </button>
+                        <button
+                          onClick={() => deleteBoard(board.id)}
+                          className="btn btn-outline-danger btn-sm"
+                        >
+                          Sil
+                        </button>
+                      </div>
+                    </>
+                  )}
                 </div>
-                <div className="dashboard-board-controls">
-                  <button onClick={() => startEditing(board)}>Düzenle</button>
-                  <button onClick={() => deleteBoard(board.id)}>Sil</button>
-                </div>
-              </>
-            )}
-          </div>
-        ))}
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
-    </div>
+    </>
   );
 }
