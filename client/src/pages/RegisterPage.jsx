@@ -89,12 +89,8 @@ export default function RegisterPage() {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100">
-      <form
-        className="p-4 border rounded shadow-sm bg-light dark:bg-dark text-dark dark:text-light w-100"
-        style={{ maxWidth: "450px" }}
-        onSubmit={handleSubmit}
-      >
+    <div className="centered-page">
+      <form className="auth-form" onSubmit={handleSubmit}>
         <h2 className="text-center mb-4">Kayıt Ol</h2>
 
         <div className="form-group">
@@ -159,10 +155,10 @@ export default function RegisterPage() {
           </label>
         </div>
 
-        <small className="text-muted d-block mb-3">
+        <p className="password-rules">
           Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli ve
           en az 8 karakter olmalı.
-        </small>
+        </p>
 
         <div className="form-group">
           <label>Güvenlik Sorusu</label>
@@ -205,7 +201,7 @@ export default function RegisterPage() {
           Google ile kayıt ol
         </a>
 
-        <div className="text-center mt-3">
+        <div className="text-center mt-3 auth-links">
           <p className="mb-1">Zaten hesabınız var mı?</p>
           <a href="/login" className="text-decoration-none">
             Giriş Yap
@@ -213,7 +209,7 @@ export default function RegisterPage() {
         </div>
 
         {errors.length > 0 && (
-          <div className="alert alert-danger mt-3">
+          <div className="form-error mt-3">
             {errors.map((err, i) => (
               <div key={i}>{err}</div>
             ))}
@@ -221,7 +217,7 @@ export default function RegisterPage() {
         )}
 
         {serverMessage && (
-          <div className="alert alert-success mt-3">{serverMessage}</div>
+          <div className="success-text mt-3">{serverMessage}</div>
         )}
       </form>
     </div>

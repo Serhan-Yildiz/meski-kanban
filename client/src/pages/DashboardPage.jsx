@@ -74,12 +74,12 @@ export default function DashboardPage() {
       />
 
       <div className="container mt-4 dashboard">
-        <h2 className="mb-4">Panolarım</h2>
+        <h2 className="dashboard-heading mb-4">Panolarım</h2>
 
-        <div className="row">
+        <div className="row dashboard-board-list">
           {boards.map((board) => (
             <div key={board.id} className="col-md-6 col-lg-4 mb-4">
-              <div className="card h-100 shadow-sm">
+              <div className="dashboard-board card h-100 shadow-sm">
                 <div className="card-body d-flex flex-column justify-content-between">
                   {editBoardId === board.id ? (
                     <>
@@ -98,7 +98,7 @@ export default function DashboardPage() {
                       <div className="d-flex justify-content-end">
                         <button
                           onClick={saveEditedBoard}
-                          className="btn btn-primary btn-sm mr-2"
+                          className="btn btn-primary btn-sm me-2"
                         >
                           Kaydet
                         </button>
@@ -112,17 +112,17 @@ export default function DashboardPage() {
                     </>
                   ) : (
                     <>
-                      <h5
-                        className="card-title mb-3 cursor-pointer"
+                      <div
+                        className="dashboard-board-title card-title mb-3"
                         onClick={() => navigate(`/boards/${board.id}`)}
                         style={{ cursor: "pointer" }}
                       >
                         {board.title}
-                      </h5>
-                      <div className="d-flex justify-content-end gap-2">
+                      </div>
+                      <div className="dashboard-board-controls d-flex justify-content-end gap-2">
                         <button
                           onClick={() => startEditing(board)}
-                          className="btn btn-outline-secondary btn-sm mr-2"
+                          className="btn btn-outline-secondary btn-sm"
                         >
                           Düzenle
                         </button>

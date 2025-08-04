@@ -78,116 +78,113 @@ export default function ForgotPasswordPage() {
   };
 
   return (
-    <div className="container py-5">
-      <div className="row justify-content-center">
-        <div className="col-md-6 col-lg-5">
-          <div className="card shadow-sm p-4">
-            <h2 className="mb-4 text-center">Şifremi Unuttum</h2>
+    <div className="centered-page">
+      <form
+        className="auth-form"
+        onSubmit={step === 1 ? handleEmailSubmit : handleResetSubmit}
+      >
+        <h2 className="text-center mb-4">Şifremi Unuttum</h2>
 
-            <form onSubmit={step === 1 ? handleEmailSubmit : handleResetSubmit}>
-              {step === 1 && (
-                <>
-                  <div className="form-group">
-                    <input
-                      type="email"
-                      className="form-control"
-                      placeholder="Email adresiniz"
-                      value={email}
-                      onChange={(e) => setEmail(e.target.value)}
-                      required
-                    />
-                  </div>
-                  <button type="submit" className="btn btn-primary btn-block">
-                    Devam Et
-                  </button>
-                </>
-              )}
+        {step === 1 && (
+          <>
+            <div className="form-group">
+              <input
+                type="email"
+                className="form-control"
+                placeholder="Email adresiniz"
+                value={email}
+                onChange={(e) => setEmail(e.target.value)}
+                required
+              />
+            </div>
+            <button type="submit" className="btn btn-primary w-100">
+              Devam Et
+            </button>
+          </>
+        )}
 
-              {step === 2 && (
-                <>
-                  <div className="mb-3">
-                    <strong>Güvenlik Sorusu:</strong>
-                    <p>{question}</p>
-                  </div>
+        {step === 2 && (
+          <>
+            <div className="mb-3">
+              <strong>Güvenlik Sorusu:</strong>
+              <p>{question}</p>
+            </div>
 
-                  <div className="form-group">
-                    <input
-                      type="text"
-                      className="form-control"
-                      placeholder="Cevabınız"
-                      value={answer}
-                      onChange={(e) => setAnswer(e.target.value)}
-                      required
-                    />
-                  </div>
+            <div className="form-group">
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Cevabınız"
+                value={answer}
+                onChange={(e) => setAnswer(e.target.value)}
+                required
+              />
+            </div>
 
-                  <div className="form-group">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      className="form-control"
-                      placeholder="Yeni şifre"
-                      value={newPassword}
-                      onChange={(e) => setNewPassword(e.target.value)}
-                      required
-                    />
-                  </div>
+            <div className="form-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control"
+                placeholder="Yeni şifre"
+                value={newPassword}
+                onChange={(e) => setNewPassword(e.target.value)}
+                required
+              />
+            </div>
 
-                  <div className="form-group">
-                    <input
-                      type={showPassword ? "text" : "password"}
-                      className="form-control"
-                      placeholder="Yeni şifre tekrar"
-                      value={confirmPassword}
-                      onChange={(e) => setConfirmPassword(e.target.value)}
-                      required
-                    />
-                  </div>
+            <div className="form-group">
+              <input
+                type={showPassword ? "text" : "password"}
+                className="form-control"
+                placeholder="Yeni şifre tekrar"
+                value={confirmPassword}
+                onChange={(e) => setConfirmPassword(e.target.value)}
+                required
+              />
+            </div>
 
-                  <div className="form-group form-check">
-                    <input
-                      type="checkbox"
-                      className="form-check-input"
-                      id="showPassword"
-                      checked={showPassword}
-                      onChange={(e) => setShowPassword(e.target.checked)}
-                    />
-                    <label htmlFor="showPassword" className="form-check-label">
-                      Şifreyi göster
-                    </label>
-                  </div>
+            <div className="form-group form-check mb-2">
+              <input
+                type="checkbox"
+                className="form-check-input"
+                id="showPassword"
+                checked={showPassword}
+                onChange={(e) => setShowPassword(e.target.checked)}
+              />
+              <label htmlFor="showPassword" className="form-check-label">
+                Şifreyi göster
+              </label>
+            </div>
 
-                  <div className="alert alert-secondary small">
-                    Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam
-                    içermeli ve en az 8 karakter olmalıdır.
-                  </div>
+            <p className="password-rules">
+              Şifre en az 1 küçük harf, 1 büyük harf, 1 sembol, 1 rakam içermeli
+              ve en az 8 karakter uzunluğunda olmalıdır.
+            </p>
 
-                  <button type="submit" className="btn btn-success btn-block">
-                    Şifreyi Sıfırla
-                  </button>
-                </>
-              )}
+            <button type="submit" className="btn btn-success w-100">
+              Şifreyi Sıfırla
+            </button>
+          </>
+        )}
 
-              {errors.length > 0 && (
-                <div className="mt-3 alert alert-danger">
-                  {errors.map((err, i) => (
-                    <div key={i}>{err}</div>
-                  ))}
-                </div>
-              )}
-
-              {status && !errors.length && (
-                <div
-                  className={`mt-3 alert ${
-                    status.includes("✅") ? "alert-success" : "alert-danger"
-                  }`}
-                >
-                  {status}
-                </div>
-              )}
-            </form>
+        {errors.length > 0 && (
+          <div className="form-error alert alert-danger mt-3">
+            {errors.map((err, i) => (
+              <div key={i}>{err}</div>
+            ))}
           </div>
-        </div>
-      </div>
+        )}
+
+        {status && !errors.length && (
+          <div
+            className={`mt-3 ${
+              status.includes("✅") ? "success-text" : "error-text"
+            }`}
+          >
+            {status}
+          </div>
+        )}
+      </form>
     </div>
   );
 }

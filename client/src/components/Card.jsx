@@ -40,7 +40,7 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
   };
 
   return (
-    <div className="border rounded p-2 mb-2 bg-white shadow-sm">
+    <div className={`card-item ${checked ? "card-done" : ""}`}>
       <div className="d-flex justify-content-between align-items-start">
         <div className="form-check">
           <input
@@ -52,23 +52,19 @@ export default function Card({ card, refreshCards, isFirst, isLast }) {
             aria-label="Tamamlandı olarak işaretle"
           />
           <label
-            className={`form-check-label fw-semibold cursor-pointer ${
-              checked ? "text-decoration-line-through text-muted" : ""
-            }`}
+            className={`form-check-label fw-semibold cursor-pointer`}
             onClick={() => navigate(`/cards/${card.id}`)}
             htmlFor={`card-${card.id}`}
           >
             <span
-              className={`badge rounded-pill me-2 ${
+              className={`priority-dot ${
                 card.priority === "yüksek"
-                  ? "bg-danger"
+                  ? "priority-high"
                   : card.priority === "orta"
-                  ? "bg-warning text-dark"
-                  : "bg-primary"
+                  ? "priority-medium"
+                  : "priority-low"
               }`}
-            >
-              {card.priority}
-            </span>
+            ></span>
             {card.title}
           </label>
         </div>

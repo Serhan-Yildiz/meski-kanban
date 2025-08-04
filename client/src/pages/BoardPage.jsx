@@ -93,7 +93,7 @@ export default function BoardPage() {
   }
 
   return (
-    <div className="pt-5">
+    <div className="board-page">
       <Navbar
         onAdd={createList}
         inputValue={newListTitle}
@@ -130,7 +130,7 @@ export default function BoardPage() {
         )}
       </div>
 
-      <div className="d-flex overflow-auto px-3">
+      <div className="list-container px-3">
         {lists.map((list, index) => (
           <ListColumn
             key={list.id}

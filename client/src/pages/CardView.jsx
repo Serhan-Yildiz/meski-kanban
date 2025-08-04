@@ -92,18 +92,18 @@ export default function CardView() {
         {card ? (
           <div className="row justify-content-center">
             <div className="col-lg-8">
-              <div className="mb-4">
+              <div className="mb-4 card-title-section">
                 <h5>Başlık:</h5>
                 {isEditingTitle ? (
                   <div className="d-flex gap-2">
                     <input
-                      className="form-control mr-2"
+                      className="form-control"
                       value={title}
                       onChange={(e) => setTitle(e.target.value)}
                     />
                     <button
                       onClick={handleSaveTitle}
-                      className="btn btn-primary mx-1"
+                      className="btn btn-primary"
                     >
                       Kaydet
                     </button>
@@ -119,7 +119,7 @@ export default function CardView() {
                     <h3 className="editable-title">{title}</h3>
                     <button
                       onClick={handleEditTitle}
-                      className="btn btn-outline-secondary btn-sm ml-2"
+                      className="btn btn-outline-secondary btn-sm"
                     >
                       Düzenle
                     </button>
@@ -127,7 +127,7 @@ export default function CardView() {
                 )}
               </div>
 
-              <div className="mb-4">
+              <div className="mb-4 card-desc-section">
                 <h5>Açıklama:</h5>
                 {isEditingDesc ? (
                   <>
@@ -171,7 +171,7 @@ export default function CardView() {
                 )}
               </div>
 
-              <div className="mb-4">
+              <div className="mb-4 card-priority-section">
                 <h5>Öncelik:</h5>
                 <div className="form-check form-check-inline">
                   <input

@@ -44,12 +44,8 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="container d-flex justify-content-center align-items-center min-vh-100">
-      <form
-        className="p-4 border rounded shadow-sm bg-light dark:bg-dark text-dark dark:text-light w-100"
-        style={{ maxWidth: "400px" }}
-        onSubmit={handleSubmit}
-      >
+    <div className="centered-page">
+      <form className="auth-form" onSubmit={handleSubmit}>
         <h2 className="text-center mb-4">Giriş Yap</h2>
 
         <div className="form-group">
@@ -117,7 +113,7 @@ export default function LoginPage() {
           Google ile Giriş Yap
         </a>
 
-        <div className="text-center mt-3">
+        <div className="text-center mt-3 auth-links">
           <p className="mb-1">
             Hesabınız yok mu?{" "}
             <a href="/register" className="text-decoration-none">
@@ -131,9 +127,7 @@ export default function LoginPage() {
           </p>
         </div>
 
-        {error && (
-          <div className="alert alert-danger mt-3 text-center">{error}</div>
-        )}
+        {error && <div className="form-error mt-3 text-center">{error}</div>}
       </form>
     </div>
   );
