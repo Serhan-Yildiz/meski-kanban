@@ -4,18 +4,25 @@ const auth = (req, res, next) => {
   const authHeader = req.headers.authorization;
 
   if (!authHeader || !authHeader.startsWith("Bearer ")) {
-    return res.status(401).json({ message: "Token bulunamadı" });
+    return res.status(401).json({ message: "Yetkilendirme token'ı eksik" });
   }
 
   const token = authHeader.split(" ")[1];
 
   try {
     const decoded = jwt.verify(token, process.env.JWT_SECRET);
-    req.user = { id: decoded.id, provider: decoded.provider };
+
+    req.user = {
+      id: decoded.id,
+      provider: decoded.provider || "local",
+    };
+
     next();
   } catch (error) {
     console.error("JWT doğrulama hatası:", error.message);
-    res.status(401).json({ message: "Geçersiz token" });
+    return res
+      .status(401)
+      .json({ message: "Geçersiz veya süresi dolmuş token" });
   }
 };
 

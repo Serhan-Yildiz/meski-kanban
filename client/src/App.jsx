@@ -9,6 +9,7 @@ import CardView from "./pages/CardView";
 import HomePage from "./pages/HomePage";
 import NotFoundPage from "./pages/NotFoundPage";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
+import ProtectedRoute from "./components/ProtectedRoute.jsx";
 
 function App() {
   return (
@@ -19,10 +20,40 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/dashboard" element={<DashboardPage />} />
-        <Route path="/profile" element={<ProfilePage />} />
-        <Route path="/boards/:id" element={<BoardPage />} />
-        <Route path="/cards/:id" element={<CardView />} />
+
+        <Route
+          path="/dashboard"
+          element={
+            <ProtectedRoute>
+              <DashboardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/profile"
+          element={
+            <ProtectedRoute>
+              <ProfilePage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/boards/:id"
+          element={
+            <ProtectedRoute>
+              <BoardPage />
+            </ProtectedRoute>
+          }
+        />
+        <Route
+          path="/cards/:id"
+          element={
+            <ProtectedRoute>
+              <CardView />
+            </ProtectedRoute>
+          }
+        />
+
         <Route path="*" element={<NotFoundPage />} />
       </Routes>
     </BrowserRouter>

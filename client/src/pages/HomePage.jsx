@@ -5,12 +5,21 @@ export default function HomePage() {
 
   return (
     <div className="home-page">
-      <img src="/logo.png" alt="MESKİ Kanban Logo" className="logo" />
-      <h1>MESKİ Kanban'a Hoşgeldiniz</h1>
-      <p>Görevlerinizi düzenleyin, panolar oluşturun, kartlarla yönetin.</p>
+      <img src="/logo.png" alt="MESKİ Kanban Logo" className="home-logo" />
+      <h1 className="home-title">MESKİ Kanban'a Hoşgeldiniz</h1>
+      <p className="home-subtitle">
+        Görevlerinizi düzenleyin, panolar oluşturun, kartlarla yönetin.
+      </p>
       <div className="home-buttons">
-        <button onClick={() => navigate("/login")}>Giriş Yap</button>
-        <button onClick={() => navigate("/register")}>Kayıt Ol</button>
+        <button className="btn login-btn" onClick={() => navigate("/login")}>
+          Giriş Yap
+        </button>
+        <button
+          className="btn register-btn"
+          onClick={() => navigate("/register")}
+        >
+          Kayıt Ol
+        </button>
       </div>
     </div>
   );

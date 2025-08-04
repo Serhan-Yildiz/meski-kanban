@@ -2,14 +2,14 @@ import { Link } from "react-router-dom";
 
 export default function NotFound() {
   return (
-    <div className="notfound-container">
-      <h1>404</h1>
+    <div className="notfound-page">
+      <h1>404 - Sayfa Bulunamadı</h1>
       <p>
-        Aradığınız sayfa bulunamadı. Link yanlış olabilir veya sayfa kaldırılmış
-        olabilir.
+        Aradığınız sayfa mevcut değil. Bağlantı hatalı olabilir ya da sayfa
+        silinmiş olabilir.
       </p>
-      <Link to="/">
-        <button className="button">Ana Sayfaya Dön</button>
+      <Link to="/" className="notfound-button">
+        Ana Sayfaya Dön
       </Link>
     </div>
   );

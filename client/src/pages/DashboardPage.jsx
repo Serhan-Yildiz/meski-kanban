@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
-import axios from "../api/axios.js";
 import { useNavigate } from "react-router-dom";
+import api from "../api/api.js";
 import Navbar from "../components/Navbar";
 
 export default function DashboardPage() {
@@ -9,19 +9,15 @@ export default function DashboardPage() {
   const [editBoardId, setEditBoardId] = useState(null);
   const [editBoardTitle, setEditBoardTitle] = useState("");
 
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchBoards();
-  }, [token]);
+  }, []);
 
   const fetchBoards = async () => {
     try {
-      const res = await axios.get("/boards", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/boards");
       setBoards(res.data);
     } catch (err) {
       console.error("Panolar alınamadı", err);
@@ -30,15 +26,13 @@ export default function DashboardPage() {
 
   const createBoard = async () => {
     if (!newBoardTitle.trim()) return;
-    await axios.post(
-      "/boards",
-      { title: newBoardTitle },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    setNewBoardTitle("");
-    fetchBoards();
+    try {
+      await api.post("/boards", { title: newBoardTitle });
+      setNewBoardTitle("");
+      fetchBoards();
+    } catch (err) {
+      console.error("Pano oluşturulamadı", err);
+    }
   };
 
   const startEditing = (board) => {
@@ -52,23 +46,23 @@ export default function DashboardPage() {
   };
 
   const saveEditedBoard = async () => {
-    await axios.put(
-      `/boards/${editBoardId}`,
-      { title: editBoardTitle },
-      {
-        headers: { Authorization: `Bearer ${token}` },
-      }
-    );
-    cancelEditing();
-    fetchBoards();
+    try {
+      await api.put(`/boards/${editBoardId}`, { title: editBoardTitle });
+      cancelEditing();
+      fetchBoards();
+    } catch (err) {
+      console.error("Pano güncellenemedi", err);
+    }
   };
 
   const deleteBoard = async (id) => {
     if (!window.confirm("Bu panoyu silmek istediğine emin misin?")) return;
-    await axios.delete(`/boards/${id}`, {
-      headers: { Authorization: `Bearer ${token}` },
-    });
-    fetchBoards();
+    try {
+      await api.delete(`/boards/${id}`);
+      fetchBoards();
+    } catch (err) {
+      console.error("Pano silinemedi", err);
+    }
   };
 
   return (
@@ -79,7 +73,7 @@ export default function DashboardPage() {
         setInputValue={setNewBoardTitle}
       />
 
-      <h2 style={{ marginLeft: "1rem" }}>Panolarım</h2>
+      <h2 className="dashboard-heading">Panolarım</h2>
 
       <div className="dashboard-board-list">
         {boards.map((board) => (
@@ -102,10 +96,13 @@ export default function DashboardPage() {
               </>
             ) : (
               <>
-                <div onClick={() => navigate(`/boards/${board.id}`)}>
+                <div
+                  className="dashboard-board-title"
+                  onClick={() => navigate(`/boards/${board.id}`)}
+                >
                   {board.title}
                 </div>
-                <div style={{ marginTop: "10px" }}>
+                <div className="dashboard-board-controls">
                   <button onClick={() => startEditing(board)}>Düzenle</button>
                   <button onClick={() => deleteBoard(board.id)}>Sil</button>
                 </div>

@@ -1,5 +1,5 @@
 import { useEffect, useState, useCallback } from "react";
-import axios from "../api/axios.js";
+import api from "../api/api.js";
 import { useNavigate } from "react-router-dom";
 import Navbar from "../components/Navbar";
 
@@ -14,20 +14,16 @@ export default function ProfilePage() {
   const [securityAnswer, setSecurityAnswer] = useState("");
 
   const navigate = useNavigate();
-  const token =
-    localStorage.getItem("token") || sessionStorage.getItem("token");
 
   const fetchProfile = useCallback(async () => {
     try {
-      const res = await axios.get("/auth/profile", {
-        headers: { Authorization: `Bearer ${token}` },
-      });
+      const res = await api.get("/auth/profile");
       setUser(res.data);
     } catch (error) {
       console.error("Hata oluştu:", error.response?.data);
       navigate("/login");
     }
-  }, [token, navigate]);
+  }, [navigate]);
 
   useEffect(() => {
     fetchProfile();
@@ -51,13 +47,10 @@ export default function ProfilePage() {
     }
 
     try {
-      await axios.put(
-        "/profile/change-password",
-        { currentPassword, newPassword },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.put("/profile/change-password", {
+        currentPassword,
+        newPassword,
+      });
       setStatus("✅ Şifre başarıyla güncellendi");
       setCurrentPassword("");
       setNewPassword("");
@@ -71,16 +64,10 @@ export default function ProfilePage() {
   const updateSecurity = async (e) => {
     e.preventDefault();
     try {
-      await axios.put(
-        "/profile/update-security",
-        {
-          question: securityQuestion,
-          answer: securityAnswer,
-        },
-        {
-          headers: { Authorization: `Bearer ${token}` },
-        }
-      );
+      await api.put("/profile/update-security", {
+        question: securityQuestion,
+        answer: securityAnswer,
+      });
       setStatus("✅ Güvenlik sorusu güncellendi");
     } catch (err) {
       console.error(err);
@@ -92,6 +79,20 @@ export default function ProfilePage() {
     localStorage.removeItem("token");
     sessionStorage.removeItem("token");
     navigate("/");
+  };
+
+  const handleDeleteAccount = async () => {
+    if (window.confirm("Hesabınızı silmek istediğinize emin misiniz?")) {
+      try {
+        await api.delete("/profile/delete");
+        localStorage.removeItem("token");
+        sessionStorage.removeItem("token");
+        navigate("/");
+      } catch (err) {
+        console.error(err);
+        alert("❌ Hesap silinemedi");
+      }
+    }
   };
 
   const isGoogleUser = user?.isGoogleUser;
@@ -117,7 +118,7 @@ export default function ProfilePage() {
 
       {!isGoogleUser && (
         <>
-          <form onSubmit={changePassword} style={{ marginTop: "20px" }}>
+          <form className="profile-form" onSubmit={changePassword}>
             <h3>Şifre Güncelle</h3>
             <input
               type={showPassword ? "text" : "password"}
@@ -151,7 +152,7 @@ export default function ProfilePage() {
             <button type="submit">Şifreyi Güncelle</button>
           </form>
 
-          <form onSubmit={updateSecurity} style={{ marginTop: "20px" }}>
+          <form className="profile-form" onSubmit={updateSecurity}>
             <h3>Güvenlik Sorusu Güncelle</h3>
             <select
               value={securityQuestion}
@@ -178,33 +179,16 @@ export default function ProfilePage() {
       )}
 
       {status && (
-        <p style={{ color: status.startsWith("✅") ? "green" : "red" }}>
+        <p className={status.startsWith("✅") ? "success-text" : "error-text"}>
           {status}
         </p>
       )}
 
-      <button onClick={handleLogout} style={{ marginTop: "20px" }}>
+      <button className="logout-button" onClick={handleLogout}>
         Çıkış Yap
       </button>
 
-      <button
-        onClick={async () => {
-          if (window.confirm("Hesabınızı silmek istediğinize emin misiniz?")) {
-            try {
-              await axios.delete("/profile/delete", {
-                headers: { Authorization: `Bearer ${token}` },
-              });
-              localStorage.removeItem("token");
-              sessionStorage.removeItem("token");
-              navigate("/");
-            } catch (err) {
-              console.error(err);
-              alert("❌ Hesap silinemedi");
-            }
-          }
-        }}
-        style={{ marginTop: "20px", backgroundColor: "red", color: "white" }}
-      >
+      <button className="delete-button" onClick={handleDeleteAccount}>
         Hesabımı Sil
       </button>
     </div>

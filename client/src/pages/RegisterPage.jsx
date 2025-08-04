@@ -1,5 +1,5 @@
 import { useState } from "react";
-import axios from "../api/axios.js";
+import api from "../api/api.js";
 import { useNavigate } from "react-router-dom";
 
 export default function RegisterPage() {
@@ -13,7 +13,6 @@ export default function RegisterPage() {
     securityQuestion: "",
     securityAnswer: "",
   });
-  const API_URL = import.meta.env.VITE_API_URL;
 
   const [errors, setErrors] = useState([]);
   const [serverMessage, setServerMessage] = useState("");
@@ -63,27 +62,29 @@ export default function RegisterPage() {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setErrors([]);
     const validationErrors = validate();
-    setErrors(validationErrors);
+    if (validationErrors.length > 0) {
+      setErrors(validationErrors);
+      return;
+    }
 
-    if (validationErrors.length === 0) {
-      try {
-        await axios.post("/auth/register", {
-          name: form.name.trim(),
-          email: form.email.trim(),
-          password: form.password,
-          security_question: form.securityQuestion,
-          security_answer: form.securityAnswer,
-        });
+    try {
+      await api.post("/auth/register", {
+        name: form.name.trim(),
+        email: form.email.trim(),
+        password: form.password,
+        security_question: form.securityQuestion,
+        security_answer: form.securityAnswer,
+      });
 
-        setServerMessage(
-          "Kayıt başarılı. Giriş sayfasına yönlendiriliyorsunuz."
-        );
-        setTimeout(() => navigate("/login"), 1500);
-      } catch (err) {
-        const msg = err.response?.data?.message || "Kayıt başarısız.";
-        setErrors([msg]);
-      }
+      setServerMessage(
+        "✅ Kayıt başarılı. Giriş sayfasına yönlendiriliyorsunuz."
+      );
+      setTimeout(() => navigate("/login"), 1500);
+    } catch (err) {
+      const msg = err.response?.data?.message || "Kayıt başarısız.";
+      setErrors([msg]);
     }
   };
 
@@ -167,7 +168,7 @@ export default function RegisterPage() {
 
       <button type="submit">Kayıt Ol</button>
 
-      <a href={`${API_URL}/auth/google`} className="google-login">
+      <a href="/auth/google" className="google-login">
         Google ile kayıt ol
       </a>
 
@@ -176,13 +177,13 @@ export default function RegisterPage() {
         <a href="/login">Giriş Yap</a>
       </div>
 
-      <div style={{ marginTop: "1rem", fontSize: "0.95rem" }}>
+      <div className="form-feedback">
         {errors.map((err, i) => (
-          <div key={i} style={{ color: "red" }}>
+          <div key={i} className="error-text">
             {err}
           </div>
         ))}
-        {serverMessage && <div style={{ color: "green" }}>{serverMessage}</div>}
+        {serverMessage && <div className="success-text">{serverMessage}</div>}
       </div>
     </form>
   );
