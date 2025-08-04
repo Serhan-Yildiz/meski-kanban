@@ -7,7 +7,7 @@ import BoardPage from "./pages/BoardPage";
 import AuthSuccess from "./pages/AuthSuccess";
 import CardView from "./pages/CardView";
 import HomePage from "./pages/HomePage";
-import NotFoundPage from "./pages/NotFoundPage";
+import NotFound from "./pages/NotFound";
 import ForgotPasswordPage from "./pages/ForgotPasswordPage";
 import ProtectedRoute from "./components/ProtectedRoute";
 
