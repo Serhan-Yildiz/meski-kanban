@@ -49,9 +49,12 @@ button:hover {
   max-width: 400px;
   margin: 60px auto;
   background: white;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .auth-form input,
@@ -71,24 +74,26 @@ button:hover {
 .google-login {
   display: inline-block;
   width: 100%;
-  text-align: center;
-  margin-top: 10px;
   background-color: #db4437;
-  color: white;
-  text-decoration: none;
-  padding: 8px;
-  border-radius: 4px;
   box-sizing: border-box;
+  margin-top: 1rem;
+  text-align: center;
+  color: white;
+  background: #db4437;
+  padding: 0.6rem;
+  border-radius: 6px;
+  text-decoration: none;
+  font-weight: bold;
 }
-
 .google-login:hover {
   background-color: #c33c2f;
+  background: #c23321;
 }
 
 .dashboard {
   max-width: 1000px;
   margin: 20px auto;
-  padding: 90px 20px 20px; /* extra padding-top for fixed navbar */
+  padding: 90px 20px 20px;
 }
 
 .dashboard-header {
@@ -118,7 +123,7 @@ button:hover {
 }
 
 .board-page {
-  padding: 90px 20px 20px; /* extra padding-top for fixed navbar */
+  padding: 90px 20px 20px;
 }
 
 .list-input {
@@ -168,6 +173,7 @@ button:hover {
 
 .card-title {
   cursor: pointer;
+  font-weight: 500;
 }
 
 .card-controls button {
@@ -176,7 +182,7 @@ button:hover {
 
 .card-view {
   max-width: 600px;
-  margin: 90px auto 50px; /* extra padding-top for fixed navbar */
+  margin: 90px auto 50px;
   background: white;
   padding: 20px;
   border-radius: 6px;
@@ -184,12 +190,20 @@ button:hover {
 }
 
 .home-page {
-  text-align: center;
   padding-top: 80px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 80vh;
+  padding: 2rem;
+  text-align: center;
 }
 
 .home-buttons {
   margin-top: 30px;
+  display: flex;
+  gap: 1rem;
 }
 
 .home-buttons button {
@@ -202,12 +216,12 @@ button:hover {
 }
 
 .profile-page {
-  max-width: 500px;
-  margin: 90px auto 50px; /* extra padding-top for fixed navbar */
-  padding: 20px;
   background: white;
   border-radius: 6px;
   box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
+  max-width: 600px;
+  margin: 2rem auto;
+  padding: 1rem;
 }
 
 .profile-page input,
@@ -232,12 +246,12 @@ button:hover {
 }
 
 .auth-links {
-  margin-top: 15px;
+  text-align: center;
+  margin-top: 1rem;
   display: flex;
   flex-direction: column;
-  gap: 6px;
-  font-size: 0.95rem;
-  text-align: center;
+  gap: 0.4rem;
+  font-size: 0.9rem;
 }
 
 .auth-links a {
@@ -250,9 +264,11 @@ button:hover {
 }
 
 .password-rules {
-  font-size: 0.85rem;
   color: #666;
   margin-bottom: 10px;
+  margin-top: 0.5rem;
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
 }
 
 label {
@@ -360,6 +376,7 @@ label input[type="checkbox"] {
   gap: 5px;
   cursor: pointer;
   font-weight: bold;
+  margin-right: 10px;
 }
 
 .priority-low {
@@ -378,9 +395,10 @@ label input[type="checkbox"] {
   padding: 2px 8px;
   border-radius: 12px;
   font-size: 0.75rem;
-  font-weight: bold;
   display: inline-block;
   margin-top: 4px;
+  font-weight: bold;
+  margin-right: 6px;
 }
 
 .priority-dot.düşük {
@@ -405,19 +423,9 @@ label input[type="checkbox"] {
   cursor: pointer;
 }
 
-.card-title {
-  cursor: pointer;
-  font-weight: 500;
-}
-
 .card-done {
   text-decoration: line-through;
   opacity: 0.6;
-}
-
-.priority-dot {
-  font-weight: bold;
-  margin-right: 6px;
 }
 
 .board-title {
@@ -432,6 +440,7 @@ label input[type="checkbox"] {
 }
 
 .editable-title {
+  display: inline-block;
   cursor: pointer;
 }
 
@@ -441,26 +450,14 @@ label input[type="checkbox"] {
 
 .error-text {
   text-align: center;
+  margin-top: 1rem;
   color: red;
-}
-
-.editable-title {
-  display: inline-block;
-  cursor: pointer;
 }
 
 .card-title-section,
 .card-desc-section,
 .card-priority-section {
   margin-bottom: 1.5rem;
-}
-
-.loading-text {
-  text-align: center;
-}
-
-.priority-radio-group label {
-  margin-right: 10px;
 }
 
 .dashboard-heading {
@@ -478,11 +475,6 @@ label input[type="checkbox"] {
   gap: 0.5rem;
 }
 
-.password-rules {
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-}
-
 .show-password-label {
   margin: 5px 0;
   display: inline-block;
@@ -494,22 +486,9 @@ label input[type="checkbox"] {
   font-size: 0.95rem;
 }
 
-.error-text {
-  color: red;
-}
-
 .success-text {
+  margin-top: 1rem;
   color: green;
-}
-
-.home-page {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  padding: 2rem;
-  text-align: center;
 }
 
 .home-logo {
@@ -528,11 +507,6 @@ label input[type="checkbox"] {
   font-size: 1.1rem;
   color: #333;
   margin-bottom: 2rem;
-}
-
-.home-buttons {
-  display: flex;
-  gap: 1rem;
 }
 
 .btn {
@@ -560,17 +534,6 @@ label input[type="checkbox"] {
 
 .register-btn:hover {
   background-color: #1e7e34;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  max-width: 400px;
-  width: 100%;
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
 }
 
 .auth-form input[type="email"],
@@ -601,29 +564,6 @@ label input[type="checkbox"] {
 .checkbox-label {
   font-size: 0.9rem;
   margin: 0.3rem 0;
-}
-
-.auth-links {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-}
-
-.google-login {
-  margin-top: 1rem;
-  text-align: center;
-  color: white;
-  background: #db4437;
-  padding: 0.6rem;
-  border-radius: 6px;
-  text-decoration: none;
-  font-weight: bold;
-}
-
-.google-login:hover {
-  background: #c23321;
 }
 
 .form-error {
@@ -663,12 +603,6 @@ label input[type="checkbox"] {
   background-color: #00337a;
 }
 
-.profile-page {
-  max-width: 600px;
-  margin: 2rem auto;
-  padding: 1rem;
-}
-
 .profile-form {
   margin-top: 2rem;
   display: flex;
@@ -695,16 +629,6 @@ label input[type="checkbox"] {
   background-color: #00337a;
 }
 
-.success-text {
-  color: green;
-  margin-top: 1rem;
-}
-
-.error-text {
-  color: red;
-  margin-top: 1rem;
-}
-
 .logout-button,
 .delete-button {
   margin-top: 1.5rem;
@@ -726,20 +650,7 @@ label input[type="checkbox"] {
   border: none;
 }
 
-.password-rules {
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
-}
-
 .form-feedback {
   margin-top: 1rem;
   font-size: 0.95rem;
-}
-
-.error-text {
-  color: red;
-}
-
-.success-text {
-  color: green;
 }
