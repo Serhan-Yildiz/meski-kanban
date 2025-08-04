@@ -168,7 +168,10 @@ export default function RegisterPage() {
 
       <button type="submit">Kayıt Ol</button>
 
-      <a href="/auth/google" className="google-login">
+      <a
+        href={`${import.meta.env.VITE_API_URL}/auth/google`}
+        className="google-login"
+      >
         Google ile kayıt ol
       </a>
 

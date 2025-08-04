@@ -25,7 +25,6 @@ select {
 }
 
 button {
-  display: inline-block;
   background-color: var(--primary-color);
   border: none;
   color: white;
@@ -45,50 +44,158 @@ button:hover {
   align-items: center;
 }
 
+.text-center {
+  text-align: center;
+}
+
+.error-text {
+  color: red;
+  text-align: center;
+  margin-top: 1rem;
+}
+
+.success-text {
+  color: green;
+  text-align: center;
+  margin-top: 1rem;
+}
+
 .auth-form {
   max-width: 400px;
   margin: 60px auto;
   background: white;
-  padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  border-radius: 12px;
+  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+  display: flex;
+  flex-direction: column;
 }
 
-.auth-form input,
-.auth-form button {
+.auth-form input[type="email"],
+.auth-form input[type="password"],
+.auth-form input[type="text"] {
   width: 100%;
-  margin-bottom: 10px;
-  box-sizing: border-box;
+  padding: 0.6rem;
+  margin: 0.5rem 0;
+  font-size: 1rem;
+  border: 1px solid var(--border);
+  border-radius: 6px;
 }
 
-.auth-form .google-login,
 .auth-form button {
-  display: block;
-  width: 100%;
-  box-sizing: border-box;
+  margin-top: 1rem;
+  padding: 0.7rem;
+  font-size: 1rem;
+  background-color: #004aad;
+  border-radius: 6px;
+}
+
+.auth-form button:hover {
+  background-color: #00337a;
 }
 
 .google-login {
-  display: inline-block;
-  width: 100%;
-  text-align: center;
-  margin-top: 10px;
-  background-color: #db4437;
+  margin-top: 1rem;
+  background: #db4437;
   color: white;
+  text-align: center;
+  padding: 0.6rem;
+  border-radius: 6px;
+  font-weight: bold;
   text-decoration: none;
-  padding: 8px;
-  border-radius: 4px;
-  box-sizing: border-box;
 }
 
 .google-login:hover {
-  background-color: #c33c2f;
+  background-color: #c23321;
 }
 
-.dashboard {
+.auth-links {
+  margin-top: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+  font-size: 0.9rem;
+  text-align: center;
+}
+
+.auth-links a {
+  color: var(--primary-color);
+  text-decoration: none;
+}
+
+.auth-links a:hover {
+  text-decoration: underline;
+}
+
+.password-rules,
+.checkbox-label,
+.form-feedback {
+  font-size: 0.9rem;
+  margin: 0.5rem 0;
+  color: #666;
+}
+
+label {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.95rem;
+  margin-bottom: 10px;
+}
+
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 60px;
+  background-color: #0067a3;
+  color: white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 20px;
+  z-index: 999;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+}
+
+.nav-left,
+.nav-right,
+.nav-center,
+.nav-title {
+  display: flex;
+  align-items: center;
+}
+
+.nav-title {
+  font-size: 20px;
+  font-weight: bold;
+  margin: 0 20px;
+}
+
+.nav-center input,
+.nav-center button {
+  border-radius: 4px;
+  margin-right: 5px;
+}
+
+.nav-center input {
+  padding: 6px 10px;
+  border: none;
+}
+
+.nav-center button {
+  padding: 6px 12px;
+  background-color: white;
+  color: #0067a3;
+  font-weight: bold;
+}
+
+.dashboard,
+.board-page {
   max-width: 1000px;
   margin: 20px auto;
-  padding: 90px 20px 20px; /* extra padding-top for fixed navbar */
+  padding: 90px 20px 20px;
 }
 
 .dashboard-header {
@@ -117,14 +224,6 @@ button:hover {
   min-width: 150px;
 }
 
-.board-page {
-  padding: 90px 20px 20px; /* extra padding-top for fixed navbar */
-}
-
-.list-input {
-  margin-bottom: 20px;
-}
-
 .list-container {
   display: flex;
   gap: 15px;
@@ -142,245 +241,36 @@ button:hover {
   flex-direction: column;
 }
 
-.list-cardlist {
-  flex-grow: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-}
-
-.list-addcard input {
-  width: 100%;
-}
-
 .card-item {
   background: #fff;
   border: 1px solid var(--border);
   padding: 8px;
   border-radius: 4px;
-}
-
-.card-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+  margin-bottom: 6px;
 }
 
 .card-title {
+  font-weight: 500;
   cursor: pointer;
 }
 
-.card-controls button {
-  margin-left: 5px;
-}
-
-.card-view {
-  max-width: 600px;
-  margin: 90px auto 50px; /* extra padding-top for fixed navbar */
-  background: white;
-  padding: 20px;
-  border-radius: 6px;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-}
-
-.home-page {
-  text-align: center;
-  padding-top: 80px;
-}
-
-.home-buttons {
-  margin-top: 30px;
-}
-
-.home-buttons button {
-  margin: 0 10px;
-}
-
-.logo {
-  width: 200px;
-  margin-bottom: 1rem;
-}
-
-.profile-page {
-  max-width: 500px;
-  margin: 90px auto 50px; /* extra padding-top for fixed navbar */
-  padding: 20px;
-  background: white;
-  border-radius: 6px;
-  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
-}
-
-.profile-page input,
-.profile-page button {
-  width: 100%;
-  margin-top: 10px;
-}
-
-.notfound-container {
-  text-align: center;
-  margin-top: 15vh;
-}
-
-.notfound-container h1 {
-  font-size: 4rem;
-  color: #333;
-}
-
-.notfound-container p {
-  font-size: 1.2rem;
-  margin-bottom: 2rem;
-}
-
-.auth-links {
-  margin-top: 15px;
-  display: flex;
-  flex-direction: column;
-  gap: 6px;
-  font-size: 0.95rem;
-  text-align: center;
-}
-
-.auth-links a {
-  color: var(--primary-color);
-  text-decoration: none;
-}
-
-.auth-links a:hover {
-  text-decoration: underline;
-}
-
-.password-rules {
-  font-size: 0.85rem;
-  color: #666;
-  margin-bottom: 10px;
-}
-
-label {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  font-size: 0.95rem;
-  margin-bottom: 10px;
-}
-
-input[type="checkbox"] {
-  width: auto;
-  margin: 0;
-  box-sizing: border-box;
-}
-
-label input[type="checkbox"] {
-  flex-shrink: 0;
-}
-
-.navbar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 60px;
-  background-color: #0067a3;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 20px;
-  z-index: 999;
-  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
-}
-
-.nav-left,
-.nav-right,
-.nav-center,
-.nav-title {
-  display: flex;
-  align-items: center;
-}
-
-.back-btn {
-  background: transparent;
-  border: none;
-  color: white;
-  font-size: 16px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.nav-title {
-  font-size: 20px;
-  font-weight: bold;
-  margin: 0 20px;
-}
-
-.nav-center input {
-  padding: 6px 10px;
-  border-radius: 4px;
-  border: none;
-  margin-right: 5px;
-}
-
-.nav-center button {
-  padding: 6px 12px;
-  border-radius: 4px;
-  border: none;
-  background-color: white;
-  color: #0067a3;
-  font-weight: bold;
-  cursor: pointer;
-}
-
-.nav-right button {
-  background: transparent;
-  border: none;
-  color: white;
-  font-weight: bold;
-  cursor: pointer;
-}
-
+.card-done,
 .card-title.card-done {
   text-decoration: line-through;
-  opacity: 0.7;
+  opacity: 0.6;
 }
 
-.priority-badge {
-  padding: 4px 10px;
+.priority-badge,
+.priority-dot {
+  font-weight: bold;
   border-radius: 12px;
-  font-weight: bold;
   display: inline-block;
-}
-
-.priority-radio-group {
-  display: flex;
-  gap: 15px;
-  margin-top: 6px;
-}
-
-.priority-radio-group label {
-  display: flex;
-  align-items: center;
-  gap: 5px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.priority-low {
-  color: #3498db;
-}
-
-.priority-medium {
-  color: #f1c40f;
-}
-
-.priority-high {
-  color: #e74c3c;
 }
 
 .priority-dot {
   padding: 2px 8px;
-  border-radius: 12px;
   font-size: 0.75rem;
-  font-weight: bold;
-  display: inline-block;
+  margin-right: 6px;
   margin-top: 4px;
 }
 
@@ -399,275 +289,27 @@ label input[type="checkbox"] {
   color: white;
 }
 
-.card-label {
+.priority-radio-group {
   display: flex;
-  align-items: center;
-  gap: 8px;
-  cursor: pointer;
-}
-
-.card-title {
-  cursor: pointer;
-  font-weight: 500;
-}
-
-.card-done {
-  text-decoration: line-through;
-  opacity: 0.6;
-}
-
-.priority-dot {
-  font-weight: bold;
-  margin-right: 6px;
-}
-
-.board-title {
-  text-align: center;
-  margin-bottom: 1rem;
-}
-
-.board-title h1 {
-  display: inline-block;
-  border-bottom: 2px dashed #ccc;
-  padding: 0.2rem 0.5rem;
-}
-
-.editable-title {
-  cursor: pointer;
-}
-
-.loading-text {
-  text-align: center;
-}
-
-.error-text {
-  text-align: center;
-  color: red;
-}
-
-.editable-title {
-  display: inline-block;
-  cursor: pointer;
-}
-
-.card-title-section,
-.card-desc-section,
-.card-priority-section {
-  margin-bottom: 1.5rem;
-}
-
-.loading-text {
-  text-align: center;
+  gap: 15px;
+  margin-top: 6px;
 }
 
 .priority-radio-group label {
-  margin-right: 10px;
-}
-
-.dashboard-heading {
-  margin-left: 1rem;
-}
-
-.dashboard-board-title {
-  cursor: pointer;
-  font-weight: bold;
-}
-
-.dashboard-board-controls {
-  margin-top: 10px;
   display: flex;
-  gap: 0.5rem;
-}
-
-.password-rules {
-  font-size: 0.9rem;
-  margin-top: 0.5rem;
-}
-
-.show-password-label {
-  margin: 5px 0;
-  display: inline-block;
-  font-size: 0.95rem;
-}
-
-.form-status {
-  margin-top: 1rem;
-  font-size: 0.95rem;
-}
-
-.error-text {
-  color: red;
-}
-
-.success-text {
-  color: green;
-}
-
-.home-page {
-  display: flex;
-  flex-direction: column;
   align-items: center;
-  justify-content: center;
-  min-height: 80vh;
-  padding: 2rem;
-  text-align: center;
-}
-
-.home-logo {
-  width: 120px;
-  height: auto;
-  margin-bottom: 1rem;
-}
-
-.home-title {
-  font-size: 2rem;
-  margin-bottom: 0.5rem;
-  color: #004aad;
-}
-
-.home-subtitle {
-  font-size: 1.1rem;
-  color: #333;
-  margin-bottom: 2rem;
-}
-
-.home-buttons {
-  display: flex;
-  gap: 1rem;
-}
-
-.btn {
-  padding: 0.7rem 1.5rem;
-  font-size: 1rem;
-  border: none;
-  border-radius: 8px;
+  gap: 5px;
   cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.login-btn {
-  background-color: #007bff;
-  color: white;
-}
-
-.login-btn:hover {
-  background-color: #0056b3;
-}
-
-.register-btn {
-  background-color: #28a745;
-  color: white;
-}
-
-.register-btn:hover {
-  background-color: #1e7e34;
-}
-
-.auth-form {
-  display: flex;
-  flex-direction: column;
-  max-width: 400px;
-  width: 100%;
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-}
-
-.auth-form input[type="email"],
-.auth-form input[type="password"],
-.auth-form input[type="text"] {
-  padding: 0.6rem;
-  margin: 0.5rem 0;
-  font-size: 1rem;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-}
-
-.auth-form button {
-  margin-top: 1rem;
-  padding: 0.7rem;
-  font-size: 1rem;
-  background-color: #004aad;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  cursor: pointer;
-}
-
-.auth-form button:hover {
-  background-color: #00337a;
-}
-
-.checkbox-label {
-  font-size: 0.9rem;
-  margin: 0.3rem 0;
-}
-
-.auth-links {
-  margin-top: 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.4rem;
-  font-size: 0.9rem;
-}
-
-.google-login {
-  margin-top: 1rem;
-  text-align: center;
-  color: white;
-  background: #db4437;
-  padding: 0.6rem;
-  border-radius: 6px;
-  text-decoration: none;
   font-weight: bold;
-}
-
-.google-login:hover {
-  background: #c23321;
-}
-
-.form-error {
-  color: red;
-  margin-top: 1rem;
-  font-size: 0.95rem;
-}
-
-.notfound-page {
-  text-align: center;
-  padding: 4rem 2rem;
-}
-
-.notfound-page h1 {
-  font-size: 4rem;
-  color: #004aad;
-}
-
-.notfound-page p {
-  margin: 1rem 0 2rem;
-  font-size: 1.1rem;
-  color: #444;
-}
-
-.notfound-button {
-  display: inline-block;
-  background-color: #004aad;
-  color: white;
-  padding: 0.75rem 1.5rem;
-  border-radius: 8px;
-  text-decoration: none;
-  font-weight: bold;
-  transition: background-color 0.2s;
-}
-
-.notfound-button:hover {
-  background-color: #00337a;
 }
 
 .profile-page {
   max-width: 600px;
-  margin: 2rem auto;
+  margin: 90px auto 50px;
   padding: 1rem;
+  background: white;
+  border-radius: 6px;
+  box-shadow: 0 0 8px rgba(0, 0, 0, 0.1);
 }
 
 .profile-form {
@@ -678,13 +320,13 @@ label input[type="checkbox"] {
 }
 
 .profile-form input,
-.profile-form select {
+.profile-form select,
+.profile-form button {
   padding: 0.5rem;
   font-size: 1rem;
 }
 
 .profile-form button {
-  padding: 0.5rem 1rem;
   background-color: #004aad;
   color: white;
   border: none;
@@ -696,52 +338,28 @@ label input[type="checkbox"] {
   background-color: #00337a;
 }
 
-.success-text {
-  color: green;
-  margin-top: 1rem;
+.notfound-container,
+.notfound-page {
+  text-align: center;
+  padding: 4rem 2rem;
 }
 
-.error-text {
-  color: red;
-  margin-top: 1rem;
+.notfound-page h1,
+.notfound-container h1 {
+  font-size: 4rem;
+  color: #004aad;
 }
 
-.logout-button,
-.delete-button {
-  margin-top: 1.5rem;
-  padding: 0.5rem 1rem;
-  border-radius: 5px;
+.notfound-button {
+  background-color: #004aad;
+  color: white;
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  text-decoration: none;
   font-weight: bold;
-  cursor: pointer;
+  transition: background-color 0.2s;
 }
 
-.logout-button {
-  background-color: #555;
-  color: white;
-  border: none;
-}
-
-.delete-button {
-  background-color: red;
-  color: white;
-  border: none;
-  margin-left: 1rem;
-}
-
-.password-rules {
-  font-size: 0.9rem;
-  margin: 0.5rem 0;
-}
-
-.form-feedback {
-  margin-top: 1rem;
-  font-size: 0.95rem;
-}
-
-.error-text {
-  color: red;
-}
-
-.success-text {
-  color: green;
+.notfound-button:hover {
+  background-color: #00337a;
 }
