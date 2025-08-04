@@ -14,10 +14,15 @@ const router = express.Router();
 router.use(auth);
 
 router.get("/", getBoards);
+
 router.post("/", createBoard);
+
 router.put("/:id", updateBoard);
+
 router.delete("/:id", deleteBoard);
-router.get("/:id", getBoardById);
+
 router.get("/:id/lists", getListsWithCardsByBoardId);
+
+router.get("/:id", getBoardById);
 
 export default router;

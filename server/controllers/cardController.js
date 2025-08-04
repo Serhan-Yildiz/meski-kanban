@@ -8,12 +8,13 @@ export async function getCardById(req, res) {
       cardId,
     ]);
 
-    if (result.rows.length === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ message: "Kart bulunamadı" });
     }
 
     res.json(result.rows[0]);
-  } catch {
+  } catch (err) {
+    console.error("getCardById hatası:", err);
     res.status(500).json({ message: "Kart alınamadı" });
   }
 }
@@ -41,10 +42,8 @@ export const updateCard = async (req, res) => {
 
     res.json(result.rows[0]);
   } catch (err) {
-    console.error("Kart güncellenemedi:", err);
-    res
-      .status(500)
-      .json({ message: "Kart güncellenemedi", error: err.message });
+    console.error("updateCard hatası:", err);
+    res.status(500).json({ message: "Kart güncellenemedi", error: err.message });
   }
 };
 
@@ -54,7 +53,8 @@ export async function deleteCard(req, res) {
   try {
     await pool.query("DELETE FROM cards WHERE id = $1", [cardId]);
     res.json({ message: "Kart silindi" });
-  } catch {
+  } catch (err) {
+    console.error("deleteCard hatası:", err);
     res.status(500).json({ message: "Kart silinemedi" });
   }
 }
@@ -82,7 +82,7 @@ export async function createCard(req, res) {
 
     res.status(201).json(result.rows[0]);
   } catch (err) {
-    console.error("Kart eklenirken hata:", err);
+    console.error("createCard hatası:", err);
     res.status(500).json({ message: "Kart oluşturulamadı" });
   }
 }
@@ -96,7 +96,9 @@ export async function moveCardUp(req, res) {
     ]);
     const card = cardRes.rows[0];
 
-    if (!card) return res.status(404).json({ message: "Kart bulunamadı" });
+    if (!card) {
+      return res.status(404).json({ message: "Kart bulunamadı" });
+    }
 
     const aboveRes = await pool.query(
       `SELECT * FROM cards 
@@ -105,7 +107,7 @@ export async function moveCardUp(req, res) {
       [card.list_id, card.position]
     );
 
-    if (aboveRes.rows.length === 0) {
+    if (aboveRes.rowCount === 0) {
       return res.status(400).json({ message: "Kart en üstte" });
     }
 
@@ -122,7 +124,7 @@ export async function moveCardUp(req, res) {
 
     res.json({ message: "Kart yukarı taşındı" });
   } catch (err) {
-    console.error(err);
+    console.error("moveCardUp hatası:", err);
     res.status(500).json({ message: "Kart yukarı taşınamadı" });
   }
 }
@@ -136,7 +138,9 @@ export async function moveCardDown(req, res) {
     ]);
     const card = cardRes.rows[0];
 
-    if (!card) return res.status(404).json({ message: "Kart bulunamadı" });
+    if (!card) {
+      return res.status(404).json({ message: "Kart bulunamadı" });
+    }
 
     const belowRes = await pool.query(
       `SELECT * FROM cards 
@@ -145,7 +149,7 @@ export async function moveCardDown(req, res) {
       [card.list_id, card.position]
     );
 
-    if (belowRes.rows.length === 0) {
+    if (belowRes.rowCount === 0) {
       return res.status(400).json({ message: "Kart en altta" });
     }
 
@@ -162,7 +166,7 @@ export async function moveCardDown(req, res) {
 
     res.json({ message: "Kart aşağı taşındı" });
   } catch (err) {
-    console.error(err);
+    console.error("moveCardDown hatası:", err);
     res.status(500).json({ message: "Kart aşağı taşınamadı" });
   }
 }

@@ -4,7 +4,8 @@ export async function getAllLists(req, res) {
   try {
     const result = await pool.query("SELECT * FROM lists");
     res.json(result.rows);
-  } catch {
+  } catch (err) {
+    console.error("getAllLists hatası:", err);
     res.status(500).json({ message: "Listeler alınamadı" });
   }
 }
@@ -17,12 +18,13 @@ export async function getListById(req, res) {
       listId,
     ]);
 
-    if (result.rows.length === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ message: "Liste bulunamadı" });
     }
 
     res.json(result.rows[0]);
-  } catch {
+  } catch (err) {
+    console.error("getListById hatası:", err);
     res.status(500).json({ message: "Liste getirilemedi" });
   }
 }
@@ -51,7 +53,8 @@ export async function getListsByBoardId(req, res) {
     }
 
     res.json(lists);
-  } catch {
+  } catch (err) {
+    console.error("getListsByBoardId hatası:", err);
     res.status(500).json({ message: "Listeler ve kartlar getirilemedi" });
   }
 }
@@ -82,7 +85,7 @@ export const createList = async (req, res) => {
 
     res.status(201).json(insertRes.rows[0]);
   } catch (err) {
-    console.error("Liste oluşturulamadı:", err);
+    console.error("createList hatası:", err);
     res
       .status(500)
       .json({ message: "Liste oluşturulamadı", error: err.message });
@@ -99,12 +102,13 @@ export async function updateList(req, res) {
       [title, listId]
     );
 
-    if (result.rows.length === 0) {
+    if (result.rowCount === 0) {
       return res.status(404).json({ message: "Liste bulunamadı" });
     }
 
     res.json(result.rows[0]);
-  } catch {
+  } catch (err) {
+    console.error("updateList hatası:", err);
     res.status(500).json({ message: "Liste güncellenemedi" });
   }
 }
@@ -115,7 +119,8 @@ export async function deleteList(req, res) {
   try {
     await pool.query("DELETE FROM lists WHERE id = $1", [listId]);
     res.json({ message: "Liste silindi" });
-  } catch {
+  } catch (err) {
+    console.error("deleteList hatası:", err);
     res.status(500).json({ message: "Liste silinemedi" });
   }
 }
@@ -142,11 +147,13 @@ export const moveList = async (req, res) => {
       "SELECT * FROM lists WHERE board_id = $1 ORDER BY position",
       [current.board_id]
     );
+
     const lists = allRes.rows;
     const currentIndex = lists.findIndex((l) => l.id === current.id);
 
     const targetIndex =
       direction === "left" ? currentIndex - 1 : currentIndex + 1;
+
     if (targetIndex < 0 || targetIndex >= lists.length) {
       return res.status(400).json({ message: "Daha fazla hareket edemez" });
     }
@@ -164,9 +171,7 @@ export const moveList = async (req, res) => {
 
     res.json({ message: "Liste taşındı" });
   } catch (err) {
-    console.error("Liste taşıma hatası:", err);
-    res
-      .status(500)
-      .json({ message: "Liste taşıma hatası", error: err.message });
+    console.error("moveList hatası:", err);
+    res.status(500).json({ message: "Liste taşınamadı", error: err.message });
   }
 };
