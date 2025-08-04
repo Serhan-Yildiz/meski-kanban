@@ -363,3 +363,112 @@ label {
 .notfound-button:hover {
   background-color: #00337a;
 }
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --primary-color: #4dabf7;
+    --dark-blue: #1c7ed6;
+    --light-bg: #1e1e1e;
+    --text-dark: #f1f1f1;
+    --border: #444;
+  }
+
+  body {
+    background-color: var(--light-bg);
+    color: var(--text-dark);
+  }
+
+  .auth-form,
+  .dashboard-board,
+  .list-column,
+  .card-item,
+  .card-view,
+  .profile-page,
+  .notfound-container,
+  .board-title h1 {
+    background-color: #2c2c2c;
+    color: var(--text-dark);
+    border-color: var(--border);
+  }
+
+  input,
+  select,
+  .nav-center input,
+  .profile-form input,
+  .profile-form select {
+    background-color: #333;
+    color: var(--text-dark);
+    border: 1px solid var(--border);
+  }
+
+  .navbar,
+  .notfound-button,
+  .auth-form button,
+  .profile-form button,
+  .logout-button,
+  .delete-button {
+    background-color: var(--dark-blue);
+    color: white;
+  }
+
+  .navbar .nav-center button {
+    background-color: white;
+    color: var(--dark-blue);
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard-board-list,
+  .list-container,
+  .home-buttons {
+    flex-direction: column;
+    align-items: stretch;
+  }
+
+  .dashboard-board,
+  .list-column,
+  .card-view,
+  .profile-page {
+    width: 100%;
+    max-width: 100%;
+  }
+
+  .navbar {
+    flex-direction: column;
+    height: auto;
+    padding: 10px;
+  }
+
+  .nav-title {
+    margin: 10px 0;
+  }
+
+  .auth-form {
+    margin: 20px;
+    padding: 20px;
+  }
+
+  .notfound-container h1 {
+    font-size: 3rem;
+  }
+}
+
+::-webkit-scrollbar {
+  width: 10px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-thumb {
+  background-color: var(--primary-color);
+  border-radius: 8px;
+}
+
+::-webkit-scrollbar-track {
+  background-color: #eee;
+}
+
+@media (prefers-color-scheme: dark) {
+  ::-webkit-scrollbar-track {
+    background-color: #222;
+  }
+}
